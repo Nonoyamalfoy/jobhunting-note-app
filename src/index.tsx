@@ -1,17 +1,37 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import * as serviceWorker from "./serviceWorker";
+import { Provider } from "react-redux";
+import { ConnectedRouter } from "connected-react-router";
+import { MuiThemeProvider } from "@material-ui/core";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DayjsUtils from "@date-io/dayjs";
+import { theme } from "./assets/theme";
+
+import store, { history } from "./reducks/store/store";
+import dayjs from "dayjs";
+import "dayjs/locale/ja";
+
+dayjs.locale("ja");
+
+// import createStore from "./reducks/store/store";
+// import * as History from "history";
+
+// const history = History.createBrowserHistory();
+// export const store = createStore(history);
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  <Provider store={store}>
+    <ConnectedRouter history={history} >
+      <MuiPickersUtilsProvider utils={DayjsUtils} locale={dayjs.locale("ja")}>
+        <MuiThemeProvider theme={theme}>
+          <App />
+        </MuiThemeProvider>
+      </MuiPickersUtilsProvider>
+    </ConnectedRouter>
+  </Provider>,
+  document.getElementById("root")
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();

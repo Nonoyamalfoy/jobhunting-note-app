@@ -1,0 +1,57 @@
+html {
+  height: 100%;
+  font-family: "游ゴシック", YuGothic, "Hiragino Kaku Gothic ProN",
+    "ヒラギノ角ゴ ProN W3", "ヒラギノ角ゴ Pro W3", "メイリオ", Meiryo,
+    sans-serif;
+}
+
+body {
+  background-color: #bac0c7;
+  height: 100%;
+  margin: 0;
+}
+
+#root {
+  margin: 0 auto;
+  background-color: #dfe3e7;
+  max-width: 1000px;
+  height: 100%;
+}
+
+main {
+  height: 100%;
+  // background-color: #20295f;
+  box-sizing: border-box;
+  padding-top: 56px;
+  position: relative;
+}
+
+.form {
+  margin: 0 auto;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialogHeader {
+  display: flex;
+  justify-content: flex-end;
+  min-height: 48px;
+  background-color: #20295f;
+  color: white;
+  align-items: center;
+}
+
+
+/*********** Module Spacer ***********/
+.module-spacer--extra-small {
+  height: 12px;
+}
+.module-spacer--small {
+  height: 20px;
+}
+.module-spacer--medium {
+  height: 32px;
+}
