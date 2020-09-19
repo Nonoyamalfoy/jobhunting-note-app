@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React from 'react'
 import {
   Card,
   CardActionArea,
@@ -7,16 +6,11 @@ import {
   List,
   Typography,
   Box,
+  Grid, 
+  Paper
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
-import {
-  AddCompanyDialog,
-  CompanyListItem,
-  SelectedCompanyDialog,
-} from "../components/Company";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import { CreateButton } from "../components/Uikit";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,35 +28,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CompanyList: React.FC = () => {
-  const classes = useStyles();
-  const [addCompanyDialogopen, setAddCompanyDialogopen] = useState(false);
-  const handleClickOpenAddCompanyDialog = () => {
-    setAddCompanyDialogopen(true);
-  };
-  const handleCloseAddCompanyDialog = () => {
-    setAddCompanyDialogopen(false);
-  };
-  const [selectedCompanyDialogopen, setSelectedCompanyDialogopen] = useState(
-    false
-  );
-  const handleClickOpenSelectedCompanyDialog = () => {
-    setSelectedCompanyDialogopen(true);
-  };
-  const handleCloseSelectedCompanyDialog = () => {
-    setSelectedCompanyDialogopen(false);
-  };
+type Props = {
+  handleClickOpenSelectedCompanyDialog: () => void
+}
+
+const AnalyzedCompanyList: React.FC<Props> = (props) => {
+  const classes = useStyles()
   return (
-    <div className={classes.root}>
-      {/* <List>
-        <CompanyListItem />
-      </List> */}
+    <>
       <Grid container spacing={4}>
         <Grid item xs={12} sm={6} md={4}>
           <Card className={classes.paper} elevation={5}>
             <CardActionArea
               className={classes.cardActionArea}
-              onClick={handleClickOpenSelectedCompanyDialog}
+              onClick={props.handleClickOpenSelectedCompanyDialog}
             >
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
@@ -103,19 +82,8 @@ const CompanyList: React.FC = () => {
           </Paper>
         </Grid>
       </Grid>
+    </>
+  )
+}
 
-      <AddCompanyDialog
-        open={addCompanyDialogopen}
-        handleClose={handleCloseAddCompanyDialog}
-      />
-      <SelectedCompanyDialog
-        open={selectedCompanyDialogopen}
-        handleClose={handleCloseSelectedCompanyDialog}
-        handleClickOpenAddCompanyDialog={handleClickOpenAddCompanyDialog}
-      />
-      <CreateButton onClick={handleClickOpenAddCompanyDialog} size={"medium"} />
-    </div>
-  );
-};
-
-export default CompanyList;
+export default AnalyzedCompanyList

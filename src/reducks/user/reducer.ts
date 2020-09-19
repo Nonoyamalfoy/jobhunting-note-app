@@ -1,5 +1,5 @@
 import { reducerWithInitialState } from "typescript-fsa-reducers";
-import { User } from "../../domain/entity/user";
+import { User } from "../../entity/user";
 import usersActions from "./actions";
 
 const init: User = {

@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    create: {
+    medium: {
       backgroundColor: "#20295f",
       color: "white",
       position: "fixed",
@@ -18,11 +18,17 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: "#20295f",
         color: "grey",
       },
-      [theme.breakpoints.up(1000)]: {
-        right: "calc(50% - 500px)",
+      [theme.breakpoints.up(960)]: {
+        right: "calc(50% - 550px)",
         bottom: "80px",
         transform: "translateX(50%)",
       },
+    },
+    small: {
+      position: "absolute",
+      // color: "rgba(0, 0, 0, 0.30)",
+      top: 20,
+      right: 10,
     },
   })
 );
@@ -35,9 +41,16 @@ type Props = {
 const CreateButton: React.FC<Props> = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  let style;
+  if (props.size === "small") {
+    style = classes.small;
+  } else {
+    style = classes.medium;
+  }
   return (
     <IconButton
-      className={classes.create}
+      className={style}
       size={props.size}
       onClick={() => dispatch(props.onClick)}
     >

@@ -4,14 +4,15 @@ import TextField from "@material-ui/core/TextField";
 type Props = {
   label: string
   multiline: boolean
-  required: boolean
-  rows: number
-  value: string
+  required?: boolean
+  rows?: number
+  value: any
   type: string
-  onChange: (event: any) => void
+  autoFocus?: boolean
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const TextInput: React.FC<Props> = (props) => {
+const TextInput = (props: Props) => {
   return(
     <TextField 
       fullWidth={true}

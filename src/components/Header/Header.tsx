@@ -5,7 +5,7 @@ import ToolBar from "@material-ui/core/Toolbar";
 import { useSelector } from "react-redux";
 import { getIsSignedIn } from "../../reducks/user/selectors";
 import { HeaderMenus, ClosableDrawer } from "./index";
-import { RootState } from "../../domain/entity/rootState";
+import { RootState } from "../../entity/rootState";
 
 const useStyles = makeStyles({
   root: {

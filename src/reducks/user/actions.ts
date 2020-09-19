@@ -1,5 +1,5 @@
 import actionCreatorFactory from "typescript-fsa";
-import { User } from "../../domain/entity/user";
+import { User } from "../../entity/user";
 
 const actionCreator = actionCreatorFactory();
 

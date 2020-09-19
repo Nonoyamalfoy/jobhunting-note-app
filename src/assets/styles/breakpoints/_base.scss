@@ -6,15 +6,15 @@ html {
 }
 
 body {
-  background-color: #bac0c7;
-  height: 100%;
+  background-color:#dfe3e7;
+  height: 100vh;
   margin: 0;
 }
 
 #root {
   margin: 0 auto;
-  background-color: #dfe3e7;
-  max-width: 1000px;
+  // background-color: #dfe3e7;
+  max-width: 960px;
   height: 100%;
 }
 
@@ -44,13 +44,25 @@ main {
   align-items: center;
 }
 
+.p-calendar {
+  position: relative;
+  background-color: white;
+  width: 100%;
+  max-width: 960px;
+  margin-top: 16px;
+}
+
+.p-ToDo {
+  margin-top: 8px;
+}
+
 
 /*********** Module Spacer ***********/
 .module-spacer--extra-small {
-  height: 12px;
+  height: 8px;
 }
 .module-spacer--small {
-  height: 20px;
+  height: 16px;
 }
 .module-spacer--medium {
   height: 32px;

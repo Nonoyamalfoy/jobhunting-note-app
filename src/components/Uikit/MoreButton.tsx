@@ -3,7 +3,7 @@ import { IconButton, Menu, MenuItem, makeStyles } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const useStyles = makeStyles({
-  icon: {
+  white: {
     color: "white"
   }
 })
@@ -25,10 +25,15 @@ const MoretButton: React.FC<Props> = (props) => {
     setAnchorEl(null);
   };
 
+  let color
+  if(props.size === "small") {
+    color = classes.white
+  }
+
   return (
     <>
       <IconButton size={props.size} onClick={handleClick}>
-        <MoreHorizIcon className={classes.icon} color="disabled"/>
+        <MoreHorizIcon className={color} />
       </IconButton>
 
       <Menu
@@ -43,7 +48,7 @@ const MoretButton: React.FC<Props> = (props) => {
             handleClose();
           }}
         >
-          Edit
+          編集
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -51,7 +56,7 @@ const MoretButton: React.FC<Props> = (props) => {
             handleClose();
           }}
         >
-          Remove
+          削除
         </MenuItem>
       </Menu>
     </>

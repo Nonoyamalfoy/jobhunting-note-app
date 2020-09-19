@@ -5,15 +5,14 @@ html {
 }
 
 body {
-  background-color: #bac0c7;
-  height: 100%;
+  background-color: #dfe3e7;
+  height: 100vh;
   margin: 0;
 }
 
 #root {
   margin: 0 auto;
-  background-color: #dfe3e7;
-  max-width: 1000px;
+  max-width: 960px;
   height: 100%;
 }
 
@@ -54,16 +53,39 @@ main {
           align-items: center;
 }
 
+.p-calendar {
+  position: relative;
+  background-color: white;
+  width: 100%;
+  max-width: 960px;
+  margin-top: 16px;
+}
+
+.p-ToDo {
+  margin-top: 8px;
+}
+
 /*********** Module Spacer ***********/
 .module-spacer--extra-small {
-  height: 12px;
+  height: 8px;
 }
 
 .module-spacer--small {
-  height: 20px;
+  height: 16px;
 }
 
 .module-spacer--medium {
   height: 32px;
+}
+
+@media (min-width: 600px) {
+  main {
+    padding-top: 80px;
+  }
+  .p-calendar {
+    margin-top: 16px;
+    -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
+  }
 }
 /*# sourceMappingURL=style.css.map */

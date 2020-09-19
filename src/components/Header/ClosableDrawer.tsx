@@ -47,15 +47,15 @@ const ClosableDrawer = (props: Props) => {
       func: selectMenu,
       label: "自己分析",
       icon: <AccountCircleIcon />,
-      id: "todoList",
-      value: "/todoList",
+      id: "self-analysis",
+      value: "/self-analysis",
     },
     {
       func: selectMenu,
       label: "企業分析",
       icon: <BusinessIcon />,
-      id: "company-list",
-      value: "/company-list",
+      id: "/corporate-analysis",
+      value: "/corporate-analysis",
     },
     {
       func: selectMenu,
@@ -69,7 +69,7 @@ const ClosableDrawer = (props: Props) => {
       label: "やることリスト",
       icon: <CheckBoxIcon />,
       id: "todoList",
-      value: "/todoList",
+      value: "/todo",
     },
   ];
 

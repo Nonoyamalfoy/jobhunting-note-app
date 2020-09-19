@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getIsSignedIn } from "./reducks/user/selectors";
 import { listenAuthState } from "./reducks/user/operations";
-import { RootState } from "./domain/entity/rootState";
+import { RootState } from "./entity/rootState";
 
 type Props = {
   children: React.ReactNode;
