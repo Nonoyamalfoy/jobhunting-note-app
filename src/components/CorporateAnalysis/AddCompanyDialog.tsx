@@ -77,107 +77,18 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
   const [locatin, setLocatin] = useState("");
   const [memo, setMemo] = useState("");
 
-  const inputCompanyName = useCallback(
-    (event) => {
-      setCompanyName(event.target.value);
-    },
-    [setCompanyName]
-  );
-  const inputCorporatePhilosophy = useCallback(
-    (event) => {
-      setcorporatePhilosophy(event.target.value);
-    },
-    [setcorporatePhilosophy]
-  );
-  const inputCompanyBusiness = useCallback(
-    (event) => {
-      setCompanyBusiness(event.target.value);
-    },
-    [setCompanyBusiness]
-  );
+
   const inputYearOfEstablish = useCallback(
     (month) => {
       setYearOfEstablish(month);
     },
     [setYearOfEstablish]
   );
-  const inputNumberOfEmployees = useCallback(
-    (event) => {
-      setNumberOfEmployees(event.target.value);
-    },
-    [setNumberOfEmployees]
-  );
-  const inputCapital = useCallback(
-    (event) => {
-      setCapital(event.target.value);
-    },
-    [setCapital]
-  );
-  const inputAnnualIncome = useCallback(
-    (event) => {
-      setAnnualIncome(event.target.value);
-    },
-    [setAnnualIncome]
-  );
-  const inputRequiredPersonImage = useCallback(
-    (event) => {
-      setRequiredPersonImage(event.target.value);
-    },
-    [setRequiredPersonImage]
-  );
-  const inputRequiredSkill = useCallback(
-    (event) => {
-      setRequiredSkill(event.target.value);
-    },
-    [setRequiredSkill]
-  );
-  const inputFuture = useCallback(
-    (event) => {
-      setFuture(event.target.value);
-    },
-    [setFuture]
-  );
-  const inputTask = useCallback(
-    (event) => {
-      setTask(event.target.value);
-    },
-    [setTask]
-  );
-  const inputWorkingEnvironment = useCallback(
-    (event) => {
-      setWorkingEnvironment(event.target.value);
-    },
-    [setWorkingEnvironment]
-  );
-  const inputWelfare = useCallback(
-    (event) => {
-      setWelfare(event.target.value);
-    },
-    [setWelfare]
-  );
-  const inputReasonsForAspiration = useCallback(
-    (event) => {
-      setReasonsForAspiration(event.target.value);
-    },
-    [setReasonsForAspiration]
-  );
   const inputDate = useCallback(
     (date) => {
       setDate(date);
     },
     [setDate]
-  );
-  const inputLocatin = useCallback(
-    (event) => {
-      setLocatin(event.target.value);
-    },
-    [setLocatin]
-  );
-  const inputMemo = useCallback(
-    (event) => {
-      setMemo(event.target.value);
-    },
-    [setMemo]
   );
 
   const matches = useMediaQuery("(max-width:960px)");
@@ -204,7 +115,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
           rows={1}
           value={companyName}
           type={"text"}
-          onChange={inputCompanyName}
+          onChange={createStringChangeEventCallback(setCompanyName)}
         />
 
         <Box className={classes.box}>
@@ -222,8 +133,6 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
           <AccordionSummary
             className={classes.AccordionSummary}
             expandIcon={<ExpandMoreIcon />}
-            // aria-controls="panel1a-content"
-            // id="panel1a-header"
           >
             <Typography>理念・会社概要</Typography>
           </AccordionSummary>
@@ -234,7 +143,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
               required={true}
               value={corporatePhilosophy}
               type={"text"}
-              onChange={inputCorporatePhilosophy}
+              onChange={createStringChangeEventCallback(setcorporatePhilosophy)}
             />
             <TextInput
               label={"事業"}
@@ -242,7 +151,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
               required={true}
               value={companyBusiness}
               type={"text"}
-              onChange={inputCompanyBusiness}
+              onChange={createStringChangeEventCallback(setCompanyBusiness)}
             />
             <Grid container>
               <Grid item container spacing={4}>
@@ -269,7 +178,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
                     rows={1}
                     value={numberOfEmployees}
                     type={"text"}
-                    onChange={inputNumberOfEmployees}
+                    onChange={createStringChangeEventCallback(setNumberOfEmployees)}
                   />
                 </Grid>
               </Grid>
@@ -282,7 +191,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
                     rows={1}
                     value={capital}
                     type={"text"}
-                    onChange={inputCapital}
+                    onChange={createStringChangeEventCallback(setCapital)}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -293,7 +202,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
                     rows={1}
                     value={annualIncome}
                     type={"text"}
-                    onChange={inputAnnualIncome}
+                    onChange={createStringChangeEventCallback(setAnnualIncome)}
                   />
                 </Grid>
               </Grid>
@@ -315,7 +224,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
               required={true}
               value={requiredPersonImage}
               type={"text"}
-              onChange={inputRequiredPersonImage}
+              onChange={createStringChangeEventCallback(setRequiredPersonImage)}
             />
             <TextInput
               label={"スキル"}
@@ -323,7 +232,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
               required={true}
               value={requiredSkill}
               type={"text"}
-              onChange={inputRequiredSkill}
+              onChange={createStringChangeEventCallback(setRequiredSkill)}
             />
           </AccordionDetails>
         </Accordion>
@@ -342,7 +251,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
               required={true}
               value={future}
               type={"text"}
-              onChange={inputFuture}
+              onChange={createStringChangeEventCallback(setFuture)}
             />
             <TextInput
               label={"課題"}
@@ -350,7 +259,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
               required={true}
               value={task}
               type={"text"}
-              onChange={inputTask}
+              onChange={createStringChangeEventCallback(setTask)}
             />
           </AccordionDetails>
         </Accordion>
@@ -369,7 +278,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
               required={true}
               value={workingEnvironment}
               type={"text"}
-              onChange={inputWorkingEnvironment}
+              onChange={createStringChangeEventCallback(setWorkingEnvironment)}
             />
             <TextInput
               label={"福利厚生"}
@@ -377,7 +286,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
               required={true}
               value={welfare}
               type={"text"}
-              onChange={inputWelfare}
+              onChange={createStringChangeEventCallback(setWelfare)}
             />
           </AccordionDetails>
         </Accordion>
@@ -395,7 +304,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
               required={true}
               value={reasonsForAspiration}
               type={"text"}
-              onChange={inputReasonsForAspiration}
+              onChange={createStringChangeEventCallback(setReasonsForAspiration)}
             />
           </AccordionDetails>
         </Accordion>
@@ -430,7 +339,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
                     required={true}
                     value={locatin}
                     type={"text"}
-                    onChange={inputLocatin}
+                    onChange={createStringChangeEventCallback(setLocatin)}
                   />
                 </Grid>
               </Grid>
@@ -452,7 +361,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
               required={true}
               value={memo}
               type={"text"}
-              onChange={inputMemo}
+              onChange={createStringChangeEventCallback(setMemo)}
             />
           </AccordionDetails>
         </Accordion>
