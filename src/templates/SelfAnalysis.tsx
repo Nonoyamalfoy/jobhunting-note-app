@@ -15,7 +15,12 @@ import {
   IconButton,
 } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import { AddBestWork, SelectedBestWork } from "../components/SelfAnalysis";
+import {
+  AddBestWork,
+  AddMotivation,
+  MotivationGraph,
+  SelectedBestWork,
+} from "../components/SelfAnalysis";
 import { CreateButton } from "../components/Uikit";
 
 const useStyles = makeStyles((theme) => ({
@@ -93,6 +98,7 @@ const SelfAnalysis: React.FC = () => {
     false
   );
   const [addBestWorkDialogopen, setAddBestWorkDialogopen] = useState(false);
+  const [addMotivationDialogOpen, setAddMotivationDialogOpen] = useState(false);
   const handleClickOpenSelectedBestWorkDialog = () => {
     setSelectedBestWorkDialogopen(true);
   };
@@ -104,6 +110,12 @@ const SelfAnalysis: React.FC = () => {
   };
   const handleCloseAddBestWorkDialog = () => {
     setAddBestWorkDialogopen(false);
+  };
+  const handleClickOpenAddMotivationDialog = () => {
+    setAddMotivationDialogOpen(true);
+  };
+  const handleCloseAddMotivationDialog = () => {
+    setAddMotivationDialogOpen(false);
   };
   return (
     <>
@@ -183,7 +195,13 @@ const SelfAnalysis: React.FC = () => {
       <Card className={classes.mainCard} elevation={5}>
         <CardContent>
           <Grid className={classes.textContainer}>
-            <CreateButton size="small" onClick={() => {}} />
+            <IconButton
+              className={classes.addCircleIcon}
+              size="small"
+              onClick={handleClickOpenAddMotivationDialog}
+            >
+              <AddCircleOutlineIcon />
+            </IconButton>
             <Grid container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.square}></span>
@@ -193,9 +211,7 @@ const SelfAnalysis: React.FC = () => {
               </Grid>
             </Grid>
 
-            <Typography color="textSecondary">
-              強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです強みです
-            </Typography>
+            <MotivationGraph />
           </Grid>
         </CardContent>
       </Card>
@@ -261,6 +277,10 @@ const SelfAnalysis: React.FC = () => {
       <AddBestWork
         open={addBestWorkDialogopen}
         handleClose={handleCloseAddBestWorkDialog}
+      />
+      <AddMotivation
+        open={addMotivationDialogOpen}
+        handleClose={handleCloseAddMotivationDialog}
       />
     </>
   );

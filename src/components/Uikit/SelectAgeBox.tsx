@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
+import { InputLabel, Grid } from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -8,20 +8,32 @@ import Select from "@material-ui/core/Select";
 const useStyles = makeStyles((theme) => ({
   formControl: {
     marginBottom: 16,
-    minWidth: 120,
+    // minWidth: 120,
     width: "100%",
+    maxHeight: 300
+  },
+  box: {
+    // width: 16,
+    height: 16,
+    display: "block",
+    // marginLeft: 6,
+    borderRadius: 4,
+  },
+  icon: {
+    margin: "0 auto",
   },
 }));
 
 type Props = {
-  value: string
-  label: string
-  required?: boolean
-  options: any
-  select: (e: any) => void
-}
+  value: string | number;
+  label: string;
+  required?: boolean;
+  options: any;
+  select: (e: any) => void;
+  unit: string
+};
 
-const SelectBox: React.FC<Props> = (props) => {
+const SelectAgeBox: React.FC<Props> = (props) => {
   const classes = useStyles();
 
   return (
@@ -34,8 +46,8 @@ const SelectBox: React.FC<Props> = (props) => {
       >
         {props.options.map((value: any) => {
           return (
-            <MenuItem key={value.id} value={value.id}>
-              {value.name}
+            <MenuItem key={value} value={value}>
+              {value + props.unit}
             </MenuItem>
           );
         })}
@@ -44,4 +56,4 @@ const SelectBox: React.FC<Props> = (props) => {
   );
 };
 
-export default SelectBox;
+export default SelectAgeBox;

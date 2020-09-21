@@ -18,23 +18,9 @@ import {
 import { CloseButton, SaveButton, TextInput, MoreButton } from "../Uikit";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-
-import MuiAccordion from "@material-ui/core/Accordion";
-import MuiAccordionSummary from "@material-ui/core/AccordionSummary";
-import MuiAccordionDetails from "@material-ui/core/AccordionDetails";
-import Rating from "@material-ui/lab/Rating";
-import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
+import { createStringChangeEventCallback } from "../../lib/createHooks";
 
 const useStyles = makeStyles({
-  dialogHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    minHeight: 48,
-    backgroundColor: "#20295f",
-    color: "white",
-    alignItems: "center",
-    paddingLeft: "24px",
-  },
   Accordion: {
     padding: 0,
     // borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
@@ -87,42 +73,12 @@ const AddBestWork: React.FC<Props> = (props) => {
   const matches = useMediaQuery("(max-width:960px)");
   const schrollType = matches ? "paper" : "body";
 
+  const [title, setTitle] = useState("");
   const [whatIDid, setWhatIDid] = useState("");
   const [whatWasDifficult, setWhatWasDifficult] = useState("");
-  const [whatIGot, setWhteIGot] = useState("");
+  const [whatIGot, setWhatIGot] = useState("");
   const [reasonsForWorking, setReasonsForWorking] = useState("");
   const [whyIWantedToSolve, setWhyIWantedToSolve] = useState("");
-
-  const inputWhatIDid = useCallback(
-    (event) => {
-      setWhatIDid(event.target.value);
-    },
-    [setWhatIDid]
-  );
-  const inputWhatWasDifficult = useCallback(
-    (event) => {
-      setWhatWasDifficult(event.target.value);
-    },
-    [setWhatWasDifficult]
-  );
-  const inputWhatIGot = useCallback(
-    (event) => {
-      setWhteIGot(event.target.value);
-    },
-    [setWhteIGot]
-  );
-  const inputReasonsForWorking = useCallback(
-    (event) => {
-      setReasonsForWorking(event.target.value);
-    },
-    [setReasonsForWorking]
-  );
-  const inputWhyIWhantedToSolve = useCallback(
-    (event) => {
-      setWhyIWantedToSolve(event.target.value);
-    },
-    [setWhyIWantedToSolve]
-  );
 
   return (
     <div>
@@ -134,28 +90,27 @@ const AddBestWork: React.FC<Props> = (props) => {
         fullWidth
         maxWidth="md"
       >
-        <div className={classes.dialogHeader}>
-          <Typography>
-            バスケ部キャプテンとしてリーダーシップを発揮した
-          </Typography>
+        <div className="dialogHeader">
           <DialogActions>
             <CloseButton onClick={props.handleClose} />
           </DialogActions>
         </div>
         <DialogContent>
+          <TextInput
+            label={"タイトル"}
+            multiline
+            required={true}
+            // rows={1}
+            value={title}
+            type={"text"}
+            onChange={createStringChangeEventCallback(setTitle)}
+          />
           <Accordion defaultExpanded className={classes.Accordion}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               className={classes.AccordionSummary}
             >
-              <Grid container spacing={1} alignItems="center">
-                <Grid item>
-                  <span className={classes.square}></span>
-                </Grid>
-                <Grid item>
-                  <Typography>何をやったか(行動と結果)</Typography>
-                </Grid>
-              </Grid>
+              <Typography>何をやったか(行動と結果)</Typography>
             </AccordionSummary>
             <AccordionDetails className={classes.AccordionDetails}>
               <TextInput
@@ -165,7 +120,7 @@ const AddBestWork: React.FC<Props> = (props) => {
                 // rows={1}
                 value={whatIDid}
                 type={"text"}
-                onChange={inputWhatIDid}
+                onChange={createStringChangeEventCallback(setWhatIDid)}
               />
             </AccordionDetails>
           </Accordion>
@@ -176,14 +131,7 @@ const AddBestWork: React.FC<Props> = (props) => {
               expandIcon={<ExpandMoreIcon />}
               className={classes.AccordionSummary}
             >
-              <Grid container spacing={1} alignItems="center">
-                <Grid item>
-                  <span className={classes.square}></span>
-                </Grid>
-                <Grid item>
-                  <Typography>何が困難だったか</Typography>
-                </Grid>
-              </Grid>
+              <Typography>何が困難だったか</Typography>
             </AccordionSummary>
             <AccordionDetails className={classes.AccordionDetails}>
               <TextInput
@@ -193,7 +141,7 @@ const AddBestWork: React.FC<Props> = (props) => {
                 // rows={1}
                 value={whatWasDifficult}
                 type={"text"}
-                onChange={inputWhatWasDifficult}
+                onChange={createStringChangeEventCallback(setWhatWasDifficult)}
               />
             </AccordionDetails>
           </Accordion>
@@ -204,14 +152,7 @@ const AddBestWork: React.FC<Props> = (props) => {
               expandIcon={<ExpandMoreIcon />}
               className={classes.AccordionSummary}
             >
-              <Grid container spacing={1} alignItems="center">
-                <Grid item>
-                  <span className={classes.square}></span>
-                </Grid>
-                <Grid item>
-                  <Typography>なぜ解決しようと思ったか</Typography>
-                </Grid>
-              </Grid>
+              <Typography>なぜ解決しようと思ったか</Typography>
             </AccordionSummary>
             <AccordionDetails className={classes.AccordionDetails}>
               <TextInput
@@ -221,7 +162,7 @@ const AddBestWork: React.FC<Props> = (props) => {
                 // rows={1}
                 value={reasonsForWorking}
                 type={"text"}
-                onChange={inputReasonsForWorking}
+                onChange={createStringChangeEventCallback(setReasonsForWorking)}
               />
             </AccordionDetails>
           </Accordion>
@@ -232,14 +173,7 @@ const AddBestWork: React.FC<Props> = (props) => {
               expandIcon={<ExpandMoreIcon />}
               className={classes.AccordionSummary}
             >
-              <Grid container spacing={1} alignItems="center">
-                <Grid item>
-                  <span className={classes.square}></span>
-                </Grid>
-                <Grid item>
-                  <Typography>何を得たか</Typography>
-                </Grid>
-              </Grid>
+              <Typography>何を得たか</Typography>
             </AccordionSummary>
             <AccordionDetails className={classes.AccordionDetails}>
               <TextInput
@@ -249,7 +183,7 @@ const AddBestWork: React.FC<Props> = (props) => {
                 // rows={1}
                 value={whatIGot}
                 type={"text"}
-                onChange={inputWhatIGot}
+                onChange={createStringChangeEventCallback(setWhatIGot)}
               />
             </AccordionDetails>
           </Accordion>
@@ -259,14 +193,7 @@ const AddBestWork: React.FC<Props> = (props) => {
               expandIcon={<ExpandMoreIcon />}
               className={classes.AccordionSummary}
             >
-              <Grid container spacing={1} alignItems="center">
-                <Grid item>
-                  <span className={classes.square}></span>
-                </Grid>
-                <Grid item>
-                  <Typography>何に活かせるか</Typography>
-                </Grid>
-              </Grid>
+              <Typography>何に活かせるか</Typography>
             </AccordionSummary>
             <AccordionDetails className={classes.AccordionDetails}>
               <TextInput
@@ -276,12 +203,15 @@ const AddBestWork: React.FC<Props> = (props) => {
                 // rows={1}
                 value={whyIWantedToSolve}
                 type={"text"}
-                onChange={inputWhyIWhantedToSolve}
+                onChange={createStringChangeEventCallback(setWhyIWantedToSolve)}
               />
             </AccordionDetails>
           </Accordion>
           <Divider className={classes.dividerBlack} />
         </DialogContent>
+        <DialogActions>
+          <SaveButton onClick={() => {}} />
+        </DialogActions>
       </Dialog>
     </div>
   );
