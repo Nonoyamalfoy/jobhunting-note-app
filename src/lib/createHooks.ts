@@ -10,3 +10,20 @@ export const createStringChangeEventCallback = (
     [update]
   );
 };
+
+export const createNumberChangeEventCallback = (update: Dispatch<SetStateAction<number>>) => {
+  return useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    // if (/^[0-9]+$/.test(event.target.value)) {
+      // event.target.valueは文字列型なので、数値型に変換する
+      update(Number(event))
+    // }
+  }, [update])
+}
+// export const createNumberChangeEventCallback = (update: Dispatch<SetStateAction<number>>) => {
+//   return useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+//     if (/^[0-9]+$/.test(event.target.value)) {
+//       // event.target.valueは文字列型なので、数値型に変換する
+//       update(Number(event.target.value))
+//     }
+//   }, [update])
+// }
