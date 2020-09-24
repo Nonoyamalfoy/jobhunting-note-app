@@ -59,17 +59,9 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
 
   const [events, setEvents] = useState<IEvent[]>([]);
 
-  console.log(events);
-  
 
   const inputEvent = useCallback(
     (value: Partial<IEvent>, i: number) => {
-      
-      // setEvents(
-      //   events.map((event, eventNumber) =>
-      //     i === eventNumber ? { ...event, ...value } : event
-      //   )
-      // );
       
       const _events = events.map((event, eventNumber) => {
         return i === eventNumber ? { ...event, ...value } : event
