@@ -1,16 +1,28 @@
+import dayjs from "dayjs";
+
+export type Event = {
+  eventDate: dayjs.Dayjs;
+  eventLocation: string;
+  eventDescription: string;
+};
+
 export type Company = {
   companyId: string;
-  companyName: string
+  aspiration: number | null;
+  companyName: string;
   corporatePhilosophy: string;
-  corporateProfile: string;
-  requiredPerson: string;
-  requiredSkil: string;
+  companyBusiness: string;
+  yearOfEstablish: dayjs.Dayjs;
+  numberOfEmployees: string;
+  capital: string;
   annualIncome: string;
+  requiredPersonImage: string;
+  requiredSkill: string;
   workingEnvironment: string;
+  welfare: string;
   future: string;
   corporateIssues: string;
   reasonForAspiration: string;
-  interview: string;
-  test: string;
+  event: Event[];
   memo: string;
-} 
+};
