@@ -63,9 +63,18 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
   const inputEvent = useCallback(
     (value: Partial<IEvent>, i: number) => {
       
+      // {eventDescription: "a"} 0 のように引数の受け取りに成功している
+      console.log(value, i);
+
       const _events = events.map((event, eventNumber) => {
+        // 表示なし
+        console.log(event, eventNumber);
         return i === eventNumber ? { ...event, ...value } : event
       });
+
+      // 常に空の配列
+      console.log(_events);
+      
       setEvents([..._events]);
 
     },
