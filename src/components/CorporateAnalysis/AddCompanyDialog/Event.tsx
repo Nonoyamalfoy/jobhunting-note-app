@@ -55,7 +55,6 @@ type Props = {
 
 const Event: React.FC<Props> = (props) => {
   const classes = useStyles();
-
   return (
     <>
       <Accordion defaultExpanded className={classes.Accordion}>
