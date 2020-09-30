@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Line } from "react-chartjs-2";
 
 import {
@@ -9,13 +9,20 @@ import {
   makeStyles,
   Grid,
   Divider,
+  IconButton,
 } from "@material-ui/core";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import Timeline from "@material-ui/lab/Timeline";
 import TimelineItem from "@material-ui/lab/TimelineItem";
 import TimelineSeparator from "@material-ui/lab/TimelineSeparator";
 import TimelineConnector from "@material-ui/lab/TimelineConnector";
 import TimelineContent from "@material-ui/lab/TimelineContent";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { useSelector } from "react-redux";
+import { RootState } from "../../entity/rootState";
+import { Experience } from "../../entity/user";
+import { getExperiences } from "../../reducks/user/selectors";
+import { SelectedExperience, AddExperienceDialog } from "./";
 
 const useStyles = makeStyles((theme) => ({
   timeline: {
@@ -43,15 +50,20 @@ const useStyles = makeStyles((theme) => ({
     padding: 4,
     alignSelf: "baseline",
     // marginTop: "8px",
-    borderStyle: "solid",
-    borderWidth: 2,
+    // borderStyle: "solid",
+    // borderWidth: 2,
     borderRadius: "50%",
     // marginBottom: 8,
     backgroundColor: "#20295f",
     boxShadow: "0 3px 5px rgba(0,0,0,0.5)",
+    cursor: "pointer",
+    color: "#fff",
     "& span": {
-      color: "#fff",
       margin: "0 auto",
+    },
+    "&:hover": {
+      // backgroundColor: "#20295f",
+      color: "grey",
     },
   },
   Accordion: {
@@ -75,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
   },
   AccordionDetails: {
     display: "block",
-    padding: 0
+    padding: 0,
     // backgroundColor: "#dfe3e7",
   },
   square: {
@@ -88,131 +100,216 @@ const useStyles = makeStyles((theme) => ({
   dividerBlack: {
     backgroundColor: "rgba(0, 0, 0, 0.54)",
   },
+  addCircleIcon: {
+    position: "absolute",
+    top: 20,
+    right: 10,
+  },
+  textContainer: {
+    padding: "8px 16px 16px 16px",
+    position: "relative",
+  },
 }));
 
-const myMotivations = [
-  { title: "テニスと出会う", age: 5, motivation: 5 },
-  { title: "怪我により２ヶ月間のドクターストップ", age: 10, motivation: 30 },
-  { title: "復帰後の引退試合でメンバー入り", age: 15, motivation: 9 },
-  { title: "志望大学に落ちる", age: 16, motivation: 80 },
-  { title: "タイに旅行に行き、海外の魅力に気づく", age: 18, motivation: -30 },
-  { title: "一週間の旅に出る", age: 20, motivation: 40 },
-  { title: "帰国後現実とのギャップに苦しむ", age: 21, motivation: 10 },
-  { title: "学生団体での活動に打ち込む", age: 22, motivation: 70 },
-];
-
-const getTitles = () => {
-  const array = [];
-  for (let i = 0; i < myMotivations.length; i++) {
-    array[i] = myMotivations[i].title;
-  }
-  return array;
-};
-
-const getAges = () => {
-  const array = [];
-  for (let i = 0; i < myMotivations.length; i++) {
-    array[i] = myMotivations[i].age;
-  }
-  return array;
-};
-
-const getMotivations = () => {
-  const array = [];
-  for (let i = 0; i < myMotivations.length; i++) {
-    array[i] = myMotivations[i].motivation;
-  }
-  return array;
-};
-
-const data = {
-  labels: getAges(),
-  datasets: [
-    {
-      label: "モチベーション",
-      // backgroundColor: "#008080",
-      borderColor: "#20295f",
-      pointBorderWidth: 10,
-      data: getMotivations(),
-    },
-  ],
-};
-
-const options = {
-  legend: {
-    display: false,
-  },
-  scales: {
-    yAxes: [
-      {
-        ticks: {
-          display: false,
-          beginAtZero: true,
-          max: 100,
-        },
-      },
-    ],
-  },
-  tooltips: {
-    displayColors: false,
-    callbacks: {
-      title: (tooltipItems: any, data: any) => "",
-      beforeLabel: (tooltipItems: any, data: any) => {
-        return `${getAges()[tooltipItems.index]}歳`;
-      },
-      label: (tooltipItems: any, data: any) => {
-        return getTitles()[tooltipItems.index];
-      },
-    },
-  },
-};
+// type Props = {
+//   handleClickOpenAddExperienceDialog: (age: number) => void;
+// };
 
 const MotivationGraph: React.FC = () => {
   const classes = useStyles();
+  const selector = useSelector((state: RootState) => state);
+  const experiences = getExperiences(selector).sort((a, b) =>
+    a.age > b.age ? 1 : -1
+  );
+  // const [age, setAge] = useState(0);
+  const [experience, setExperience] = useState<Experience>({
+    experienceId: "",
+    title: "",
+    age: 0,
+    motivation: 0,
+    description: ""
+  });
+  const [addMotivationDialogOpen, setAddMotivationDialogOpen] = useState(false);
+  const [
+    selectedExperienceDialogOpen,
+    setSelectedExperienceDialogOpen,
+  ] = useState(false);
+
+  const resetExperience = () => {
+    setExperience({
+      experienceId: "",
+      title: "",
+      age: 0,
+      motivation: 0,
+      description: ""
+    });
+  };
+
+  // SelectDialog
+  const handleClickOpenSelectedExperienceDialog = (e: Experience) => {
+    setExperience(e);
+    setSelectedExperienceDialogOpen(true);
+  };
+  const handleCloseSelectedExperienceDialog = () => {
+    setSelectedExperienceDialogOpen(false);
+  };
+
+  // AddDialog
+  const handleClickOpenAddExperienceDialog = () => {
+    setAddMotivationDialogOpen(true);
+  };
+  const handleCloseAddMotivationDialog = () => {
+    setAddMotivationDialogOpen(false);
+  };
+
+  const getTitles = () => {
+    const array = [];
+    for (let i = 0; i < experiences.length; i++) {
+      array[i] = experiences[i].title;
+    }
+    return array;
+  };
+
+  const getAges = () => {
+    const array = [];
+    for (let i = 0; i < experiences.length; i++) {
+      array[i] = experiences[i].age;
+    }
+    return array;
+  };
+
+  const getMotivations = () => {
+    const array = [];
+    for (let i = 0; i < experiences.length; i++) {
+      array[i] = experiences[i].motivation;
+    }
+    return array;
+  };
+
+  const data = {
+    labels: getAges(),
+    datasets: [
+      {
+        label: "モチベーション",
+        // backgroundColor: "#008080",
+        borderColor: "#20295f",
+        pointBorderWidth: 10,
+        data: getMotivations(),
+      },
+    ],
+  };
+
+  const options = {
+    legend: {
+      display: false,
+    },
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            display: false,
+            beginAtZero: true,
+            max: 100,
+          },
+        },
+      ],
+    },
+    tooltips: {
+      displayColors: false,
+      callbacks: {
+        title: (tooltipItems: any, data: any) => "",
+        beforeLabel: (tooltipItems: any, data: any) => {
+          return `${getAges()[tooltipItems.index]}歳`;
+        },
+        label: (tooltipItems: any, data: any) => {
+          return getTitles()[tooltipItems.index];
+        },
+      },
+    },
+  };
+
   return (
     <div>
-      <Line data={data} options={options} />
-
-      <div className="module-spacer--medium"/>
-      <Divider className={classes.dividerBlack} />
-
-      <Accordion defaultExpanded className={classes.Accordion}>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          className={classes.AccordionSummary}
+      <Grid className={classes.textContainer}>
+        <IconButton
+          className={classes.addCircleIcon}
+          size="small"
+          onClick={() => {
+            resetExperience();
+            handleClickOpenAddExperienceDialog();
+          }}
         >
-          <Grid container spacing={1} alignItems="center">
-            <Grid item>
-              <span className={classes.square}></span>
-            </Grid>
-            <Grid item>
-              <Typography>自分史</Typography>
-            </Grid>
+          <AddCircleOutlineIcon />
+        </IconButton>
+        <Grid container spacing={1} alignItems="center">
+          <Grid item>
+            <span className={classes.square}></span>
           </Grid>
-        </AccordionSummary>
-        <AccordionDetails className={classes.AccordionDetails}>
-          <Timeline className={classes.timeline}>
-            {myMotivations.map((motivation, i) => (
-              <TimelineItem className={classes.timelineItem}>
-                <TimelineSeparator>
-                  <div className={classes.circle}>
-                    <span>{motivation.age}</span>
-                  </div>
-                  {i !== myMotivations.length - 1 && <TimelineConnector />}
-                </TimelineSeparator>
-                <TimelineContent>
-                  <Typography color="textSecondary">
-                    {motivation.title}
-                  </Typography>
-                  <Divider />
-                </TimelineContent>
-              </TimelineItem>
-            ))}
-          </Timeline>
-        </AccordionDetails>
-      </Accordion>
-      <Divider className={classes.dividerBlack} />
+          <Grid item>
+            <p>モチベーショングラフ</p>
+          </Grid>
+        </Grid>
+        <Line data={data} options={options} />
 
+        <div className="module-spacer--medium" />
+        <Divider className={classes.dividerBlack} />
+
+        <Accordion defaultExpanded className={classes.Accordion}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            className={classes.AccordionSummary}
+          >
+            <Grid container spacing={1} alignItems="center">
+              <Grid item>
+                <span className={classes.square}></span>
+              </Grid>
+              <Grid item>
+                <Typography>自分史</Typography>
+              </Grid>
+            </Grid>
+          </AccordionSummary>
+          <AccordionDetails className={classes.AccordionDetails}>
+            <Timeline className={classes.timeline}>
+              {experiences.map((experience, i) => (
+                <TimelineItem key={i} className={classes.timelineItem}>
+                  <TimelineSeparator>
+                    <div
+                      className={classes.circle}
+                      onClick={() =>
+                        handleClickOpenSelectedExperienceDialog(experience)
+                      }
+                    >
+                      <span>{experience.age}</span>
+                    </div>
+                    {i !== experiences.length - 1 && <TimelineConnector />}
+                  </TimelineSeparator>
+                  <TimelineContent>
+                    <Typography color="textSecondary">
+                      {experience.title}
+                    </Typography>
+                    <Divider />
+                  </TimelineContent>
+                </TimelineItem>
+              ))}
+            </Timeline>
+          </AccordionDetails>
+        </Accordion>
+        <Divider className={classes.dividerBlack} />
+
+        <AddExperienceDialog
+          experience={experience}
+          open={addMotivationDialogOpen}
+          handleClose={handleCloseAddMotivationDialog}
+        />
+        <SelectedExperience
+          open={selectedExperienceDialogOpen}
+          handleClickOpenAddExperienceDialog={
+            handleClickOpenAddExperienceDialog
+          }
+          handleClose={handleCloseSelectedExperienceDialog}
+          selectedExperience={experience}
+        />
+      </Grid>
     </div>
   );
 };

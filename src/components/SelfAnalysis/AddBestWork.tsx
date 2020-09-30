@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +19,9 @@ import { CloseButton, SaveButton, TextInput, MoreButton } from "../Uikit";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { createStringChangeEventCallback } from "../../lib/createHooks";
+import { addBestWork } from "../../reducks/user/operations";
+import { useDispatch } from "react-redux";
+import { BestWork } from "../../entity/user";
 
 const useStyles = makeStyles({
   Accordion: {
@@ -44,13 +47,7 @@ const useStyles = makeStyles({
     display: "block",
     backgroundColor: "#dfe3e7",
   },
-  rectangle: {
-    width: 8,
-    height: 16,
-    display: "block",
-    borderRadius: "20%",
-    backgroundColor: "rgba(0, 0, 0, 0.30)",
-  },
+
   square: {
     height: 16,
     width: 16,
@@ -66,19 +63,31 @@ const useStyles = makeStyles({
 type Props = {
   open: boolean;
   handleClose: () => void;
+  bestWork: BestWork
 };
 
 const AddBestWork: React.FC<Props> = (props) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const matches = useMediaQuery("(max-width:960px)");
   const schrollType = matches ? "paper" : "body";
+  const bestWork = props.bestWork
 
   const [title, setTitle] = useState("");
   const [whatIDid, setWhatIDid] = useState("");
   const [whatWasDifficult, setWhatWasDifficult] = useState("");
   const [whatIGot, setWhatIGot] = useState("");
   const [reasonsForWorking, setReasonsForWorking] = useState("");
-  const [whyIWantedToSolve, setWhyIWantedToSolve] = useState("");
+  const [whatImakeUseOftheBestWork, setWhatImakeUseOftheBestWork] = useState("");
+
+  useEffect(() => {
+    setTitle(bestWork.title)
+    setWhatIDid(bestWork.whatIDid)
+    setWhatWasDifficult(bestWork.whatWasDifficult)
+    setWhatIGot(bestWork.whatIGot)
+    setReasonsForWorking(bestWork.reasonsForWorking)
+    setWhatImakeUseOftheBestWork(bestWork.whatImakeUseOftheBestWork)
+  }, [bestWork])
 
   return (
     <div>
@@ -201,16 +210,33 @@ const AddBestWork: React.FC<Props> = (props) => {
                 multiline
                 required={true}
                 // rows={1}
-                value={whyIWantedToSolve}
+                value={whatImakeUseOftheBestWork}
                 type={"text"}
-                onChange={createStringChangeEventCallback(setWhyIWantedToSolve)}
+                onChange={createStringChangeEventCallback(setWhatImakeUseOftheBestWork)}
               />
             </AccordionDetails>
           </Accordion>
           <Divider className={classes.dividerBlack} />
         </DialogContent>
         <DialogActions>
-          <SaveButton onClick={() => {}} />
+          <SaveButton
+            onClick={() => {
+              dispatch(
+                addBestWork({
+                  bestWorkId: bestWork.bestWorkId,
+                  title: title,
+                  whatIDid: whatIDid,
+                  whatWasDifficult: whatWasDifficult,
+                  whatIGot: whatIGot,
+                  reasonsForWorking: reasonsForWorking,
+                  whatImakeUseOftheBestWork: whatImakeUseOftheBestWork,
+                  created_at: bestWork.created_at,
+                  updated_at: bestWork.updated_at,
+                })
+              );
+              props.handleClose()
+            }}
+          />
         </DialogActions>
       </Dialog>
     </div>

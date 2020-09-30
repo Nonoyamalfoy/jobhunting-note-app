@@ -1,14 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Card,
-  CardActionArea,
-  CardContent,
-  List,
-  Typography,
-  Box,
-} from "@material-ui/core";
-import Rating from "@material-ui/lab/Rating";
 import {
   AddCompanyDialog,
   CompanyListItem,
@@ -17,12 +8,18 @@ import {
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import { CreateButton } from "../components/Uikit";
-
+import { db } from "../firebase";
+import { useSelector } from "react-redux";
+import { RootState } from "../entity/rootState";
+import { getCompanies, getUserId } from "../reducks/user/selectors";
+import { Company } from "../entity/company";
+import dayjs from "dayjs";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     // flexGrow: 1,
     margin: 20,
+    // height: "100%"
   },
   paper: {
     // padding: theme.spacing(1),
@@ -37,47 +34,105 @@ const useStyles = makeStyles((theme) => ({
 
 const CorporateAnalysis: React.FC = () => {
   const classes = useStyles();
+  const selector = useSelector((state: RootState) => state);
+  const uid = getUserId(selector);
+  const companies = getCompanies(selector);
   const [addCompanyDialogOpen, setAddCompanyDialogOpen] = useState(false);
   const [selectedCompanyDialogopen, setSelectedCompanyDialogopen] = useState(
     false
   );
+  const [company, setCompany] = useState<Company>({
+    companyId: "",
+    companyName: "",
+    aspiration: 3,
+    corporatePhilosophy: "",
+    companyBusiness: "",
+    yearOfEstablish: dayjs().format("YYYYMM"),
+    numberOfEmployees: "",
+    capital: "",
+    annualIncome: "",
+    requiredPersonImage: "",
+    requiredSkill: "",
+    workingEnvironment: "",
+    welfare: "",
+    future: "",
+    task: "",
+    reasonForAspiration: "",
+    schedules: [],
+    memo: "",
+  } as Company);
+
+  const resetCompany = () => {
+    setCompany({
+      companyId: "",
+      companyName: "",
+      aspiration: 3,
+      corporatePhilosophy: "",
+      companyBusiness: "",
+      yearOfEstablish: dayjs().format("YYYYMM"),
+      numberOfEmployees: "",
+      capital: "",
+      annualIncome: "",
+      requiredPersonImage: "",
+      requiredSkill: "",
+      workingEnvironment: "",
+      welfare: "",
+      future: "",
+      task: "",
+      reasonForAspiration: "",
+      schedules: [],
+      memo: "",
+    });
+  };
+
   const handleClickOpenAddCompanyDialog = () => {
     setAddCompanyDialogOpen(true);
   };
   const handleCloseAddCompanyDialog = () => {
+    resetCompany();
     setAddCompanyDialogOpen(false);
   };
-  const handleClickOpenSelectedCompanyDialog = () => {
+  const handleClickOpenSelectedCompanyDialog = (c: Company) => {
+    setCompany(c);
     setSelectedCompanyDialogopen(true);
   };
   const handleCloseSelectedCompanyDialog = () => {
+    // resetCompany()
     setSelectedCompanyDialogopen(false);
   };
+
   return (
     <div className={classes.root}>
-
       <Grid container spacing={4}>
-        <CompanyListItem
-          handleClickOpenSelectedCompanyDialog={handleClickOpenSelectedCompanyDialog}
-        />
-        <CompanyListItem
-          handleClickOpenSelectedCompanyDialog={handleClickOpenSelectedCompanyDialog}
-        />
-        <CompanyListItem
-          handleClickOpenSelectedCompanyDialog={handleClickOpenSelectedCompanyDialog}
-        />
+        {companies.map((c, i) => (
+          <CompanyListItem
+            key={i}
+            company={c}
+            handleClickOpenSelectedCompanyDialog={() =>
+              handleClickOpenSelectedCompanyDialog(c)
+            }
+          />
+        ))}
       </Grid>
 
       <AddCompanyDialog
         open={addCompanyDialogOpen}
         handleClose={handleCloseAddCompanyDialog}
+        company={company}
       />
       <SelectedCompanyDialog
         open={selectedCompanyDialogopen}
         handleClose={handleCloseSelectedCompanyDialog}
         handleClickOpenAddCompanyDialog={handleClickOpenAddCompanyDialog}
+        selectedCompany={company}
       />
-      <CreateButton onClick={handleClickOpenAddCompanyDialog} size={"medium"} />
+      <CreateButton
+        onClick={() => {
+          handleClickOpenAddCompanyDialog();
+          resetCompany();
+        }}
+        size={"medium"}
+      />
     </div>
   );
 };

@@ -1,30 +1,14 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Dialog, DialogContent, DialogActions, Grid } from "@material-ui/core";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-// import {
-//   getIsDialogOpen,
-//   getIsStartEdit,
-//   getForm,
-// } from "../../reducks/addSchedule/selector";
-// import {
-//   closeAddScheduledialog,
-//   setIsEditStart,
-// } from "../../reducks/addSchedule/operation";
-import {
-  LocationOnOutlined,
-  NotesOutlined,
-  AccessTime,
-} from "@material-ui/icons";
-import { DatePicker } from "@material-ui/pickers";
+import { DateTimePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/styles";
-// import { setAddSchedule } from "../../reducks/addSchedule/operation";
-// import { addSchedule } from "../../reducks/users/operations";
 import { TextInput, SaveButton, CloseButton, SelectColorBox } from "../Uikit";
-// import { setScheduleColor } from "../../services/schedule";
-// import { isCloseDialog } from "../../services/schedule";
 import dayjs from "dayjs";
 import { createStringChangeEventCallback } from "../../lib/createHooks";
+import { addSchedule } from "../../reducks/user/operations";
+import { Schedule } from "../../entity/user";
 
 const day = dayjs();
 
@@ -41,28 +25,8 @@ const useStyles = makeStyles({
   },
 });
 
-const setScheduleColor = (color: string) => {
-  let scheduleColor;
-  switch (color) {
-    case "default":
-      scheduleColor = "#000088";
-      break;
-    case "red":
-      scheduleColor = "#880000";
-      break;
-    case "orange":
-      scheduleColor = "#D2691E";
-      break;
-    case "green":
-      scheduleColor = "#008800";
-      break;
-    default:
-      break;
-  }
-  return scheduleColor;
-};
-
 type Props = {
+  schedule: Schedule;
   open: boolean;
   handleClose: () => void;
 };
@@ -73,14 +37,13 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
 
   const [title, setTitle] = useState("");
   const [color, setColor] = useState("default");
-  const [date, setDate] = useState(day);
-  const [location, setLocation] = useState("");
+  const [date, setDate] = useState(day.format("YYYYMMDDHHmm"));
   const [description, setDescription] = useState("");
+  const [location, setLocation] = useState("");
 
-  const scheduleColor = setScheduleColor(color);
+  const scheduel = props.schedule
   const matches = useMediaQuery("(max-width:960px)");
   const schrollType = matches ? "paper" : "body";
-
 
   const inputColor = useCallback(
     (color) => {
@@ -88,19 +51,29 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
     },
     [setColor]
   );
+  
   const inputDate = useCallback(
     (date) => {
-      setDate(date);
+      setDate(date.format("YYYYMMDDHHmm"));
     },
     [setDate]
   );
+
+  useEffect(() => {
+    setTitle(scheduel.title)
+    setColor(scheduel.color)
+    setDate(scheduel.date)
+    setDescription(scheduel.description)
+    setLocation(scheduel.location)
+  }, [scheduel])
 
   return (
     <Dialog
       className="dialog"
       open={props.open}
       onClose={props.handleClose}
-      // fullScreen={matches}
+      fullScreen={matches}
+      scroll={schrollType}
       fullWidth
       // maxWidth="sm"
     >
@@ -111,7 +84,7 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
       </div>
 
       <DialogContent>
-      <div className="module-spacer--medium" />
+        <div className="module-spacer--medium" />
         <TextInput
           label="タイトル"
           autoFocus={true}
@@ -120,7 +93,7 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
           type="text"
           onChange={createStringChangeEventCallback(setTitle)}
         />
-        <div className="module-spacer--medium" />
+        <div className="module-spacer--small" />
         <Grid container spacing={3}>
           <Grid item xs={6}>
             <SelectColorBox
@@ -131,12 +104,14 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
             />
           </Grid>
           <Grid item xs={6}>
-            <DatePicker
-              label="日時"
+            <DateTimePicker
               value={date}
+              placeholder="deadline"
+              label="deadline"
+              ampm={false}
               onChange={inputDate}
               variant="inline"
-              format="YYYY/MM/DD"
+              format="YYYY/MM/DD HH:mm"
               animateYearScrolling
               disableToolbar
               fullWidth
@@ -146,16 +121,7 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
           </Grid>
         </Grid>
 
-
-        <TextInput
-          label="場所"
-          value={location}
-          multiline={true}
-          onChange={createStringChangeEventCallback(setLocation)}
-          type="text"
-        />
-
-        <div className="module-spacer--medium" />
+        <div className="module-spacer--small" />
 
         <TextInput
           label="概要"
@@ -165,10 +131,32 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
           type="text"
         />
 
-        <div className="module-spacer--medium" />
+        <div className="module-spacer--small" />
+
+        <TextInput
+          label="場所"
+          value={location}
+          multiline={true}
+          onChange={createStringChangeEventCallback(setLocation)}
+          type="text"
+        />
       </DialogContent>
       <DialogActions>
-        <SaveButton onClick={() => {}} />
+        <SaveButton
+          onClick={() => {
+            dispatch(
+              addSchedule({
+                scheduleId: scheduel.scheduleId,
+                title: title,
+                color: color,
+                date: date,
+                description: description,
+                location: location,
+              })
+            );
+            props.handleClose();
+          }}
+        />
       </DialogActions>
     </Dialog>
   );

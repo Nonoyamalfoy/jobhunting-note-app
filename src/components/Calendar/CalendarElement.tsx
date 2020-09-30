@@ -1,9 +1,11 @@
 import React from "react";
 import { makeStyles } from "@material-ui/styles";
 import { Typography, ListItem } from "@material-ui/core";
+import { ScheduleBar } from "./";
 import dayjs from "dayjs";
 import { isSameMonth, isFirstDay, isSameDay } from "../../lib/calendar";
 import { useSelector } from "react-redux";
+import { Schedule } from "../../entity/user";
 
 const useStyles = makeStyles({
   element: {
@@ -42,11 +44,15 @@ const useStyles = makeStyles({
 });
 
 type Props = {
-  date: dayjs.Dayjs
-  currentDate: dayjs.Dayjs
-}
+  date: dayjs.Dayjs;
+  currentDate: dayjs.Dayjs;
+  schedules: Schedule[];
+  handleClickOpenSelectedScheduleDialog: (s: Schedule) => void;
+};
 
 const CalendarElement: React.FC<Props> = (props) => {
+  // console.log(props.schedules);
+
   const classes = useStyles();
   const selector = useSelector((state) => state);
   const today = dayjs();
@@ -74,7 +80,11 @@ const CalendarElement: React.FC<Props> = (props) => {
         <span className={date}>{props.date.format(format)}</span>
       </Typography>
       <div className={classes.schedules}>
-        
+        {props.schedules.map((schedule, i) => (
+          <div key={i} onClick={() => props.handleClickOpenSelectedScheduleDialog(schedule)}>
+            <ScheduleBar key={schedule.scheduleId} schedule={schedule} />
+          </div>
+        ))}
       </div>
     </ListItem>
   );

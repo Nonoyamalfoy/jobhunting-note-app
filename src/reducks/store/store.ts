@@ -1,28 +1,22 @@
-import {
-  createStore,
-  combineReducers,
-  applyMiddleware,
-  compose,
-} from "redux";
+import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import { RootState } from "../../entity/rootState";
 import { connectRouter, routerMiddleware } from "connected-react-router";
-import {createBrowserHistory} from "history";
+import { createBrowserHistory } from "history";
 
-import UserReducer from "../user/reducer"
+import UserReducer from "../user/reducer";
+import CalendarReducer from "../calendar/reducer";
 
 export const history = createBrowserHistory();
 
 const store = createStore(
   combineReducers<RootState>({
     router: connectRouter(history),
-    user: UserReducer
+    user: UserReducer,
+    calendar: CalendarReducer,
   }),
   compose(
-    applyMiddleware(
-      routerMiddleware(history),
-      thunk
-      ),
+    applyMiddleware(routerMiddleware(history), thunk)
     // (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
     //   (window as any).__REDUX_DEVTOOLS_EXTENSION__()
   )

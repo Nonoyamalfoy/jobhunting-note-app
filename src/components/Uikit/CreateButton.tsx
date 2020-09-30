@@ -18,8 +18,8 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: "#20295f",
         color: "grey",
       },
-      [theme.breakpoints.up(960)]: {
-        right: "calc(50% - 550px)",
+      [theme.breakpoints.up(1100)]: {
+        right: "calc(50% - 520px)",
         bottom: "80px",
         transform: "translateX(50%)",
       },

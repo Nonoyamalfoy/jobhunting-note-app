@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Grid,
   Typography,
@@ -17,11 +17,24 @@ import {
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import {
   AddBestWork,
-  AddMotivation,
+  AddStrengthsAndWeaknessesDialog,
   MotivationGraph,
   SelectedBestWork,
 } from "../components/SelfAnalysis";
 import { CreateButton } from "../components/Uikit";
+import {
+  getUserId,
+  getBestWorks,
+  getStrengths,
+  getWeaknesses,
+} from "../reducks/user/selectors";
+import { useSelector } from "react-redux";
+import { RootState } from "../entity/rootState";
+import { BestWork, Experience } from "../entity/user";
+import HTMLReactParser from "html-react-parser";
+
+import { db } from "../firebase/index";
+import SelectedExperience from "../components/SelfAnalysis/SelectedExperience";
 
 const useStyles = makeStyles((theme) => ({
   mainCard: {
@@ -94,35 +107,90 @@ const useStyles = makeStyles((theme) => ({
 
 const SelfAnalysis: React.FC = () => {
   const classes = useStyles();
+  const selector = useSelector((state: RootState) => state);
+  const uid = getUserId(selector);
+  const strengths = getStrengths(selector);
+  const weaknesses = getWeaknesses(selector);
+  const bestWorks = getBestWorks(selector);
+
   const [selectedBestWorkDialogopen, setSelectedBestWorkDialogopen] = useState(
     false
   );
+  const [
+    addStrengthsAndWeaknessesOpen,
+    setAddStrengthsAndWeaknessesOpen,
+  ] = useState(false);
+
   const [addBestWorkDialogopen, setAddBestWorkDialogopen] = useState(false);
-  const [addMotivationDialogOpen, setAddMotivationDialogOpen] = useState(false);
-  const handleClickOpenSelectedBestWorkDialog = () => {
+
+  const [bestWork, setBestWork] = useState({
+    bestWorkId: "",
+    title: "",
+    whatIDid: "",
+    whatWasDifficult: "",
+    whatIGot: "",
+    reasonsForWorking: "",
+    whatImakeUseOftheBestWork: "",
+  } as BestWork);
+
+  const resetBestWork = () => {
+    setBestWork({
+      bestWorkId: "",
+      title: "",
+      whatIDid: "",
+      whatWasDifficult: "",
+      whatIGot: "",
+      reasonsForWorking: "",
+      whatImakeUseOftheBestWork: "",
+    });
+  };
+
+  // Select
+
+  const handleClickOpenSelectedBestWorkDialog = (b: BestWork) => {
+    setBestWork(b);
     setSelectedBestWorkDialogopen(true);
   };
   const handleCloseSelectedBestWorkDialog = () => {
     setSelectedBestWorkDialogopen(false);
   };
+
+  // OpenAddDialog
+  const handleClickOpenAddStrengthsAndWeaknessesDialog = () => {
+    setAddStrengthsAndWeaknessesOpen(true);
+  };
+
   const handleClickOpenAddBestWorkDialog = () => {
     setAddBestWorkDialogopen(true);
   };
+
+  // CloseAddDialog
+  const handleCloseAddStrengthsAndWeaknessesDialog = () => {
+    setAddStrengthsAndWeaknessesOpen(false);
+  };
+
   const handleCloseAddBestWorkDialog = () => {
+    resetBestWork();
     setAddBestWorkDialogopen(false);
   };
-  const handleClickOpenAddMotivationDialog = () => {
-    setAddMotivationDialogOpen(true);
+
+  const returnCodeToBr = (text: string) => {
+    if (text === "") {
+      return text;
+    } else {
+      return HTMLReactParser(text.replace(/\r?\n/g, "<br/>"));
+    }
   };
-  const handleCloseAddMotivationDialog = () => {
-    setAddMotivationDialogOpen(false);
-  };
+
   return (
     <>
       <Card className={classes.mainCard} elevation={5}>
         <CardContent>
           <div className={classes.textContainer}>
-            <CreateButton size="small" onClick={() => {}} />
+            <CreateButton
+              size="small"
+              onClick={handleClickOpenAddStrengthsAndWeaknessesDialog}
+            />
             <Grid container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.square}></span>
@@ -131,32 +199,17 @@ const SelfAnalysis: React.FC = () => {
                 <p>自分の強み</p>
               </Grid>
             </Grid>
-
-            <Grid container justify="flex-start">
-              <Grid item>
-                <Typography color="textSecondary">・</Typography>
-              </Grid>
-              <Grid item xs={11}>
-                <Typography color="textSecondary">
-                  強みです強みです強みです強みです強みです強みです強みです
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid container justify="flex-start">
-              <Grid item>
-                <Typography color="textSecondary">・</Typography>
-              </Grid>
-              <Grid item xs={11}>
-                <Typography color="textSecondary">
-                  強みです強みです強みです強みです強みです強みです強みです
-                </Typography>
-              </Grid>
-            </Grid>
+            <Typography color="textSecondary">
+              {returnCodeToBr(strengths)}
+            </Typography>
             <Divider className={classes.dividerBlack} />
           </div>
 
           <div className={classes.textContainer}>
-            <CreateButton size="small" onClick={() => {}} />
+            <CreateButton
+              size="small"
+              onClick={handleClickOpenAddStrengthsAndWeaknessesDialog}
+            />
             <Grid container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.square}></span>
@@ -165,27 +218,9 @@ const SelfAnalysis: React.FC = () => {
                 <p>自分の弱み</p>
               </Grid>
             </Grid>
-
-            <Grid container justify="flex-start">
-              <Grid item>
-                <Typography color="textSecondary">・</Typography>
-              </Grid>
-              <Grid item xs={11}>
-                <Typography color="textSecondary">
-                  強みです強みです強みです強みです強みです強みです強みです強みです
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid container justify="flex-start">
-              <Grid item>
-                <Typography color="textSecondary">・</Typography>
-              </Grid>
-              <Grid item xs={11}>
-                <Typography color="textSecondary">
-                  強みです強みです強みです強みです強みです強みです強みです強みです
-                </Typography>
-              </Grid>
-            </Grid>
+            <Typography color="textSecondary">
+              {returnCodeToBr(weaknesses)}
+            </Typography>
 
             <Divider className={classes.dividerBlack} />
           </div>
@@ -194,25 +229,7 @@ const SelfAnalysis: React.FC = () => {
 
       <Card className={classes.mainCard} elevation={5}>
         <CardContent>
-          <Grid className={classes.textContainer}>
-            <IconButton
-              className={classes.addCircleIcon}
-              size="small"
-              onClick={handleClickOpenAddMotivationDialog}
-            >
-              <AddCircleOutlineIcon />
-            </IconButton>
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <span className={classes.square}></span>
-              </Grid>
-              <Grid item>
-                <p>モチベーショングラフ</p>
-              </Grid>
-            </Grid>
-
-            <MotivationGraph />
-          </Grid>
+          <MotivationGraph />
         </CardContent>
       </Card>
 
@@ -222,7 +239,10 @@ const SelfAnalysis: React.FC = () => {
             <IconButton
               className={classes.addCircleIcon}
               size="small"
-              onClick={handleClickOpenAddBestWorkDialog}
+              onClick={() => {
+                handleClickOpenAddBestWorkDialog();
+                resetBestWork();
+              }}
             >
               <AddCircleOutlineIcon />
             </IconButton>
@@ -235,52 +255,44 @@ const SelfAnalysis: React.FC = () => {
               </Grid>
             </Grid>
             <Grid container spacing={4}>
-              <Grid item xs={12} sm={6} md={4}>
-                <Card className={classes.subCard} elevation={5}>
-                  <CardActionArea
-                    className={classes.cardActionArea}
-                    onClick={handleClickOpenSelectedBestWorkDialog}
-                  >
-                    <CardContent>
-                      <Typography gutterBottom variant="subtitle1">
-                        バスケ部キャプテンとしてリーダーシップを発揮した
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={4}>
-                <Card className={classes.subCard} elevation={5}>
-                  <CardActionArea
-                    className={classes.cardActionArea}
-                    onClick={handleClickOpenSelectedBestWorkDialog}
-                  >
-                    <CardContent>
-                      <Typography gutterBottom variant="subtitle1">
-                        ビジコンで最優秀賞を受賞
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Grid>
+              {bestWorks.map((bestWork: BestWork, i: number) => (
+                <Grid key={i} item xs={12} sm={6} md={4}>
+                  <Card className={classes.subCard} elevation={5}>
+                    <CardActionArea
+                      className={classes.cardActionArea}
+                      onClick={() =>
+                        handleClickOpenSelectedBestWorkDialog(bestWork)
+                      }
+                    >
+                      <CardContent>
+                        <Typography gutterBottom variant="subtitle1">
+                          {bestWork.title}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Grid>
+              ))}
             </Grid>
           </div>
         </CardContent>
       </Card>
 
-      <SelectedBestWork
-        open={selectedBestWorkDialogopen}
-        handleClickOpenAddBestWorkDialog={handleClickOpenAddBestWorkDialog}
-        handleClose={handleCloseSelectedBestWorkDialog}
+      <AddStrengthsAndWeaknessesDialog
+        open={addStrengthsAndWeaknessesOpen}
+        handleClose={handleCloseAddStrengthsAndWeaknessesDialog}
       />
       <AddBestWork
         open={addBestWorkDialogopen}
         handleClose={handleCloseAddBestWorkDialog}
+        bestWork={bestWork}
       />
-      <AddMotivation
-        open={addMotivationDialogOpen}
-        handleClose={handleCloseAddMotivationDialog}
+
+      <SelectedBestWork
+        open={selectedBestWorkDialogopen}
+        handleClickOpenAddBestWorkDialog={handleClickOpenAddBestWorkDialog}
+        handleClose={handleCloseSelectedBestWorkDialog}
+        selectedBestWork={bestWork}
       />
     </>
   );

@@ -13,7 +13,7 @@ const Router: React.FC = () => {
         <Route exact path={"/corporate-analysis"} component={CorporateAnalysis} />
         <Route exact path={"/calendar"} component={Calendar} />
         <Route exact path={"/todo"} component={ToDoList} />
-        <Route exact path={"(/)?"} component={Home} />
+        <Route exact path={"(/)?"} component={CorporateAnalysis} />
       </Auth>
     </Switch>
   );

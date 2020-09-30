@@ -41,7 +41,7 @@ const useStyles = makeStyles({
 type Props = {
   corporatePhilosophy: string;
   companyBusiness: string;
-  yearOfEstablish: dayjs.Dayjs;
+  yearOfEstablish: string;
   numberOfEmployees: string;
   capital: string;
   annualIncome: string;

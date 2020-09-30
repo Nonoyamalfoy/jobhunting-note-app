@@ -1,30 +1,22 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import {
   Dialog,
   DialogContent,
   DialogActions,
-  DialogTitle,
-  DialogContentText,
   Typography,
   Grid,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   makeStyles,
-  withStyles,
-  Box,
   Divider,
 } from "@material-ui/core";
-import { CloseButton, SaveButton, TextInput, MoreButton } from "../Uikit";
+import { CloseButton, MoreButton } from "../Uikit";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { CreateButton } from "../Uikit";
-
-import MuiAccordion from "@material-ui/core/Accordion";
-import MuiAccordionSummary from "@material-ui/core/AccordionSummary";
-import MuiAccordionDetails from "@material-ui/core/AccordionDetails";
-import Rating from "@material-ui/lab/Rating";
-import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
+import { BestWork } from "../../entity/user";
+import HTMLReactParser from "html-react-parser";
+import { db } from "../../firebase/index";
+import { useSelector } from "react-redux";
+import { RootState } from "../../entity/rootState";
+import { getUserId } from "../../reducks/user/selectors";
 
 const useStyles = makeStyles({
   dialogHeader: {
@@ -86,13 +78,33 @@ type Props = {
   open: boolean;
   handleClose: () => void;
   handleClickOpenAddBestWorkDialog: () => void;
+  selectedBestWork: BestWork;
 };
 
 const SelectedBestWork: React.FC<Props> = (props) => {
   const classes = useStyles();
-
+  const selector = useSelector((state: RootState) => state);
+  const uid = getUserId(selector);
+  const selectedBestWork = props.selectedBestWork;
   const matches = useMediaQuery("(max-width:960px)");
   const schrollType = matches ? "paper" : "body";
+
+  const removeBestWork = (bestWorkId: string) => {
+    db.collection("users")
+      .doc(uid)
+      .collection("bestWorks")
+      .doc(bestWorkId)
+      .delete();
+  };
+
+  const returnCodeToBr = (text: string) => {
+    if (text === "") {
+      return text;
+    } else {
+      return HTMLReactParser(text.replace(/\r?\n/g, "<br/>"));
+    }
+  };
+
   return (
     <div>
       <Dialog
@@ -104,17 +116,19 @@ const SelectedBestWork: React.FC<Props> = (props) => {
         maxWidth="md"
       >
         <div className={classes.dialogHeader}>
-          <Typography>
-            バスケ部キャプテンとしてリーダーシップを発揮した
-          </Typography>
+          <Typography>{selectedBestWork.title}</Typography>
           <DialogActions>
             <MoreButton
+              color="white"
               size="small"
               onClickEdit={() => {
                 props.handleClickOpenAddBestWorkDialog();
                 props.handleClose();
               }}
-              onClickRemove={props.handleClose}
+              onClickRemove={() => {
+                removeBestWork(selectedBestWork.bestWorkId);
+                props.handleClose();
+              }}
             />
             <CloseButton onClick={props.handleClose} />
           </DialogActions>
@@ -122,10 +136,13 @@ const SelectedBestWork: React.FC<Props> = (props) => {
 
         <DialogContent>
           <div className={classes.textContainer}>
-            <CreateButton size="small" onClick={() => {
-              props.handleClickOpenAddBestWorkDialog()
-              props.handleClose()
-            }} />
+            <CreateButton
+              size="small"
+              onClick={() => {
+                props.handleClickOpenAddBestWorkDialog();
+                props.handleClose();
+              }}
+            />
             <Grid container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.square}></span>
@@ -136,16 +153,19 @@ const SelectedBestWork: React.FC<Props> = (props) => {
             </Grid>
 
             <Typography color="textSecondary">
-              行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果
+              {returnCodeToBr(selectedBestWork.whatIDid)}
             </Typography>
             <Divider className={classes.dividerBlack} />
           </div>
 
           <div className={classes.textContainer}>
-            <CreateButton size="small" onClick={() => {
-              props.handleClickOpenAddBestWorkDialog()
-              props.handleClose()
-            }} />
+            <CreateButton
+              size="small"
+              onClick={() => {
+                props.handleClickOpenAddBestWorkDialog();
+                props.handleClose();
+              }}
+            />
             <Grid container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.square}></span>
@@ -156,16 +176,19 @@ const SelectedBestWork: React.FC<Props> = (props) => {
             </Grid>
 
             <Typography color="textSecondary">
-              行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果
+              {returnCodeToBr(selectedBestWork.whatWasDifficult)}
             </Typography>
             <Divider className={classes.dividerBlack} />
           </div>
 
           <div className={classes.textContainer}>
-            <CreateButton size="small" onClick={() => {
-              props.handleClickOpenAddBestWorkDialog()
-              props.handleClose()
-            }} />
+            <CreateButton
+              size="small"
+              onClick={() => {
+                props.handleClickOpenAddBestWorkDialog();
+                props.handleClose();
+              }}
+            />
             <Grid container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.square}></span>
@@ -176,16 +199,19 @@ const SelectedBestWork: React.FC<Props> = (props) => {
             </Grid>
 
             <Typography color="textSecondary">
-              行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果
+              {returnCodeToBr(selectedBestWork.whatImakeUseOftheBestWork)}
             </Typography>
             <Divider className={classes.dividerBlack} />
           </div>
 
           <div className={classes.textContainer}>
-            <CreateButton size="small" onClick={() => {
-              props.handleClickOpenAddBestWorkDialog()
-              props.handleClose()
-            }} />
+            <CreateButton
+              size="small"
+              onClick={() => {
+                props.handleClickOpenAddBestWorkDialog();
+                props.handleClose();
+              }}
+            />
             <Grid container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.square}></span>
@@ -196,16 +222,19 @@ const SelectedBestWork: React.FC<Props> = (props) => {
             </Grid>
 
             <Typography color="textSecondary">
-              行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果
+              {returnCodeToBr(selectedBestWork.whatIGot)}
             </Typography>
             <Divider className={classes.dividerBlack} />
           </div>
 
           <div className={classes.textContainer}>
-            <CreateButton size="small" onClick={() => {
-              props.handleClickOpenAddBestWorkDialog()
-              props.handleClose()
-            }} />
+            <CreateButton
+              size="small"
+              onClick={() => {
+                props.handleClickOpenAddBestWorkDialog();
+                props.handleClose();
+              }}
+            />
             <Grid container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.square}></span>
@@ -216,7 +245,7 @@ const SelectedBestWork: React.FC<Props> = (props) => {
             </Grid>
 
             <Typography color="textSecondary">
-              行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果行動と結果
+              {returnCodeToBr(selectedBestWork.whatImakeUseOftheBestWork)}
             </Typography>
             <Divider className={classes.dividerBlack} />
           </div>

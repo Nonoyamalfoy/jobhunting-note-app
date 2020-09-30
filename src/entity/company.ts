@@ -1,18 +1,12 @@
-import dayjs from "dayjs";
-
-export type Event = {
-  eventDate: dayjs.Dayjs;
-  eventLocation: string;
-  eventDescription: string;
-};
+import { Schedule } from "./user";
 
 export type Company = {
   companyId: string;
-  aspiration: number | null;
   companyName: string;
+  aspiration: number | null;
   corporatePhilosophy: string;
   companyBusiness: string;
-  yearOfEstablish: dayjs.Dayjs;
+  yearOfEstablish: string;
   numberOfEmployees: string;
   capital: string;
   annualIncome: string;
@@ -21,8 +15,10 @@ export type Company = {
   workingEnvironment: string;
   welfare: string;
   future: string;
-  corporateIssues: string;
+  task: string;
   reasonForAspiration: string;
-  event: Event[];
+  schedules: Schedule[];
   memo: string;
+  created_at?: firebase.firestore.Timestamp;
+  updated_at?: firebase.firestore.Timestamp;
 };

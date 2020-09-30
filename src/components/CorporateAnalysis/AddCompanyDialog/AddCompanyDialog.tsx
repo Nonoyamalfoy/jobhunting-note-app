@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -6,6 +6,10 @@ import {
   Typography,
   makeStyles,
   Box,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Button,
 } from "@material-ui/core";
 import {
   CloseButton,
@@ -19,8 +23,14 @@ import Rating from "@material-ui/lab/Rating";
 import dayjs from "dayjs";
 import { createStringChangeEventCallback } from "../../../lib/createHooks";
 import PhilosophyAndCompanyProfile from "./PhilosophyAndCompanyProfile";
-import Event from "./Event";
-import { Event as IEvent } from "../../../entity/company";
+import Schedule from "./Schedule";
+import { Company } from "../../../entity/company";
+import { addCompany } from "../../../reducks/user/operations";
+import { useDispatch, useSelector } from "react-redux";
+import { Schedule as ISchedule } from "../../../entity/user";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { RootState } from "../../../entity/rootState";
+import { getSchedules } from "../../../reducks/user/selectors";
 
 // import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 
@@ -31,20 +41,61 @@ const useStyles = makeStyles({
     borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
     marginTop: 10,
   },
+  Accordion: {
+    padding: 0,
+    borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
+    boxShadow: "none",
+    margin: 0,
+    marginTop: 5,
+    "&:before": {
+      display: "none",
+    },
+    "&.Mui-expanded": {
+      margin: 0,
+    },
+  },
+  AccordionSummary: {
+    padding: "0px 16px 0px 0px",
+    "& .MuiAccordionSummary-content": {
+      margin: "17px 0px 7px 0px",
+    },
+  },
+  AccordionDetails: {
+    display: "block",
+    backgroundColor: "#dfe3e7",
+  },
 });
 
 type Props = {
   open: boolean;
   handleClose: () => void;
+  company: Company;
 };
 
 const AddCompanyDialog: React.FC<Props> = (props) => {
   const classes = useStyles();
-  const [aspiration, setAspiration] = React.useState<number | null>(3);
+  const dispatch = useDispatch();
+  const selector = useSelector((state: RootState) => state);
+  const matches = useMediaQuery("(max-width:960px)");
+  const schrollType = matches ? "paper" : "body";
+  const company = props.company;
+  const companyId = company.companyId;
+  
+  const _schedules = getSchedules(selector);
+  let companySchedules: ISchedule[];
+  if (companyId === "") {
+    companySchedules = [];
+  } else {
+    companySchedules = _schedules.filter((schedule) =>
+      schedule.scheduleId.startsWith(companyId)
+    );
+  }
+
   const [companyName, setCompanyName] = useState("");
+  const [aspiration, setAspiration] = React.useState<number | null>(3);
   const [corporatePhilosophy, setcorporatePhilosophy] = useState("");
   const [companyBusiness, setCompanyBusiness] = useState("");
-  const [yearOfEstablish, setYearOfEstablish] = useState(day);
+  const [yearOfEstablish, setYearOfEstablish] = useState(day.format("YYYYMM"));
   const [numberOfEmployees, setNumberOfEmployees] = useState("");
   const [capital, setCapital] = useState("");
   const [annualIncome, setAnnualIncome] = useState("");
@@ -54,42 +105,74 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
   const [task, setTask] = useState("");
   const [workingEnvironment, setWorkingEnvironment] = useState("");
   const [welfare, setWelfare] = useState("");
-  const [reasonsForAspiration, setReasonsForAspiration] = useState("");
+  const [reasonForAspiration, setReasonForAspiration] = useState("");
   const [memo, setMemo] = useState("");
-
-  const [events, setEvents] = useState<IEvent[]>([]);
-
-  const inputEvent = useCallback(
-    (value: Partial<IEvent>, i: number) => {
-      const _events = events.map((event, eventNumber) => {
-        return i === eventNumber ? { ...event, ...value } : event;
-      });
-      setEvents([..._events]);
-    },
-    [setEvents, events]
+  const [schedules, setSchedules] = useState<ISchedule[]>([]);
+  const [deletedScheduleIdList, setDeletedScheduleIdList] = useState<string[]>(
+    []
   );
 
-  const addEvent = () => {
-    setEvents([
-      ...events,
+  const scheduleIdList = schedules.map((schedule) => schedule.scheduleId);
+
+  const inputSchedule = useCallback(
+    (value: Partial<ISchedule>, i: number) => {
+      const _scheduels = schedules.map((schedule, scheduleNumber) => {
+        return i === scheduleNumber ? { ...schedule, ...value } : schedule;
+      });
+      setSchedules([..._scheduels]);
+    },
+    [setSchedules, schedules]
+  );
+
+  const addSchedule = () => {
+    setSchedules([
+      ...schedules,
       {
-        eventDate: day,
-        eventLocation: "",
-        eventDescription: "",
+        scheduleId: "",
+        title: "",
+        color: "default",
+        date: day.format("YYYYMMDDHHmm"),
+        location: "",
+        description: "",
       },
     ]);
-    
+  };
+
+  const deleteSchedule = (scheduleNumber: number) => {
+    const _scheduels = schedules.filter((_, i) => i !== scheduleNumber);
+    setSchedules([..._scheduels]);
+    const deletedScheduleId = schedules[scheduleNumber].scheduleId;
+    setDeletedScheduleIdList([...deletedScheduleIdList, deletedScheduleId]);
   };
 
   const inputYearOfEstablish = useCallback(
-    (month) => {
-      setYearOfEstablish(month);
+    (month: dayjs.Dayjs) => {
+      setYearOfEstablish(month.format("YYYYMM"));
     },
     [setYearOfEstablish]
   );
 
-  const matches = useMediaQuery("(max-width:960px)");
-  const schrollType = matches ? "paper" : "body";
+  useEffect(() => {
+    setCompanyName(company.companyName);
+    setAspiration(company.aspiration);
+    setcorporatePhilosophy(company.corporatePhilosophy);
+    setCompanyBusiness(company.companyBusiness);
+    setYearOfEstablish(company.yearOfEstablish);
+    setNumberOfEmployees(company.numberOfEmployees);
+    setCapital(company.capital);
+    setAnnualIncome(company.annualIncome);
+    setRequiredPersonImage(company.requiredPersonImage);
+    setRequiredSkill(company.requiredSkill);
+    setFuture(company.future);
+    setTask(company.task);
+    setWorkingEnvironment(company.workingEnvironment);
+    setWelfare(company.welfare);
+    setReasonForAspiration(company.reasonForAspiration);
+    setMemo(company.memo);
+    setSchedules(companySchedules);
+    // }
+  }, [company]);
+
   return (
     <Dialog
       open={props.open}
@@ -183,13 +266,37 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
         <SingleTextInputAccordion
           title="志望理由"
           TextInputLabel="志望理由"
-          TextInputValue={reasonsForAspiration}
+          TextInputValue={reasonForAspiration}
           TextInputOnChange={createStringChangeEventCallback(
-            setReasonsForAspiration
+            setReasonForAspiration
           )}
         />
 
-        <Event addEvent={addEvent} events={events} inputEvent={inputEvent} />
+        <Accordion defaultExpanded className={classes.Accordion}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            className={classes.AccordionSummary}
+          >
+            <Typography>面接・試験日程</Typography>
+          </AccordionSummary>
+          <AccordionDetails className={classes.AccordionDetails}>
+            {schedules.map((schedule, i) => (
+              <Schedule
+                key={i}
+                addSchedule={addSchedule}
+                schedule={schedule}
+                index={i}
+                inputSchedule={inputSchedule}
+                deleteSchedule={deleteSchedule}
+              />
+            ))}
+
+            <div className="module-spacer--small" />
+            <Button onClick={addSchedule} fullWidth variant="outlined">
+              日程を追加
+            </Button>
+          </AccordionDetails>
+        </Accordion>
 
         <SingleTextInputAccordion
           title="メモ"
@@ -199,7 +306,38 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
         />
       </DialogContent>
       <DialogActions>
-        <SaveButton onClick={() => {}} />
+        <SaveButton
+          onClick={() => {
+            dispatch(
+              addCompany(
+                {
+                  companyId: company.companyId,
+                  companyName: companyName,
+                  aspiration: aspiration,
+                  corporatePhilosophy: corporatePhilosophy,
+                  companyBusiness: companyBusiness,
+                  yearOfEstablish: yearOfEstablish,
+                  numberOfEmployees: numberOfEmployees,
+                  capital: capital,
+                  annualIncome: annualIncome,
+                  requiredPersonImage: requiredPersonImage,
+                  requiredSkill: requiredSkill,
+                  future: future,
+                  task: task,
+                  workingEnvironment: workingEnvironment,
+                  welfare: welfare,
+                  reasonForAspiration: reasonForAspiration,
+                  memo: memo,
+                  schedules: schedules,
+                  created_at: company.created_at,
+                  updated_at: company.updated_at,
+                },
+                deletedScheduleIdList
+              )
+            );
+            props.handleClose();
+          }}
+        />
       </DialogActions>
     </Dialog>
   );

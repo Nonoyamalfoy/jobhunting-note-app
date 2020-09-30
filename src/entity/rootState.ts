@@ -1,7 +1,9 @@
 import { User } from "./user";
+import { Calendar } from "./calendar";
 import { RouterState } from "connected-react-router";
 
 export type RootState = {
   user: User;
-  router: RouterState
+  calendar: Calendar;
+  router: RouterState;
 };

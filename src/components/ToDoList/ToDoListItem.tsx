@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles, Theme } from "@material-ui/core/styles";
-import dayjs from "dayjs";
-// import { openAddToDoDialog } from "../../reducks/addToDo/operation";
 import Checkbox from "@material-ui/core/Checkbox";
 import MoreVertButton from "../Uikit/MoreButton";
-// import { getUserId } from "../../reducks/users/selectors";
-// import { toggleCompleted, removeToDo } from "../../services/ToDo";
 import { ListItemSecondaryAction } from "@material-ui/core";
+import { ToDo } from "../../entity/user";
+import { db } from "../../firebase/index";
+import { getUserId } from "../../reducks/user/selectors";
+import { RootState } from "../../entity/rootState";
 
 const useStyles = makeStyles((theme: Theme) => ({
   toDoListItemContainer: {
@@ -40,15 +40,33 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const ToDoItem: React.FC = () => {
+type Props = {
+  toDo: ToDo;
+  handleClickOpenAddToDoDialog: (t: ToDo) => void;
+};
+
+const ToDoListItem: React.FC<Props> = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const selector = useSelector((state) => state);
+  const selector = useSelector((state: RootState) => state);
+  const uid = getUserId(selector);
+  const toDo = props.toDo;
 
-  const [completed, setCompleted] = useState(false);
-  const toggleCompleted = () => {
-    setCompleted(!completed)
-  }
+  const removeToDo = (toDoListId: string) => {
+    db.collection("users")
+      .doc(uid)
+      .collection("toDoList")
+      .doc(toDoListId)
+      .delete();
+  };
+
+  const toggleCompleted = (toDoId: string, completed: boolean) => {
+    db.collection("users")
+      .doc(uid)
+      .collection("toDoList")
+      .doc(toDoId)
+      .set({ completed: !completed }, { merge: true });
+  };
 
   return (
     <>
@@ -58,7 +76,7 @@ const ToDoItem: React.FC = () => {
           role={undefined}
           dense
           button
-          onClick={toggleCompleted}
+          onClick={() => toggleCompleted(toDo.toDoId, toDo.completed)}
         >
           <ListItemIcon>
             <Checkbox
@@ -66,19 +84,26 @@ const ToDoItem: React.FC = () => {
               size="medium"
               color="primary"
               edge="start"
-              checked={completed}
+              checked={toDo.completed}
             />
           </ListItemIcon>
           <ListItemText
             className={classes.text}
-            primary="ヤフーES提出"
-            secondary="2020年9月28日"
+            primary={toDo.title}
+            secondary={toDo.deadline}
           />
           <ListItemSecondaryAction>
             <MoreVertButton
               size="medium"
-              onClickEdit={() => {}}
-              onClickRemove={() => {}}
+              onClickEdit={() =>
+                props.handleClickOpenAddToDoDialog({
+                  toDoId: toDo.toDoId,
+                  title: toDo.title,
+                  deadline: toDo.deadline,
+                  completed: toDo.completed,
+                })
+              }
+              onClickRemove={() => removeToDo(toDo.toDoId)}
             />
           </ListItemSecondaryAction>
         </ListItem>
@@ -88,4 +113,4 @@ const ToDoItem: React.FC = () => {
   );
 };
 
-export default ToDoItem;
+export default ToDoListItem;

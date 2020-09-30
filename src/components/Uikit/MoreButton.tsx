@@ -9,6 +9,7 @@ const useStyles = makeStyles({
 })
 
 type Props = {
+  color?: string
   size: "small" | "medium";
   className?: string;
   onClickEdit: () => void;
@@ -26,7 +27,7 @@ const MoretButton: React.FC<Props> = (props) => {
   };
 
   let color
-  if(props.size === "small") {
+  if(props.color === "white") {
     color = classes.white
   }
 

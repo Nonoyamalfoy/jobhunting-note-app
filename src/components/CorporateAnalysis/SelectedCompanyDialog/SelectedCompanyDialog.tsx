@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,10 +12,17 @@ import {
   Box,
   Divider,
 } from "@material-ui/core";
-import { CloseButton, MoreButton, CreateButton } from "../Uikit";
+import { CloseButton, MoreButton, CreateButton } from "../../Uikit";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Rating from "@material-ui/lab/Rating";
+import { Company } from "../../../entity/company";
+import HTMLReactParser from "html-react-parser";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../entity/rootState";
+import { getSchedules, getUserId } from "../../../reducks/user/selectors";
+import { db } from "../../../firebase/index";
+import Schedule from "./Schedule";
 
 const useStyles = makeStyles({
   dialogHeader: {
@@ -72,6 +79,7 @@ const useStyles = makeStyles({
 });
 
 type Props = {
+  selectedCompany: Company;
   open: boolean;
   handleClose: () => void;
   handleClickOpenAddCompanyDialog: () => void;
@@ -79,9 +87,44 @@ type Props = {
 
 const SelectedCompany: React.FC<Props> = (props) => {
   const classes = useStyles();
-
+  const selector = useSelector((state: RootState) => state);
+  const uid = getUserId(selector);
   const matches = useMediaQuery("(max-width:960px)");
   const schrollType = matches ? "paper" : "body";
+  const selectedCompany = props.selectedCompany;
+  const companyId = selectedCompany.companyId;
+
+  const schedules = getSchedules(selector);
+  const companySchedules = schedules.filter((schedule) =>
+    schedule.scheduleId.startsWith(companyId)
+  );
+
+  const removeCompany = (companyId: string) => {
+    db.collection("users")
+      .doc(uid)
+      .collection("companies")
+      .doc(companyId)
+      .delete();
+
+    if (companySchedules.length > 0) {
+      companySchedules.map((companySchedule) => {
+        db.collection("users")
+          .doc(uid)
+          .collection("schedules")
+          .doc(companySchedule.scheduleId)
+          .delete();
+      });
+    }
+  };
+
+  const returnCodeToBr = (text: string) => {
+    if (text === "") {
+      return text;
+    } else {
+      return HTMLReactParser(text.replace(/\r?\n/g, "<br/>"));
+    }
+  };
+
   return (
     <Dialog
       open={props.open}
@@ -93,16 +136,20 @@ const SelectedCompany: React.FC<Props> = (props) => {
     >
       <div className={classes.dialogHeader}>
         <Typography variant="h5" component="h2">
-          ヤフー株式会社
+          {selectedCompany.companyName}
         </Typography>
         <DialogActions>
           <MoreButton
+          color="white"
             size="small"
             onClickEdit={() => {
               props.handleClickOpenAddCompanyDialog();
               props.handleClose();
             }}
-            onClickRemove={props.handleClose}
+            onClickRemove={() => {
+              removeCompany(selectedCompany.companyId);
+              props.handleClose();
+            }}
           />
           <CloseButton onClick={props.handleClose} />
         </DialogActions>
@@ -110,7 +157,7 @@ const SelectedCompany: React.FC<Props> = (props) => {
       <DialogContent>
         <Box className={classes.box}>
           <Typography>志望度</Typography>
-          <Rating readOnly value={3} />
+          <Rating readOnly value={selectedCompany.aspiration} />
         </Box>
 
         <Accordion className={classes.Accordion} defaultExpanded>
@@ -143,11 +190,11 @@ const SelectedCompany: React.FC<Props> = (props) => {
                 <p>理念</p>
               </Grid>
             </Grid>
-
             <Typography color="textSecondary">
-              情報技術で人々や社会の課題を解決する
+              {returnCodeToBr(selectedCompany.corporatePhilosophy)}
             </Typography>
             <Divider />
+
             <Grid container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.rectangle}></span>
@@ -156,10 +203,9 @@ const SelectedCompany: React.FC<Props> = (props) => {
                 <p>事業内容</p>
               </Grid>
             </Grid>
-            <Typography color="textSecondary">・情報・通信業</Typography>
-            <Typography color="textSecondary">・Yahoo!Japan</Typography>
-            <Typography color="textSecondary">・ヤフオク！</Typography>
-            <Typography color="textSecondary">・Yahoo!モバゲー</Typography>
+            <Typography color="textSecondary">
+              {returnCodeToBr(selectedCompany.companyBusiness)}
+            </Typography>
             <Divider />
             <Grid container>
               <Grid item container spacing={4}>
@@ -172,7 +218,9 @@ const SelectedCompany: React.FC<Props> = (props) => {
                       <p>設立年</p>
                     </Grid>
                   </Grid>
-                  <Typography color="textSecondary">1996年1月</Typography>
+                  <Typography color="textSecondary">
+                    {selectedCompany.yearOfEstablish}
+                  </Typography>
                   <Divider />
                 </Grid>
                 <Grid item xs={6}>
@@ -184,7 +232,9 @@ const SelectedCompany: React.FC<Props> = (props) => {
                       <p>従業員数</p>
                     </Grid>
                   </Grid>
-                  <Typography color="textSecondary">6993人</Typography>
+                  <Typography color="textSecondary">
+                    {selectedCompany.numberOfEmployees}
+                  </Typography>
                   <Divider />
                 </Grid>
               </Grid>
@@ -195,10 +245,12 @@ const SelectedCompany: React.FC<Props> = (props) => {
                       <span className={classes.rectangle}></span>
                     </Grid>
                     <Grid item>
-                      <p>平均年齢</p>
+                      <p>資本金</p>
                     </Grid>
                   </Grid>
-                  <Typography color="textSecondary">35.7歳</Typography>
+                  <Typography color="textSecondary">
+                    {selectedCompany.capital}
+                  </Typography>
                   <Divider />
                 </Grid>
                 <Grid item xs={6}>
@@ -210,7 +262,9 @@ const SelectedCompany: React.FC<Props> = (props) => {
                       <p>平均年収</p>
                     </Grid>
                   </Grid>
-                  <Typography color="textSecondary">765.1万円</Typography>
+                  <Typography color="textSecondary">
+                    {selectedCompany.annualIncome}
+                  </Typography>
                   <Divider />
                 </Grid>
               </Grid>
@@ -249,17 +303,10 @@ const SelectedCompany: React.FC<Props> = (props) => {
               </Grid>
             </Grid>
             <Grid container justify="flex-start">
-              <Grid item>
-                <Typography color="textSecondary">・</Typography>
-              </Grid>
-              <Grid item xs={11}>
-                <Typography color="textSecondary">
-                  ヤフーのミッションである「情報技術で人々や社会の課題を解決する」に共感し、ヤフーのバリューを発揮できる人材
-                </Typography>
-              </Grid>
+              <Typography color="textSecondary">
+                {returnCodeToBr(selectedCompany.requiredPersonImage)}
+              </Typography>
             </Grid>
-            <Typography color="textSecondary">・リーダーシップ</Typography>
-            <Typography color="textSecondary">・チャレンジ精神</Typography>
             <Divider />
             <Grid container spacing={1} alignItems="center">
               <Grid item>
@@ -269,7 +316,9 @@ const SelectedCompany: React.FC<Props> = (props) => {
                 <p>求めるスキル</p>
               </Grid>
             </Grid>
-            <Typography color="textSecondary">・高い技術力</Typography>
+            <Typography color="textSecondary">
+              {returnCodeToBr(selectedCompany.requiredSkill)}
+            </Typography>
             <Divider />
           </AccordionDetails>
         </Accordion>
@@ -304,7 +353,9 @@ const SelectedCompany: React.FC<Props> = (props) => {
                 <p>将来性</p>
               </Grid>
             </Grid>
-            <Typography color="textSecondary">未来アリ</Typography>
+            <Typography color="textSecondary">
+              {returnCodeToBr(selectedCompany.future)}
+            </Typography>
             <Divider />
             <Grid container spacing={1} alignItems="center">
               <Grid item>
@@ -314,7 +365,9 @@ const SelectedCompany: React.FC<Props> = (props) => {
                 <p>課題</p>
               </Grid>
             </Grid>
-            <Typography color="textSecondary">課題アリ</Typography>
+            <Typography color="textSecondary">
+              {returnCodeToBr(selectedCompany.task)}
+            </Typography>
             <Divider />
           </AccordionDetails>
         </Accordion>
@@ -349,7 +402,9 @@ const SelectedCompany: React.FC<Props> = (props) => {
                 <p>労働環境</p>
               </Grid>
             </Grid>
-            <Typography color="textSecondary">労働環境ヨシ</Typography>
+            <Typography color="textSecondary">
+              {returnCodeToBr(selectedCompany.workingEnvironment)}
+            </Typography>
             <Divider />
             <Grid container spacing={1} alignItems="center">
               <Grid item>
@@ -359,7 +414,9 @@ const SelectedCompany: React.FC<Props> = (props) => {
                 <p>福利厚生</p>
               </Grid>
             </Grid>
-            <Typography color="textSecondary">福利厚生ヨシ</Typography>
+            <Typography color="textSecondary">
+              {returnCodeToBr(selectedCompany.welfare)}
+            </Typography>
             <Divider />
           </AccordionDetails>
         </Accordion>
@@ -394,7 +451,9 @@ const SelectedCompany: React.FC<Props> = (props) => {
                 <p>志望理由</p>
               </Grid>
             </Grid>
-            <Typography color="textSecondary">入りたい</Typography>
+            <Typography color="textSecondary">
+              {returnCodeToBr(selectedCompany.reasonForAspiration)}
+            </Typography>
             <Divider />
           </AccordionDetails>
         </Accordion>
@@ -422,32 +481,9 @@ const SelectedCompany: React.FC<Props> = (props) => {
               }}
             />
             <Grid container>
-              <Grid item container>
-                <Grid item xs={6}>
-                  <Grid container spacing={1} alignItems="center">
-                    <Grid item>
-                      <span className={classes.rectangle}></span>
-                    </Grid>
-                    <Grid item>
-                      <p>日程</p>
-                    </Grid>
-                  </Grid>
-                  <Typography color="textSecondary">12月21日</Typography>
-                  <Divider />
-                </Grid>
-                <Grid item xs={12}>
-                  <Grid container spacing={1} alignItems="center">
-                    <Grid item>
-                      <span className={classes.rectangle}></span>
-                    </Grid>
-                    <Grid item>
-                      <p>場所</p>
-                    </Grid>
-                  </Grid>
-                  <Typography color="textSecondary">東京</Typography>
-                  <Divider />
-                </Grid>
-              </Grid>
+              {companySchedules?.map((schedule, i) => (
+                <Schedule schedule={schedule} index={i} key={i} />
+              ))}
             </Grid>
           </AccordionDetails>
         </Accordion>
@@ -482,7 +518,9 @@ const SelectedCompany: React.FC<Props> = (props) => {
                 <p>メモ</p>
               </Grid>
             </Grid>
-            <Typography color="textSecondary">メモメモ</Typography>
+            <Typography color="textSecondary">
+              {returnCodeToBr(selectedCompany.memo)}
+            </Typography>
             <Divider />
           </AccordionDetails>
         </Accordion>

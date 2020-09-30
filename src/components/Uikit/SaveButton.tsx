@@ -26,7 +26,7 @@ const SaveButton: React.FC<Props> = (props) => {
     className={classes.saveButton}
     onClick={() => props.onClick()}
     >
-      Save
+      保存
     </Button>
   )
 }

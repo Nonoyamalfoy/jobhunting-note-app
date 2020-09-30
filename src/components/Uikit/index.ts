@@ -1,5 +1,7 @@
 export {default as CloseButton} from "./CloseButton"
 export {default as CreateButton} from "./CreateButton";
+export {default as DeleteCircleButton} from "./DeleteCircleButton";
+export {default as DeleteSquareButton} from "./DeleteSquareButton";
 export {default as DoubleTextInputAccordion} from "./DoubleTextInputAccordion";
 export {default as MoreButton} from "./MoreButton";
 export {default as PrimaryButton} from "./PrimaryButton";

@@ -36,12 +36,19 @@ const ClosableDrawer = (props: Props) => {
   };
 
   const menus = [
+    // {
+    //   func: selectMenu,
+    //   label: "ホーム",
+    //   icon: <HomeIcon />,
+    //   id: "home",
+    //   value: "/",
+    // },
     {
       func: selectMenu,
-      label: "ホーム",
-      icon: <HomeIcon />,
-      id: "home",
-      value: "/",
+      label: "企業分析",
+      icon: <BusinessIcon />,
+      id: "/corporate-analysis",
+      value: "/corporate-analysis",
     },
     {
       func: selectMenu,
@@ -49,13 +56,6 @@ const ClosableDrawer = (props: Props) => {
       icon: <AccountCircleIcon />,
       id: "self-analysis",
       value: "/self-analysis",
-    },
-    {
-      func: selectMenu,
-      label: "企業分析",
-      icon: <BusinessIcon />,
-      id: "/corporate-analysis",
-      value: "/corporate-analysis",
     },
     {
       func: selectMenu,
