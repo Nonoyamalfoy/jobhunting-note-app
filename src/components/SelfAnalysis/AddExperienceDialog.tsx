@@ -7,7 +7,7 @@ import {
   SaveButton,
   CloseButton,
   SelectAgeBox,
-  DeleteSquareButton,
+  ValidationTextInput,
 } from "../Uikit";
 import dayjs from "dayjs";
 import {
@@ -70,6 +70,8 @@ const AddExperienceDialog: React.FC<Props> = (props) => {
   const [age, setAge] = useState(0);
   const [motivation, setMotivation] = useState(0);
   const [description, setDescription] = useState("");
+  const [isTitleEditStart, setIsTietleEditStart] = useState(false);
+  const isTitleInValid = !title && isTitleEditStart;
 
   const matches = useMediaQuery("(max-width:960px)");
   const schrollType = matches ? "paper" : "body";
@@ -101,7 +103,10 @@ const AddExperienceDialog: React.FC<Props> = (props) => {
     <Dialog
       className="dialog"
       open={props.open}
-      onClose={props.handleClose}
+      onClose={() => {
+        props.handleClose();
+        setIsTietleEditStart(false);
+      }}
       fullWidth
       scroll={schrollType}
       fullScreen={matches}
@@ -109,7 +114,12 @@ const AddExperienceDialog: React.FC<Props> = (props) => {
     >
       <div className="dialogHeader">
         <DialogActions>
-          <CloseButton onClick={props.handleClose} />
+          <CloseButton
+            onClick={() => {
+              props.handleClose();
+              setIsTietleEditStart(false);
+            }}
+          />
         </DialogActions>
       </div>
 
@@ -138,14 +148,19 @@ const AddExperienceDialog: React.FC<Props> = (props) => {
           </Grid>
         </Grid>
         <div className="module-spacer--medium" />
-        <TextInput
+        <ValidationTextInput
+          autoFocus={true}
           label="タイトル"
           value={title}
           multiline={true}
           onChange={createStringChangeEventCallback(setTitle)}
           type="text"
+          required={true}
+          onBlur={() => setIsTietleEditStart(true)}
+          error={isTitleInValid}
+          validationText="タイトルは必須項目です"
         />
-        <div className="module-spacer--medium" />
+        <div className="module-spacer--extra-small" />
         <TextInput
           label="概要"
           value={description}
@@ -167,7 +182,10 @@ const AddExperienceDialog: React.FC<Props> = (props) => {
               })
             );
             setAge(0);
-            props.handleClose();
+            if (title !== "") {
+              props.handleClose();
+              setIsTietleEditStart(false);
+            }
           }}
         />
       </DialogActions>

@@ -5,6 +5,7 @@ import {
   SaveButton,
   TextInput,
   SingleTextInputAccordion,
+  ValidationTextInput,
 } from "../Uikit";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { createStringChangeEventCallback } from "../../lib/createHooks";
@@ -44,6 +45,8 @@ const AddBestWork: React.FC<Props> = (props) => {
   const [whatImakeUseOftheBestWork, setWhatImakeUseOftheBestWork] = useState(
     ""
   );
+  const [isTitleEditStart, setIsTietleEditStart] = useState(false);
+  const isTitleInValid = !title && isTitleEditStart;
 
   useEffect(() => {
     setTitle(bestWork.title);
@@ -58,7 +61,10 @@ const AddBestWork: React.FC<Props> = (props) => {
     <div>
       <Dialog
         open={props.open}
-        onClose={props.handleClose}
+        onClose={() => {
+          props.handleClose();
+          setIsTietleEditStart(false);
+        }}
         scroll={schrollType}
         fullScreen={matches}
         fullWidth
@@ -66,18 +72,26 @@ const AddBestWork: React.FC<Props> = (props) => {
       >
         <div className="dialogHeader">
           <DialogActions>
-            <CloseButton onClick={props.handleClose} />
+            <CloseButton
+              onClick={() => {
+                props.handleClose();
+                setIsTietleEditStart(false);
+              }}
+            />
           </DialogActions>
         </div>
         <DialogContent className={classes.dialogContent}>
-          <TextInput
+          <ValidationTextInput
+            autoFocus={true}
             label={"タイトル"}
             multiline
             required={true}
-            // rows={1}
             value={title}
             type={"text"}
             onChange={createStringChangeEventCallback(setTitle)}
+            onBlur={() => setIsTietleEditStart(true)}
+            error={isTitleInValid}
+            validationText="タイトルは必須項目です"
           />
           <SingleTextInputAccordion
             title="何をやったか(行動と結果)"
@@ -132,7 +146,10 @@ const AddBestWork: React.FC<Props> = (props) => {
                   updated_at: bestWork.updated_at,
                 })
               );
-              props.handleClose();
+              if (title !== "") {
+                props.handleClose();
+                setIsTietleEditStart(false);
+              }
             }}
           />
         </DialogActions>

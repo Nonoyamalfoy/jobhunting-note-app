@@ -11,3 +11,4 @@ export {default as SelectAgeBox} from "./SelectAgeBox";
 export {default as SelectColorBox} from "./SelectColorBox";
 export {default as SingleTextInputAccordion} from "./SingleTextInputAccordion";
 export {default as TextInput} from "./TextInput";
+export {default as ValidationTextInput} from "./ValidationTextInput";

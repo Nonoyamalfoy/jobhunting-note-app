@@ -3,12 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Dialog, DialogContent, DialogActions, Grid } from "@material-ui/core";
 import { Timer } from "@material-ui/icons";
 import { DateTimePicker } from "@material-ui/pickers";
-import {
-  SaveButton,
-  TextInput,
-  CloseButton,
-  DeleteSquareButton,
-} from "../Uikit";
+import { SaveButton, CloseButton, ValidationTextInput } from "../Uikit";
 import dayjs from "dayjs";
 import { createStringChangeEventCallback } from "../../lib/createHooks";
 import { addToDo } from "../../reducks/user/operations";
@@ -17,7 +12,6 @@ import { db } from "../../firebase/index";
 import { getUserId } from "../../reducks/user/selectors";
 import { RootState } from "../../entity/rootState";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-
 
 type Props = {
   open: boolean;
@@ -32,13 +26,15 @@ const AddToDoDialog: React.FC<Props> = (props) => {
   const uid = getUserId(selector);
   const [title, setTitle] = useState("");
   const [deadline, setDeadline] = useState(dayjs().format("YYYYMMDDHHmm"));
+  const [isTitleEditStart, setIsTietleEditStart] = useState(false);
+  const isTitleInValid = !title && isTitleEditStart;
 
   const matches = useMediaQuery("(max-width:960px)");
   const schrollType = matches ? "paper" : "body";
 
   const inputDeadline = useCallback(
     (date) => {
-      setDeadline(date);
+      setDeadline(date.format("YYYYMMDDHHmm"));
     },
     [setDeadline]
   );
@@ -52,7 +48,10 @@ const AddToDoDialog: React.FC<Props> = (props) => {
     <Dialog
       className="dialog"
       open={props.open}
-      onClose={props.handleClose}
+      onClose={() => {
+        props.handleClose();
+        setIsTietleEditStart(false);
+      }}
       maxWidth="sm"
       fullWidth
       scroll={schrollType}
@@ -60,25 +59,34 @@ const AddToDoDialog: React.FC<Props> = (props) => {
     >
       <div className="dialogHeader">
         <DialogActions>
-          <CloseButton onClick={props.handleClose} />
+          <CloseButton
+            onClick={() => {
+              props.handleClose();
+              setIsTietleEditStart(false);
+            }}
+          />
         </DialogActions>
       </div>
 
       <DialogContent>
         {/* <div className="module-spacer--medium" /> */}
-        <TextInput
+        <ValidationTextInput
           autoFocus={true}
-          label="Text"
+          label="タイトル"
           value={title}
-          type="text"
           multiline={true}
           onChange={createStringChangeEventCallback(setTitle)}
+          type="text"
+          required={true}
+          onBlur={() => setIsTietleEditStart(true)}
+          error={isTitleInValid}
+          validationText="タイトルは必須項目です"
         />
-        <div className="module-spacer--medium" />
+        <div className="module-spacer--extra-small" />
         <DateTimePicker
           value={deadline}
           placeholder="deadline"
-          label="deadline"
+          label="日時"
           ampm={false}
           onChange={inputDeadline}
           variant="inline"
@@ -102,7 +110,10 @@ const AddToDoDialog: React.FC<Props> = (props) => {
                 completed: toDo.completed,
               })
             );
-            props.handleClose();
+            if (title !== "") {
+              props.handleClose();
+              setIsTietleEditStart(false);
+            }
           }}
         />
       </DialogActions>

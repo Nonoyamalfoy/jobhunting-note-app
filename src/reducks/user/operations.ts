@@ -43,7 +43,7 @@ export const addExperiences = (experience: Experience) => {
     const timestamp = FirebaseTimestamp.now();
 
     if (experience.title === "") {
-      alert("必須項目が未入力です");
+      alert("タイトルが未入力です");
     } else {
       if (experience.experienceId === "") {
         const toDoRef = db
@@ -74,7 +74,7 @@ export const addToDo = (toDo: ToDo) => {
     const timestamp = FirebaseTimestamp.now();
 
     if (toDo.title === "") {
-      alert("必須項目が未入力です");
+      alert("タイトルが未入力です");
     } else {
       if (toDo.toDoId === "") {
         const toDoRef = db
@@ -105,7 +105,7 @@ export const addSchedule = (schedule: Schedule) => {
     const timestamp = FirebaseTimestamp.now();
 
     if (schedule.title === "") {
-      alert("必須項目が未入力です");
+      alert("タイトルが未入力です");
     } else {
       if (schedule.scheduleId === "") {
         const scheduleRef = db
@@ -137,111 +137,121 @@ export const addCompany = (
   return async (dispatch: Dispatch, getState: () => RootState) => {
     const uid = getState().user.uid;
     const timestamp = FirebaseTimestamp.now();
-
-    if (deletedScheduleIdList.length > 0) {
-      deletedScheduleIdList.map((deleteScheduleId) => {
-        if (deleteScheduleId !== "") {
-          db.collection("users")
-            .doc(uid)
-            .collection("schedules")
-            .doc(deleteScheduleId)
-            .delete();
-        }
-      });
-    }
-
-    if (company.companyId === "") {
-      const companyRef = db
-        .collection("users")
-        .doc(uid)
-        .collection("companies")
-        .doc();
-      company["companyId"] = companyRef.id;
-      company["created_at"] = timestamp;
-      company["updated_at"] = timestamp;
-
-      if (company.schedules.length > 0) {
-        company.schedules.map((schedule, i) => {
-          if (schedule.title === "") {
-            alert("必須項目が未入力です");
-          } else {
-            if (schedule.scheduleId === "") {
-              // var l = 8;
-
-              // 生成する文字列に含める文字セット
-              const c = "abcdefghijklmnopqrstuvwxyz0123456789";
-              const cl = c.length;
-              let r = "";
-              for (let i = 0; i < 20; i++) {
-                r += c[Math.floor(Math.random() * cl)];
-              }
-              schedule.scheduleId = companyRef.id + r;
-              const scheduleRef = db
-                .collection("users")
-                .doc(uid)
-                .collection("schedules")
-                .doc(schedule.scheduleId);
-              // schedule["scheduleId"] = scheduleRef.id;
-              schedule["created_at"] = timestamp;
-              schedule["updated_at"] = timestamp;
-              scheduleRef.set(schedule);
-            } else {
-              const scheduleRef = db
-                .collection("users")
-                .doc(uid)
-                .collection("schedules")
-                .doc(schedule.scheduleId);
-              schedule["updated_at"] = timestamp;
-              scheduleRef.set(schedule, { merge: true });
-            }
-          }
-        });
-      }
-
-      await companyRef.set(company);
+    if (company.companyName === "") {
+      alert("会社名が未入力です");
     } else {
-      const companyRef = db
-        .collection("users")
-        .doc(uid)
-        .collection("companies")
-        .doc(company.companyId);
-      company["updated_at"] = timestamp;
+      if (company.companyId === "") {
+        const companyRef = db
+          .collection("users")
+          .doc(uid)
+          .collection("companies")
+          .doc();
+        company["companyId"] = companyRef.id;
+        company["created_at"] = timestamp;
+        company["updated_at"] = timestamp;
 
-      if (company.schedules.length > 0) {
-        company.schedules.map((schedule, i) => {
-          if (schedule.title === "") {
-            alert("必須項目が未入力です");
-          } else {
-            if (schedule.scheduleId === "") {
-              const c = "abcdefghijklmnopqrstuvwxyz0123456789";
-              const cl = c.length;
-              let r = "";
-              for (let i = 0; i < 20; i++) {
-                r += c[Math.floor(Math.random() * cl)];
-              }
-              schedule.scheduleId = companyRef.id + r;
-              const scheduleRef = db
-                .collection("users")
-                .doc(uid)
-                .collection("schedules")
-                .doc(schedule.scheduleId);
-              // schedule["scheduleId"] = scheduleRef.id;
-              schedule["created_at"] = timestamp;
-              schedule["updated_at"] = timestamp;
-              scheduleRef.set(schedule);
+        if (company.schedules.length > 0) {
+          company.schedules.map((schedule, i) => {
+            if (schedule.title === "") {
+              alert(`日程${i + 1}のタイトルが未入力です`);
+              return;
             } else {
-              const scheduleRef = db
-                .collection("users")
-                .doc(uid)
-                .collection("schedules")
-                .doc(schedule.scheduleId);
-              schedule["updated_at"] = timestamp;
-              scheduleRef.set(schedule, { merge: true });
+              if (schedule.scheduleId === "") {
+                const c = "abcdefghijklmnopqrstuvwxyz0123456789";
+                const cl = c.length;
+                let r = "";
+                for (let i = 0; i < 20; i++) {
+                  r += c[Math.floor(Math.random() * cl)];
+                }
+                schedule.scheduleId = companyRef.id + r;
+                const scheduleRef = db
+                  .collection("users")
+                  .doc(uid)
+                  .collection("schedules")
+                  .doc(schedule.scheduleId);
+                // schedule["scheduleId"] = scheduleRef.id;
+                schedule["created_at"] = timestamp;
+                schedule["updated_at"] = timestamp;
+                scheduleRef.set(schedule);
+              } else {
+                const scheduleRef = db
+                  .collection("users")
+                  .doc(uid)
+                  .collection("schedules")
+                  .doc(schedule.scheduleId);
+                schedule["updated_at"] = timestamp;
+                scheduleRef.set(schedule, { merge: true });
+              }
+              if (deletedScheduleIdList.length > 0) {
+                deletedScheduleIdList.map((deleteScheduleId) => {
+                  if (deleteScheduleId !== "") {
+                    db.collection("users")
+                      .doc(uid)
+                      .collection("schedules")
+                      .doc(deleteScheduleId)
+                      .delete();
+                  }
+                });
+              }
+              companyRef.set(company);
             }
-          }
-        });
+          });
+        }
+      } else {
+        const companyRef = db
+          .collection("users")
+          .doc(uid)
+          .collection("companies")
+          .doc(company.companyId);
+        company["updated_at"] = timestamp;
+
+        if (company.schedules.length > 0) {
+          company.schedules.map((schedule, i) => {
+            if (schedule.title === "") {
+              alert(`日程${i + 1}のタイトルが未入力です`);
+            } else {
+              if (schedule.scheduleId === "") {
+                const c = "abcdefghijklmnopqrstuvwxyz0123456789";
+                const cl = c.length;
+                let r = "";
+                for (let i = 0; i < 20; i++) {
+                  r += c[Math.floor(Math.random() * cl)];
+                }
+                schedule.scheduleId = companyRef.id + r;
+                const scheduleRef = db
+                  .collection("users")
+                  .doc(uid)
+                  .collection("schedules")
+                  .doc(schedule.scheduleId);
+                // schedule["scheduleId"] = scheduleRef.id;
+                schedule["created_at"] = timestamp;
+                schedule["updated_at"] = timestamp;
+                scheduleRef.set(schedule);
+              } else {
+                const scheduleRef = db
+                  .collection("users")
+                  .doc(uid)
+                  .collection("schedules")
+                  .doc(schedule.scheduleId);
+                schedule["updated_at"] = timestamp;
+                scheduleRef.set(schedule, { merge: true });
+              }
+              if (deletedScheduleIdList.length > 0) {
+                deletedScheduleIdList.map((deleteScheduleId) => {
+                  if (deleteScheduleId !== "") {
+                    db.collection("users")
+                      .doc(uid)
+                      .collection("schedules")
+                      .doc(deleteScheduleId)
+                      .delete();
+                  }
+                });
+              }
+              companyRef.set(company, { merge: true });
+            }
+          });
+        }
       }
-      await companyRef.set(company, { merge: true });
     }
   };
 };
@@ -279,24 +289,28 @@ export const addBestWork = (bestWork: BestWork) => {
   return async (dispatch: Dispatch, getState: () => RootState) => {
     const uid = getState().user.uid;
     const timestamp = FirebaseTimestamp.now();
-    if (bestWork.bestWorkId === "") {
-      const bestWorkRef = db
-        .collection("users")
-        .doc(uid)
-        .collection("bestWorks")
-        .doc();
-      bestWork["bestWorkId"] = bestWorkRef.id;
-      bestWork["created_at"] = timestamp;
-      bestWork["updated_at"] = timestamp;
-      await bestWorkRef.set(bestWork);
+    if (bestWork.title === "") {
+      alert("タイトルが未入力です");
     } else {
-      const bestWorkRef = db
-        .collection("users")
-        .doc(uid)
-        .collection("bestWorks")
-        .doc(bestWork.bestWorkId);
-      bestWork["updated_at"] = timestamp;
-      await bestWorkRef.set(bestWork, { merge: true });
+      if (bestWork.bestWorkId === "") {
+        const bestWorkRef = db
+          .collection("users")
+          .doc(uid)
+          .collection("bestWorks")
+          .doc();
+        bestWork["bestWorkId"] = bestWorkRef.id;
+        bestWork["created_at"] = timestamp;
+        bestWork["updated_at"] = timestamp;
+        await bestWorkRef.set(bestWork);
+      } else {
+        const bestWorkRef = db
+          .collection("users")
+          .doc(uid)
+          .collection("bestWorks")
+          .doc(bestWork.bestWorkId);
+        bestWork["updated_at"] = timestamp;
+        await bestWorkRef.set(bestWork, { merge: true });
+      }
     }
   };
 };

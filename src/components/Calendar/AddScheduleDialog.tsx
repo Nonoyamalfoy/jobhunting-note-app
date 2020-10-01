@@ -4,7 +4,13 @@ import { Dialog, DialogContent, DialogActions, Grid } from "@material-ui/core";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { DateTimePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/styles";
-import { TextInput, SaveButton, CloseButton, SelectColorBox } from "../Uikit";
+import {
+  TextInput,
+  SaveButton,
+  CloseButton,
+  SelectColorBox,
+  ValidationTextInput,
+} from "../Uikit";
 import dayjs from "dayjs";
 import { createStringChangeEventCallback } from "../../lib/createHooks";
 import { addSchedule } from "../../reducks/user/operations";
@@ -40,8 +46,10 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
   const [date, setDate] = useState(day.format("YYYYMMDDHHmm"));
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
+  const [isTitleEditStart, setIsTietleEditStart] = useState(false);
+  const isTitleInValid = !title && isTitleEditStart;
 
-  const scheduel = props.schedule
+  const scheduel = props.schedule;
   const matches = useMediaQuery("(max-width:960px)");
   const schrollType = matches ? "paper" : "body";
 
@@ -51,7 +59,7 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
     },
     [setColor]
   );
-  
+
   const inputDate = useCallback(
     (date) => {
       setDate(date.format("YYYYMMDDHHmm"));
@@ -60,18 +68,21 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
   );
 
   useEffect(() => {
-    setTitle(scheduel.title)
-    setColor(scheduel.color)
-    setDate(scheduel.date)
-    setDescription(scheduel.description)
-    setLocation(scheduel.location)
-  }, [scheduel])
+    setTitle(scheduel.title);
+    setColor(scheduel.color);
+    setDate(scheduel.date);
+    setDescription(scheduel.description);
+    setLocation(scheduel.location);
+  }, [scheduel]);
 
   return (
     <Dialog
       className="dialog"
       open={props.open}
-      onClose={props.handleClose}
+      onClose={() => {
+        props.handleClose();
+        setIsTietleEditStart(false);
+      }}
       fullScreen={matches}
       scroll={schrollType}
       fullWidth
@@ -79,18 +90,28 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
     >
       <div className="dialogHeader">
         <DialogActions>
-          <CloseButton onClick={props.handleClose} />
+          <CloseButton
+            onClick={() => {
+              props.handleClose();
+              setIsTietleEditStart(false);
+            }}
+          />
         </DialogActions>
       </div>
 
       <DialogContent>
         <div className="module-spacer--medium" />
-        <TextInput
+        <ValidationTextInput
+          autoFocus={true}
           label="タイトル"
           value={title}
           multiline={true}
-          type="text"
           onChange={createStringChangeEventCallback(setTitle)}
+          type="text"
+          required={true}
+          onBlur={() => setIsTietleEditStart(true)}
+          error={isTitleInValid}
+          validationText="必須項目が未入力です"
         />
         <div className="module-spacer--small" />
         <Grid container spacing={3}>
@@ -153,6 +174,7 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
               })
             );
             props.handleClose();
+            setIsTietleEditStart(false);
           }}
         />
       </DialogActions>

@@ -16,6 +16,7 @@ import {
   SaveButton,
   SingleTextInputAccordion,
   TextInput,
+  ValidationTextInput,
 } from "../../Uikit";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 
@@ -123,7 +124,13 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
     []
   );
 
+  const [isCompanyNameEditStart, setIsCompanyNameEditStart] = useState(false);
+  const isCompanyNameInValid = !companyName && isCompanyNameEditStart;
+
   const scheduleIdList = schedules.map((schedule) => schedule.scheduleId);
+  const judgementOfSchedulesTitle = schedules.filter((schedule) => 
+    schedule.title === ""
+  )
 
   const inputSchedule = useCallback(
     (value: Partial<ISchedule>, i: number) => {
@@ -187,7 +194,10 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
   return (
     <Dialog
       open={props.open}
-      onClose={props.handleClose}
+      onClose={() => {
+        props.handleClose();
+        setIsCompanyNameEditStart(false);
+      }}
       scroll={schrollType}
       fullScreen={matches}
       fullWidth
@@ -195,11 +205,17 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
     >
       <div className="dialogHeader">
         <DialogActions>
-          <CloseButton onClick={props.handleClose} />
+          <CloseButton
+            onClick={() => {
+              props.handleClose();
+              setIsCompanyNameEditStart(false);
+            }}
+          />
         </DialogActions>
       </div>
       <DialogContent className={classes.dialogContent}>
-        <TextInput
+        <ValidationTextInput
+          autoFocus={true}
           label={"会社名"}
           multiline={false}
           required={true}
@@ -207,6 +223,9 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
           value={companyName}
           type={"text"}
           onChange={createStringChangeEventCallback(setCompanyName)}
+          onBlur={() => setIsCompanyNameEditStart(true)}
+          error={isCompanyNameInValid}
+          validationText="タイトルは必須項目です"
         />
 
         <Box className={classes.box}>
@@ -346,7 +365,12 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
                 deletedScheduleIdList
               )
             );
-            props.handleClose();
+            if (companyName !== "") {
+              if(!judgementOfSchedulesTitle.length) {
+                props.handleClose();
+                setIsCompanyNameEditStart(false);
+              }
+            }
           }}
         />
       </DialogActions>
