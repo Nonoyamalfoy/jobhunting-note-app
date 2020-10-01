@@ -89,7 +89,7 @@ const ToDoListItem: React.FC<Props> = (props) => {
             />
           </ListItemIcon>
           <ListItemText
-            className={classes.text}
+            className={toDo.completed ? classes.doneText : classes.text}
             primary={toDo.title}
             secondary={dayjs(toDo.deadline).format("YYYY/MM/DD HH:mm")}
           />

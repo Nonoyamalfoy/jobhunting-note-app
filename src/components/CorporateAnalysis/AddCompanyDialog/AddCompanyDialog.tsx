@@ -225,7 +225,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
           onChange={createStringChangeEventCallback(setCompanyName)}
           onBlur={() => setIsCompanyNameEditStart(true)}
           error={isCompanyNameInValid}
-          validationText="タイトルは必須項目です"
+          validationText="会社名は必須項目です"
         />
 
         <Box className={classes.box}>

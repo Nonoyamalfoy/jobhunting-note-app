@@ -25,12 +25,12 @@ export const isSameMonth = (m1: dayjs.Dayjs, m2: dayjs.Dayjs) => {
   return m1.format(format) === m2.format(format);
 };
 
-export const getNextMonth = (day: dayjs.Dayjs) => {
-  const nextMonthDay = day.add(1, "month");
+export const getNextMonth = (month: string) => {
+  const nextMonthDay = dayjs(month).add(1, "month");
   return nextMonthDay
 };
 
-export const getPreviousMonth = (day: dayjs.Dayjs) => {
-  const previousMonthDay = day.add(-1, "month");
+export const getPreviousMonth = (month: string) => {
+  const previousMonthDay = dayjs(month).add(-1, "month");
   return previousMonthDay; 
 };

@@ -3,7 +3,10 @@ import { IconButton, Toolbar } from "@material-ui/core";
 import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIos from "@material-ui/icons/ArrowForwardIos";
 import { useDispatch, useSelector } from "react-redux";
-// import {  setPreviousMonth, setNextMonth } from "../../reducks/calendar/oeprations";
+import {
+  setPreviousMonth,
+  setNextMonth,
+} from "../../reducks/calendar/operations";
 import { DatePicker } from "@material-ui/pickers";
 // import { getCurrentDate } from "../../reducks/calendar/selectors";
 // import {setDate} from "../../reducks/calendar/oeprations";
@@ -37,36 +40,32 @@ const Navigation: React.FC = () => {
   const currentDate = getCurrentDate(selector);
 
   useEffect(() => {
-    dispatch(setCurrentDate(dayjs()))
-  }, [])
+    dispatch(setCurrentDate(dayjs()));
+  }, []);
 
   return (
-    // <div>
-    //   {onCalendarPage && (
-        <Toolbar className={classes.toolBar}>
-          <IconButton onClick={() => {}}>
-            <ArrowBackIos className={classes.arrowButton} />
-          </IconButton>
-          <DatePicker
-            InputProps={{
-              style: { fontSize: 20, color: "white" },
-              disableUnderline: true,
-            }}
-            InputLabelProps={{ style: { fontSize: 20, color: "white" } }}
-            className={classes.datePicker}
-            value={currentDate}
-            onChange={(e) => dispatch(setCurrentDate(e as dayjs.Dayjs))}
-            variant="inline"
-            format="YYYY/MM/DD"
-            animateYearScrolling
-            disableToolbar
-          />
-          <IconButton onClick={() => {}}>
-            <ArrowForwardIos className={classes.arrowButton} />
-          </IconButton>
-        </Toolbar>
-    //   )}
-    // </div>
+    <Toolbar className={classes.toolBar}>
+      <IconButton onClick={() => dispatch(setPreviousMonth())}>
+        <ArrowBackIos className={classes.arrowButton} />
+      </IconButton>
+      <DatePicker
+        InputProps={{
+          style: { fontSize: 20, color: "white" },
+          disableUnderline: true,
+        }}
+        InputLabelProps={{ style: { fontSize: 20, color: "white" } }}
+        className={classes.datePicker}
+        value={currentDate}
+        onChange={(e) => dispatch(setCurrentDate(e as dayjs.Dayjs))}
+        variant="inline"
+        format="YYYY/MM/DD"
+        animateYearScrolling
+        disableToolbar
+      />
+      <IconButton onClick={() => dispatch(setNextMonth())}>
+        <ArrowForwardIos className={classes.arrowButton} />
+      </IconButton>
+    </Toolbar>
   );
 };
 
