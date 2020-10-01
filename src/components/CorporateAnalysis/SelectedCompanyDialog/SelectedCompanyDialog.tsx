@@ -62,6 +62,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: "relative",
       minHeight: 57,
       cursor: "pointer",
+      borderRadius: 4,
       [theme.breakpoints.down(960)]: {
         padding: "8px 5px 16px",
       },
@@ -99,7 +100,7 @@ type Props = {
   handleClickOpenAddCompanyDialog: () => void;
 };
 
-const SelectedCompany: React.FC<Props> = (props) => {
+const SelectedCompanyDialog: React.FC<Props> = (props) => {
   const classes = useStyles();
   const selector = useSelector((state: RootState) => state);
   const uid = getUserId(selector);
@@ -585,4 +586,4 @@ const SelectedCompany: React.FC<Props> = (props) => {
   );
 };
 
-export default SelectedCompany;
+export default SelectedCompanyDialog;

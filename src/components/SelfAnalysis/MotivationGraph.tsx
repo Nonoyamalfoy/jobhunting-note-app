@@ -109,6 +109,9 @@ const useStyles = makeStyles((theme) => ({
     padding: "8px 16px 16px 16px",
     position: "relative",
   },
+  experienceTitle: {
+    cursor: "pointer",
+  },
 }));
 
 // type Props = {
@@ -127,7 +130,7 @@ const MotivationGraph: React.FC = () => {
     title: "",
     age: 0,
     motivation: 0,
-    description: ""
+    description: "",
   });
   const [addMotivationDialogOpen, setAddMotivationDialogOpen] = useState(false);
   const [
@@ -141,7 +144,7 @@ const MotivationGraph: React.FC = () => {
       title: "",
       age: 0,
       motivation: 0,
-      description: ""
+      description: "",
     });
   };
 
@@ -284,7 +287,13 @@ const MotivationGraph: React.FC = () => {
                     {i !== experiences.length - 1 && <TimelineConnector />}
                   </TimelineSeparator>
                   <TimelineContent>
-                    <Typography color="textSecondary">
+                    <Typography
+                      className={classes.experienceTitle}
+                      color="textSecondary"
+                      onClick={() =>
+                        handleClickOpenSelectedExperienceDialog(experience)
+                      }
+                    >
                       {experience.title}
                     </Typography>
                     <Divider />

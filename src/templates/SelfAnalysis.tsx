@@ -97,6 +97,12 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     height: 100,
     backgroundColor: "#dfe3e7",
+    transition: "all 0.3s",
+    "&:hover": {
+      boxShadow:
+        "0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)",
+      transform: "translateY(-3px)",
+    },
   },
   addCircleIcon: {
     position: "absolute",
@@ -257,7 +263,7 @@ const SelfAnalysis: React.FC = () => {
             <Grid container spacing={4}>
               {bestWorks.map((bestWork: BestWork, i: number) => (
                 <Grid key={i} item xs={12} sm={6} md={4}>
-                  <Card className={classes.subCard} elevation={5}>
+                  <Card className={classes.subCard}>
                     <CardActionArea
                       className={classes.cardActionArea}
                       onClick={() =>

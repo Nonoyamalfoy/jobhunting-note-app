@@ -58,6 +58,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "block",
       backgroundColor: "#dfe3e7",
       cursor: "pointer",
+      borderRadius: 4,
       [theme.breakpoints.down(960)]: {
         padding: "8px 5px 16px",
       },

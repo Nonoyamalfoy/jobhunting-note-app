@@ -137,9 +137,11 @@ export const addCompany = (
   return async (dispatch: Dispatch, getState: () => RootState) => {
     const uid = getState().user.uid;
     const timestamp = FirebaseTimestamp.now();
+    // 会社名が空欄かどうか
     if (company.companyName === "") {
       alert("会社名が未入力です");
     } else {
+      // すでにある会社かどうか
       if (company.companyId === "") {
         const companyRef = db
           .collection("users")
@@ -149,13 +151,15 @@ export const addCompany = (
         company["companyId"] = companyRef.id;
         company["created_at"] = timestamp;
         company["updated_at"] = timestamp;
-
+        // 日程があるかどうか
         if (company.schedules.length > 0) {
           company.schedules.map((schedule, i) => {
+            // 日程のタイトルが空欄かどうか
             if (schedule.title === "") {
               alert(`日程${i + 1}のタイトルが未入力です`);
               return;
             } else {
+              // すでに存在する日程かどうか
               if (schedule.scheduleId === "") {
                 const c = "abcdefghijklmnopqrstuvwxyz0123456789";
                 const cl = c.length;
@@ -169,7 +173,6 @@ export const addCompany = (
                   .doc(uid)
                   .collection("schedules")
                   .doc(schedule.scheduleId);
-                // schedule["scheduleId"] = scheduleRef.id;
                 schedule["created_at"] = timestamp;
                 schedule["updated_at"] = timestamp;
                 scheduleRef.set(schedule);
@@ -182,21 +185,14 @@ export const addCompany = (
                 schedule["updated_at"] = timestamp;
                 scheduleRef.set(schedule, { merge: true });
               }
-              if (deletedScheduleIdList.length > 0) {
-                deletedScheduleIdList.map((deleteScheduleId) => {
-                  if (deleteScheduleId !== "") {
-                    db.collection("users")
-                      .doc(uid)
-                      .collection("schedules")
-                      .doc(deleteScheduleId)
-                      .delete();
-                  }
-                });
-              }
-              companyRef.set(company);
             }
           });
         }
+        // 削除された日程があるかどうか
+
+        console.log("aaa");
+
+        companyRef.set(company);
       } else {
         const companyRef = db
           .collection("users")
@@ -236,21 +232,21 @@ export const addCompany = (
                 schedule["updated_at"] = timestamp;
                 scheduleRef.set(schedule, { merge: true });
               }
-              if (deletedScheduleIdList.length > 0) {
-                deletedScheduleIdList.map((deleteScheduleId) => {
-                  if (deleteScheduleId !== "") {
-                    db.collection("users")
-                      .doc(uid)
-                      .collection("schedules")
-                      .doc(deleteScheduleId)
-                      .delete();
-                  }
-                });
-              }
-              companyRef.set(company, { merge: true });
             }
           });
         }
+        if (deletedScheduleIdList.length > 0) {
+          deletedScheduleIdList.map((deleteScheduleId) => {
+            if (deleteScheduleId !== "") {
+              db.collection("users")
+                .doc(uid)
+                .collection("schedules")
+                .doc(deleteScheduleId)
+                .delete();
+            }
+          });
+        }
+        companyRef.set(company, { merge: true });
       }
     }
   };
