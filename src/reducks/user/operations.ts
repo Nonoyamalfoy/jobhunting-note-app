@@ -5,7 +5,8 @@ import usersActions from "./actions";
 import { RootState } from "../../entity/rootState";
 import { Company } from "../../entity/company";
 import { BestWork, Schedule, ToDo, Experience } from "../../entity/user";
-import dayjs from "dayjs";
+import loadingActions from "../loading/actions";
+import { isValidEmailFormat } from "../../lib/validation";
 
 export const fetchExperiences = (experiences: Experience[]) => {
   return async (dispatch: Dispatch) => {
@@ -141,7 +142,7 @@ export const addCompany = (
       deletedScheduleIdList.map((deleteScheduleId) => {
         if (deleteScheduleId !== "") {
           db.collection("users")
-            .doc(uid) 
+            .doc(uid)
             .collection("schedules")
             .doc(deleteScheduleId)
             .delete();
@@ -278,7 +279,6 @@ export const addBestWork = (bestWork: BestWork) => {
   return async (dispatch: Dispatch, getState: () => RootState) => {
     const uid = getState().user.uid;
     const timestamp = FirebaseTimestamp.now();
-
     if (bestWork.bestWorkId === "") {
       const bestWorkRef = db
         .collection("users")
@@ -346,6 +346,32 @@ export const signUp = ({
   confirmPassword,
 }: signUp) => {
   return async (dispatch: Dispatch) => {
+    dispatch(loadingActions.showLoadingAction("Sign up..."));
+    if (
+      username === "" ||
+      email === "" ||
+      password === "" ||
+      confirmPassword === ""
+    ) {
+      dispatch(loadingActions.hideLoadingAction());
+      alert("必須項目が未入力です");
+      return false;
+    }
+    if (!isValidEmailFormat(email)) {
+      dispatch(loadingActions.hideLoadingAction());
+      alert("メールアドレスの形式が不正です。もう1度お試しください。");
+      return false;
+    }
+    if (password !== confirmPassword) {
+      dispatch(loadingActions.hideLoadingAction());
+      alert("パスワードが一致しません。もう一度お試しください。");
+      return false;
+    }
+    if (password.length < 6) {
+      dispatch(loadingActions.hideLoadingAction());
+      alert("パスワードは6文字以上で入力してください。");
+      return false;
+    }
     return auth
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
@@ -368,10 +394,12 @@ export const signUp = ({
             .set(userInitialData)
             .then(() => {
               dispatch(push("/"));
+              dispatch(loadingActions.hideLoadingAction());
             });
         }
       })
       .catch((error) => {
+        dispatch(loadingActions.hideLoadingAction());
         alert("アカウント登録に失敗しました。もう1度お試しください。");
         throw new Error(error);
       });
@@ -385,11 +413,23 @@ type SignIn = {
 
 export const signIn = ({ email, password }: SignIn) => {
   return async (dispatch: Dispatch) => {
+    dispatch(loadingActions.showLoadingAction("Sign in..."));
+    if (email === "" || password === "") {
+      dispatch(loadingActions.hideLoadingAction());
+      alert("必須項目が未入力です");
+      return false;
+    }
+    if (!isValidEmailFormat(email)) {
+      dispatch(loadingActions.hideLoadingAction());
+      alert("メールアドレスの形式が不正です。");
+      return false;
+    }
     return auth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
         const user = result.user;
         if (!user) {
+          dispatch(loadingActions.hideLoadingAction());
           throw new Error("ユーザーIDを取得できません");
         }
         const uid = user.uid;
@@ -400,6 +440,7 @@ export const signIn = ({ email, password }: SignIn) => {
           .then((snapshot) => {
             const data = snapshot.data();
             if (!data) {
+              dispatch(loadingActions.hideLoadingAction());
               throw new Error("ユーザーデータが存在しません");
             }
             dispatch(
@@ -412,10 +453,12 @@ export const signIn = ({ email, password }: SignIn) => {
                 weaknesses: data.weaknesses,
               })
             );
+            dispatch(loadingActions.hideLoadingAction());
             dispatch(push("/"));
           });
       })
       .catch(() => {
+        dispatch(loadingActions.hideLoadingAction());
         alert("サインインに失敗しました");
       });
   };
@@ -423,6 +466,7 @@ export const signIn = ({ email, password }: SignIn) => {
 
 export const signOut = () => {
   return async (dispatch: Dispatch) => {
+    dispatch(loadingActions.showLoadingAction("Sign out..."));
     auth
       .signOut()
       .then(() => {
@@ -441,9 +485,11 @@ export const signOut = () => {
             bestWorks: [],
           })
         );
+        dispatch(loadingActions.hideLoadingAction());
         dispatch(push("/signin"));
       })
       .catch(() => {
+        dispatch(loadingActions.hideLoadingAction());
         throw new Error("ログアウトに失敗しました。");
       });
   };

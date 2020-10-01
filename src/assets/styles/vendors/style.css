@@ -75,6 +75,37 @@ main {
   margin-top: 8px;
 }
 
+.loading {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: rgba(255, 255, 255, 0.7);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  opacity: 0.9;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  z-index: 9999;
+}
+
+.loading > p {
+  color: #444;
+  font-weight: 600;
+  margin-top: 1rem;
+  text-align: center;
+}
+
 /*********** Module Spacer ***********/
 .module-spacer--extra-small {
   height: 8px;

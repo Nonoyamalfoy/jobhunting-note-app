@@ -3,6 +3,7 @@ export {default as CreateButton} from "./CreateButton";
 export {default as DeleteCircleButton} from "./DeleteCircleButton";
 export {default as DeleteSquareButton} from "./DeleteSquareButton";
 export {default as DoubleTextInputAccordion} from "./DoubleTextInputAccordion";
+export {default as Loading} from "./Loading";
 export {default as MoreButton} from "./MoreButton";
 export {default as PrimaryButton} from "./PrimaryButton";
 export {default as SaveButton} from "./SaveButton"

@@ -6,6 +6,7 @@ import { createBrowserHistory } from "history";
 
 import UserReducer from "../user/reducer";
 import CalendarReducer from "../calendar/reducer";
+import LoadingReducer from "../loading/reducers";
 
 export const history = createBrowserHistory();
 
@@ -14,6 +15,7 @@ const store = createStore(
     router: connectRouter(history),
     user: UserReducer,
     calendar: CalendarReducer,
+    loading: LoadingReducer,
   }),
   compose(
     applyMiddleware(routerMiddleware(history), thunk)
