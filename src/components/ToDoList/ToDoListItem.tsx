@@ -11,6 +11,7 @@ import { ToDo } from "../../entity/user";
 import { db } from "../../firebase/index";
 import { getUserId } from "../../reducks/user/selectors";
 import { RootState } from "../../entity/rootState";
+import dayjs from "dayjs";
 
 const useStyles = makeStyles((theme: Theme) => ({
   toDoListItemContainer: {
@@ -90,7 +91,7 @@ const ToDoListItem: React.FC<Props> = (props) => {
           <ListItemText
             className={classes.text}
             primary={toDo.title}
-            secondary={toDo.deadline}
+            secondary={dayjs(toDo.deadline).format("YYYY/MM/DD HH:mm")}
           />
           <ListItemSecondaryAction>
             <MoreVertButton

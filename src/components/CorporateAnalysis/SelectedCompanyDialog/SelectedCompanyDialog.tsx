@@ -23,6 +23,7 @@ import { RootState } from "../../../entity/rootState";
 import { getSchedules, getUserId } from "../../../reducks/user/selectors";
 import { db } from "../../../firebase/index";
 import Schedule from "./Schedule";
+import dayjs from "dayjs";
 
 const useStyles = makeStyles({
   dialogHeader: {
@@ -57,6 +58,7 @@ const useStyles = makeStyles({
     display: "block",
     backgroundColor: "#dfe3e7",
     position: "relative",
+    minHeight: 57
   },
   box: {
     borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
@@ -219,11 +221,11 @@ const SelectedCompany: React.FC<Props> = (props) => {
                     </Grid>
                   </Grid>
                   <Typography color="textSecondary">
-                    {selectedCompany.yearOfEstablish}
+                    {dayjs(selectedCompany.yearOfEstablish).format("YYYY/MM")}
                   </Typography>
                   <Divider />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={6} style={{minHeight: 81}}>
                   <Grid item container spacing={1} alignItems="center">
                     <Grid item>
                       <span className={classes.rectangle}></span>
@@ -232,7 +234,7 @@ const SelectedCompany: React.FC<Props> = (props) => {
                       <p>従業員数</p>
                     </Grid>
                   </Grid>
-                  <Typography color="textSecondary">
+                  <Typography color="textSecondary" style={{minHeight: 24}}>
                     {selectedCompany.numberOfEmployees}
                   </Typography>
                   <Divider />
@@ -468,7 +470,7 @@ const SelectedCompany: React.FC<Props> = (props) => {
                 <span className={classes.square}></span>
               </Grid>
               <Grid item>
-                <Typography>面接・試験</Typography>
+                <Typography>日程</Typography>
               </Grid>
             </Grid>
           </AccordionSummary>

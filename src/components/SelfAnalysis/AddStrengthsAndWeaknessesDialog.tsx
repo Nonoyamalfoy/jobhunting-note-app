@@ -17,7 +17,13 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { CloseButton, SaveButton, TextInput, MoreButton } from "../Uikit";
+import {
+  CloseButton,
+  SaveButton,
+  TextInput,
+  MoreButton,
+  SingleTextInputAccordion,
+} from "../Uikit";
 import { createStringChangeEventCallback } from "../../lib/createHooks";
 import { useDispatch, useSelector } from "react-redux";
 import { addStrengthsAndWeaknesses } from "../../reducks/user/operations";
@@ -85,18 +91,10 @@ const AddStrengthsAndWeaknessesDialog: React.FC<Props> = (props) => {
   const [strengths, setStrengths] = useState("");
   const [weaknesses, setWeaknesses] = useState("");
 
-  // useEffect(() => {
-  //   setStrengths(currentStrengths);
-  // }, [setStrengths, currentStrengths]);
-
-  // useEffect(() => {
-  //   setWeaknesses(currentWeaknesses);
-  // }, [setWeaknesses, currentWeaknesses]);
-
   useEffect(() => {
-    setStrengths(currentStrengths)
-    setWeaknesses(currentWeaknesses)
-  }, [props.open])
+    setStrengths(currentStrengths);
+    setWeaknesses(currentWeaknesses);
+  }, [props.open]);
 
   return (
     <div>
@@ -114,47 +112,18 @@ const AddStrengthsAndWeaknessesDialog: React.FC<Props> = (props) => {
           </DialogActions>
         </div>
         <DialogContent>
-          <Accordion defaultExpanded className={classes.Accordion}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              className={classes.AccordionSummary}
-            >
-              <Typography>自分の強み</Typography>
-            </AccordionSummary>
-            <AccordionDetails className={classes.AccordionDetails}>
-              <TextInput
-                label={"テキストを入力"}
-                multiline
-                required={true}
-                // rows={1}
-                value={strengths}
-                type={"text"}
-                onChange={createStringChangeEventCallback(setStrengths)}
-              />
-            </AccordionDetails>
-          </Accordion>
-          <Divider className={classes.dividerBlack} />
-
-          <Accordion defaultExpanded className={classes.Accordion}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              className={classes.AccordionSummary}
-            >
-              <Typography>自分の弱み</Typography>
-            </AccordionSummary>
-            <AccordionDetails className={classes.AccordionDetails}>
-              <TextInput
-                label={"テキストを入力"}
-                multiline
-                required={true}
-                // rows={1}
-                value={weaknesses}
-                type={"text"}
-                onChange={createStringChangeEventCallback(setWeaknesses)}
-              />
-            </AccordionDetails>
-          </Accordion>
-          <Divider className={classes.dividerBlack} />
+          <SingleTextInputAccordion
+            title="自分の強み"
+            TextInputLabel="テキストを入力"
+            TextInputValue={strengths}
+            TextInputOnChange={createStringChangeEventCallback(setStrengths)}
+          />
+          <SingleTextInputAccordion
+            title="自分の弱み"
+            TextInputLabel="テキストを入力"
+            TextInputValue={weaknesses}
+            TextInputOnChange={createStringChangeEventCallback(setWeaknesses)}
+          />
         </DialogContent>
         <DialogActions>
           <SaveButton

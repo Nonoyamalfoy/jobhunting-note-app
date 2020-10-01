@@ -17,12 +17,9 @@ import dayjs from "dayjs";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    // flexGrow: 1,
     margin: 20,
-    // height: "100%"
   },
   paper: {
-    // padding: theme.spacing(1),
     textAlign: "center",
     color: theme.palette.text.secondary,
     height: 200,
@@ -104,15 +101,21 @@ const CorporateAnalysis: React.FC = () => {
   return (
     <div className={classes.root}>
       <Grid container spacing={4}>
-        {companies.map((c, i) => (
-          <CompanyListItem
-            key={i}
-            company={c}
-            handleClickOpenSelectedCompanyDialog={() =>
-              handleClickOpenSelectedCompanyDialog(c)
-            }
-          />
-        ))}
+        {companies.length > 0 ? (
+          <>
+          {companies.map((c, i) => (
+            <CompanyListItem
+              key={i}
+              company={c}
+              handleClickOpenSelectedCompanyDialog={() =>
+                handleClickOpenSelectedCompanyDialog(c)
+              }
+            />
+          ))}
+          </>
+        ) : (
+          <h2 className="empty-item">追加された企業はありません</h2>
+        )}
       </Grid>
 
       <AddCompanyDialog

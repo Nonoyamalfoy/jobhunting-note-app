@@ -17,6 +17,7 @@ import { Schedule as ISchedule } from "../../../entity/user";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../entity/rootState";
 import { getSchedules } from "../../../reducks/user/selectors";
+import dayjs from "dayjs";
 
 const useStyles = makeStyles({
   dialogHeader: {
@@ -112,7 +113,7 @@ const Schedule: React.FC<Props> = (props) => {
               <Typography variant="caption">日時</Typography>
             </Grid>
           </Grid>
-          <Typography color="textSecondary">{schedule.date}</Typography>
+          <Typography color="textSecondary">{dayjs(schedule.date).format("YYYY/MM/DD HH:mm")}</Typography>
           <Divider />
         </Grid>
         <Grid item xs={12}>

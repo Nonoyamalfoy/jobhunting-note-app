@@ -98,7 +98,7 @@ const PhilosophyAndCompanyProfile: React.FC<Props> = (props) => {
                   InputLabelProps={{ style: { fontSize: 17 } }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={6} >
                 <TextInput
                   label={"従業員数"}
                   multiline={true}

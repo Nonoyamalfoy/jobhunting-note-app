@@ -43,13 +43,19 @@ const ToDoList: React.FC = () => {
     <div className="p-ToDo">
       {/* <div className="module-spacer--extra-small"/> */}
       <List>
-        {ToDoList.map((t, i) => (
-          <ToDoListItem
-            key={i}
-            toDo={t}
-            handleClickOpenAddToDoDialog={handleClickOpenAddToDoDialog}
-          />
-        ))}
+        {ToDoList.length > 0 ? (
+          <>
+          {ToDoList.map((t, i) => (
+            <ToDoListItem
+              key={i}
+              toDo={t}
+              handleClickOpenAddToDoDialog={handleClickOpenAddToDoDialog}
+            />
+          ))}
+          </>
+        ) : (
+          <h2 className="empty-item">追加されたToDoはありません</h2>
+        )}
       </List>
       <AddToDoDialog
         open={addToDoDialogOpen}

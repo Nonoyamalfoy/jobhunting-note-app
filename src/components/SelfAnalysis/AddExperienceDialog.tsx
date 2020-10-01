@@ -17,7 +17,6 @@ import {
 import { addExperiences } from "../../reducks/user/operations";
 import { RootState } from "../../entity/rootState";
 import { getExperiences, getUserId } from "../../reducks/user/selectors";
-import { db } from "../../firebase/index";
 import { Experience } from "../../entity/user";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
@@ -103,7 +102,6 @@ const AddExperienceDialog: React.FC<Props> = (props) => {
       className="dialog"
       open={props.open}
       onClose={props.handleClose}
-      // fullScreen={matches}
       fullWidth
       scroll={schrollType}
       fullScreen={matches}
