@@ -1,21 +1,16 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React from "react";
 import {
   Dialog,
   DialogContent,
   DialogActions,
   Typography,
   Grid,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   Box,
   Divider,
 } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-
-import { CloseButton, MoreButton, CreateButton } from "../../Uikit";
+import { CloseButton, MoreButton, SelectedDialogAccordion } from "../../Uikit";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Rating from "@material-ui/lab/Rating";
 import { Company } from "../../../entity/company";
 import HTMLReactParser from "html-react-parser";
@@ -36,36 +31,6 @@ const useStyles = makeStyles((theme: Theme) =>
       color: "white",
       alignItems: "center",
       paddingLeft: "24px",
-    },
-    Accordion: {
-      padding: 0,
-      borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
-      boxShadow: "none",
-      margin: 0,
-      marginTop: 5,
-      "&:before": {
-        display: "none",
-      },
-      "&.Mui-expanded": {
-        margin: 0,
-      },
-    },
-    AccordionSummary: {
-      padding: "0px 16px 0px 0px",
-      "& .MuiAccordionSummary-content": {
-        margin: "17px 0px 7px 0px",
-      },
-    },
-    AccordionDetails: {
-      display: "block",
-      backgroundColor: "#dfe3e7",
-      position: "relative",
-      minHeight: 57,
-      cursor: "pointer",
-      borderRadius: 4,
-      [theme.breakpoints.down(960)]: {
-        padding: "8px 5px 16px",
-      },
     },
     box: {
       borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
@@ -171,38 +136,25 @@ const SelectedCompanyDialog: React.FC<Props> = (props) => {
       </div>
       <DialogContent className={classes.dialogContent}>
         <Box className={classes.box}>
-          <Typography>志望度</Typography>
+          <Grid container spacing={1} alignItems="center">
+            <Grid item>
+              <span className={classes.square}></span>
+            </Grid>
+            <Grid item>
+              <Typography>志望度</Typography>
+            </Grid>
+          </Grid>
           <Rating readOnly value={selectedCompany.aspiration} />
         </Box>
 
-        <Accordion className={classes.Accordion} defaultExpanded>
-          <AccordionSummary
-            className={classes.AccordionSummary}
-            expandIcon={<ExpandMoreIcon />}
-          >
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <span className={classes.square}></span>
-              </Grid>
-              <Grid item>
-                <Typography>理念・会社概要</Typography>
-              </Grid>
-            </Grid>
-          </AccordionSummary>
-          <AccordionDetails
-            className={classes.AccordionDetails}
-            onClick={() => {
-              props.handleClickOpenAddCompanyDialog();
-              props.handleClose();
-            }}
-          >
-            {/* <CreateButton
-              size="small"
-              onClick={() => {
-                props.handleClickOpenAddCompanyDialog();
-                props.handleClose();
-              }}
-            /> */}
+        <SelectedDialogAccordion
+          title="理念・会社概要"
+          onClick={() => {
+            props.handleClickOpenAddCompanyDialog();
+            props.handleClose();
+          }}
+        >
+          <Typography color="textSecondary">
             <Grid item container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.rectangle}></span>
@@ -290,297 +242,165 @@ const SelectedCompanyDialog: React.FC<Props> = (props) => {
                 </Grid>
               </Grid>
             </Grid>
-          </AccordionDetails>
-        </Accordion>
+          </Typography>
+        </SelectedDialogAccordion>
 
-        <Accordion defaultExpanded className={classes.Accordion}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            className={classes.AccordionSummary}
-          >
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <span className={classes.square}></span>
-              </Grid>
-              <Grid item>
-                <Typography>求める人材・スキル</Typography>
-              </Grid>
+        <SelectedDialogAccordion
+          title="求める人物像・スキル"
+          onClick={() => {
+            props.handleClickOpenAddCompanyDialog();
+            props.handleClose();
+          }}
+        >
+          <Grid container spacing={1} alignItems="center">
+            <Grid item>
+              <span className={classes.rectangle}></span>
             </Grid>
-          </AccordionSummary>
-          <AccordionDetails
-            className={classes.AccordionDetails}
-            onClick={() => {
-              props.handleClickOpenAddCompanyDialog();
-              props.handleClose();
-            }}
-          >
-            {/* <CreateButton
-              size="small"
-              onClick={() => {
-                props.handleClickOpenAddCompanyDialog();
-                props.handleClose();
-              }}
-            /> */}
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <span className={classes.rectangle}></span>
-              </Grid>
-              <Grid item>
-                <p>求める人物像</p>
-              </Grid>
+            <Grid item>
+              <p>求める人物像</p>
             </Grid>
-            <Grid container justify="flex-start">
-              <Typography color="textSecondary">
-                {returnCodeToBr(selectedCompany.requiredPersonImage)}
-              </Typography>
-            </Grid>
-            <Divider />
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <span className={classes.rectangle}></span>
-              </Grid>
-              <Grid item>
-                <p>求めるスキル</p>
-              </Grid>
-            </Grid>
+          </Grid>
+          <Grid container justify="flex-start">
             <Typography color="textSecondary">
-              {returnCodeToBr(selectedCompany.requiredSkill)}
+              {returnCodeToBr(selectedCompany.requiredPersonImage)}
             </Typography>
-            <Divider />
-          </AccordionDetails>
-        </Accordion>
+          </Grid>
+          <Divider />
+          <Grid container spacing={1} alignItems="center">
+            <Grid item>
+              <span className={classes.rectangle}></span>
+            </Grid>
+            <Grid item>
+              <p>求めるスキル</p>
+            </Grid>
+          </Grid>
+          <Typography color="textSecondary">
+            {returnCodeToBr(selectedCompany.requiredSkill)}
+          </Typography>
+          <Divider />
+        </SelectedDialogAccordion>
 
-        <Accordion defaultExpanded className={classes.Accordion}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            className={classes.AccordionSummary}
-          >
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <span className={classes.square}></span>
-              </Grid>
-              <Grid item>
-                <Typography>将来性・課題</Typography>
-              </Grid>
+        <SelectedDialogAccordion
+          title="将来性・課題"
+          onClick={() => {
+            props.handleClickOpenAddCompanyDialog();
+            props.handleClose();
+          }}
+        >
+          <Grid container spacing={1} alignItems="center">
+            <Grid item>
+              <span className={classes.rectangle}></span>
             </Grid>
-          </AccordionSummary>
-          <AccordionDetails
-            className={classes.AccordionDetails}
-            onClick={() => {
-              props.handleClickOpenAddCompanyDialog();
-              props.handleClose();
-            }}
-          >
-            {/* <CreateButton
-              size="small"
-              onClick={() => {
-                props.handleClickOpenAddCompanyDialog();
-                props.handleClose();
-              }}
-            /> */}
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <span className={classes.rectangle}></span>
-              </Grid>
-              <Grid item>
-                <p>将来性</p>
-              </Grid>
+            <Grid item>
+              <p>将来性</p>
             </Grid>
-            <Typography color="textSecondary">
-              {returnCodeToBr(selectedCompany.future)}
-            </Typography>
-            <Divider />
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <span className={classes.rectangle}></span>
-              </Grid>
-              <Grid item>
-                <p>課題</p>
-              </Grid>
+          </Grid>
+          <Typography color="textSecondary">
+            {returnCodeToBr(selectedCompany.future)}
+          </Typography>
+          <Divider />
+          <Grid container spacing={1} alignItems="center">
+            <Grid item>
+              <span className={classes.rectangle}></span>
             </Grid>
-            <Typography color="textSecondary">
-              {returnCodeToBr(selectedCompany.task)}
-            </Typography>
-            <Divider />
-          </AccordionDetails>
-        </Accordion>
+            <Grid item>
+              <p>課題</p>
+            </Grid>
+          </Grid>
+          <Typography color="textSecondary">
+            {returnCodeToBr(selectedCompany.task)}
+          </Typography>
+          <Divider />
+        </SelectedDialogAccordion>
 
-        <Accordion defaultExpanded className={classes.Accordion}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            className={classes.AccordionSummary}
-          >
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <span className={classes.square}></span>
-              </Grid>
-              <Grid item>
-                <Typography>労働環境・福利厚生</Typography>
-              </Grid>
+        <SelectedDialogAccordion
+          title="労働環境・福利厚生"
+          onClick={() => {
+            props.handleClickOpenAddCompanyDialog();
+            props.handleClose();
+          }}
+        >
+          <Grid container spacing={1} alignItems="center">
+            <Grid item>
+              <span className={classes.rectangle}></span>
             </Grid>
-          </AccordionSummary>
-          <AccordionDetails
-            className={classes.AccordionDetails}
-            onClick={() => {
-              props.handleClickOpenAddCompanyDialog();
-              props.handleClose();
-            }}
-          >
-            {/* <CreateButton
-              size="small"
-              onClick={() => {
-                props.handleClickOpenAddCompanyDialog();
-                props.handleClose();
-              }}
-            /> */}
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <span className={classes.rectangle}></span>
-              </Grid>
-              <Grid item>
-                <p>労働環境</p>
-              </Grid>
+            <Grid item>
+              <p>労働環境</p>
             </Grid>
-            <Typography color="textSecondary">
-              {returnCodeToBr(selectedCompany.workingEnvironment)}
-            </Typography>
-            <Divider />
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <span className={classes.rectangle}></span>
-              </Grid>
-              <Grid item>
-                <p>福利厚生</p>
-              </Grid>
+          </Grid>
+          <Typography color="textSecondary">
+            {returnCodeToBr(selectedCompany.workingEnvironment)}
+          </Typography>
+          <Divider />
+          <Grid container spacing={1} alignItems="center">
+            <Grid item>
+              <span className={classes.rectangle}></span>
             </Grid>
-            <Typography color="textSecondary">
-              {returnCodeToBr(selectedCompany.welfare)}
-            </Typography>
-            <Divider />
-          </AccordionDetails>
-        </Accordion>
+            <Grid item>
+              <p>福利厚生</p>
+            </Grid>
+          </Grid>
+          <Typography color="textSecondary">
+            {returnCodeToBr(selectedCompany.welfare)}
+          </Typography>
+          <Divider />
+        </SelectedDialogAccordion>
 
-        <Accordion defaultExpanded className={classes.Accordion}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            className={classes.AccordionSummary}
-          >
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <span className={classes.square}></span>
-              </Grid>
-              <Grid item>
-                <Typography>志望理由</Typography>
-              </Grid>
+        <SelectedDialogAccordion
+          title="志望理由"
+          onClick={() => {
+            props.handleClickOpenAddCompanyDialog();
+            props.handleClose();
+          }}
+        >
+          <Grid container spacing={1} alignItems="center">
+            <Grid item>
+              <span className={classes.rectangle}></span>
             </Grid>
-          </AccordionSummary>
-          <AccordionDetails
-            className={classes.AccordionDetails}
-            onClick={() => {
-              props.handleClickOpenAddCompanyDialog();
-              props.handleClose();
-            }}
-          >
-            {/* <CreateButton
-              size="small"
-              onClick={() => {
-                props.handleClickOpenAddCompanyDialog();
-                props.handleClose();
-              }}
-            /> */}
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <span className={classes.rectangle}></span>
-              </Grid>
-              <Grid item>
-                <p>志望理由</p>
-              </Grid>
+            <Grid item>
+              <p>志望理由</p>
             </Grid>
-            <Typography color="textSecondary">
-              {returnCodeToBr(selectedCompany.reasonForAspiration)}
-            </Typography>
-            <Divider />
-          </AccordionDetails>
-        </Accordion>
+          </Grid>
+          <Typography color="textSecondary">
+            {returnCodeToBr(selectedCompany.reasonForAspiration)}
+          </Typography>
+          <Divider />
+        </SelectedDialogAccordion>
 
-        <Accordion defaultExpanded className={classes.Accordion}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            className={classes.AccordionSummary}
-          >
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <span className={classes.square}></span>
-              </Grid>
-              <Grid item>
-                <Typography>日程</Typography>
-              </Grid>
-            </Grid>
-          </AccordionSummary>
-          <AccordionDetails
-            className={classes.AccordionDetails}
-            onClick={() => {
-              props.handleClickOpenAddCompanyDialog();
-              props.handleClose();
-            }}
-          >
-            {/* <CreateButton
-              size="small"
-              onClick={() => {
-                props.handleClickOpenAddCompanyDialog();
-                props.handleClose();
-              }}
-            /> */}
-            <Grid container>
-              {companySchedules?.map((schedule, i) => (
-                <Schedule schedule={schedule} index={i} key={i} />
-              ))}
-            </Grid>
-          </AccordionDetails>
-        </Accordion>
+        <SelectedDialogAccordion
+          title="日程"
+          onClick={() => {
+            props.handleClickOpenAddCompanyDialog();
+            props.handleClose();
+          }}
+        >
+          <Grid container>
+            {companySchedules?.map((schedule, i) => (
+              <Schedule schedule={schedule} index={i} key={i} />
+            ))}
+          </Grid>
+        </SelectedDialogAccordion>
 
-        <Accordion defaultExpanded className={classes.Accordion}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            className={classes.AccordionSummary}
-          >
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <span className={classes.square}></span>
-              </Grid>
-              <Grid item>
-                <Typography>メモ</Typography>
-              </Grid>
+        <SelectedDialogAccordion
+          title="メモ"
+          onClick={() => {
+            props.handleClickOpenAddCompanyDialog();
+            props.handleClose();
+          }}
+        >
+          <Grid container spacing={1} alignItems="center">
+            <Grid item>
+              <span className={classes.rectangle}></span>
             </Grid>
-          </AccordionSummary>
-          <AccordionDetails
-            className={classes.AccordionDetails}
-            onClick={() => {
-              props.handleClickOpenAddCompanyDialog();
-              props.handleClose();
-            }}
-          >
-            {/* <CreateButton
-              size="small"
-              onClick={() => {
-                props.handleClickOpenAddCompanyDialog();
-                props.handleClose();
-              }}
-            /> */}
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <span className={classes.rectangle}></span>
-              </Grid>
-              <Grid item>
-                <p>メモ</p>
-              </Grid>
+            <Grid item>
+              <p>メモ</p>
             </Grid>
-            <Typography color="textSecondary">
-              {returnCodeToBr(selectedCompany.memo)}
-            </Typography>
-            <Divider />
-          </AccordionDetails>
-        </Accordion>
+          </Grid>
+          <Typography color="textSecondary">
+            {returnCodeToBr(selectedCompany.memo)}
+          </Typography>
+          <Divider />
+        </SelectedDialogAccordion>
       </DialogContent>
     </Dialog>
   );

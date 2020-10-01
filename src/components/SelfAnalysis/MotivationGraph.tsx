@@ -232,7 +232,7 @@ const MotivationGraph: React.FC = () => {
   };
 
   return (
-    <div>
+    <>
       <Grid className={classes.textContainer}>
         <IconButton
           className={classes.addCircleIcon}
@@ -319,7 +319,7 @@ const MotivationGraph: React.FC = () => {
           selectedExperience={experience}
         />
       </Grid>
-    </div>
+    </>
   );
 };
 

@@ -9,6 +9,7 @@ export {default as PrimaryButton} from "./PrimaryButton";
 export {default as SaveButton} from "./SaveButton"
 export {default as SelectAgeBox} from "./SelectAgeBox";
 export {default as SelectColorBox} from "./SelectColorBox";
+export {default as SelectedDialogAccordion} from "./SelectedDialogAccordion";
 export {default as SingleTextInputAccordion} from "./SingleTextInputAccordion";
 export {default as TextInput} from "./TextInput";
 export {default as ValidationTextInput} from "./ValidationTextInput";

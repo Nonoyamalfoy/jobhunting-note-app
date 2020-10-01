@@ -12,7 +12,7 @@ type Props = {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const TextInput = (props: Props) => {
+const TextInput: React.FC<Props> = (props) => {
   return(
     <TextField 
       fullWidth={true}

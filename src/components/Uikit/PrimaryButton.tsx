@@ -23,7 +23,7 @@ type Props = {
   label: string;
 };
 
-const PrimaryButton = (props: Props) => {
+const PrimaryButton: React.FC<Props> = (props) => {
   const classes = useStyles();
   return (
     <Button

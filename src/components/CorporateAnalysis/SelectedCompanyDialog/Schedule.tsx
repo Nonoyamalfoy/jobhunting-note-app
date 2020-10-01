@@ -1,22 +1,7 @@
 import React from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogActions,
-  Typography,
-  Grid,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  makeStyles,
-  Box,
-  Divider,
-} from "@material-ui/core";
+import { Typography, Grid, makeStyles, Divider } from "@material-ui/core";
 import HTMLReactParser from "html-react-parser";
 import { Schedule as ISchedule } from "../../../entity/user";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../entity/rootState";
-import { getSchedules } from "../../../reducks/user/selectors";
 import dayjs from "dayjs";
 
 const useStyles = makeStyles({
@@ -28,34 +13,6 @@ const useStyles = makeStyles({
     color: "white",
     alignItems: "center",
     paddingLeft: "24px",
-  },
-  Accordion: {
-    padding: 0,
-    borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
-    boxShadow: "none",
-    margin: 0,
-    marginTop: 5,
-    "&:before": {
-      display: "none",
-    },
-    "&.Mui-expanded": {
-      margin: 0,
-    },
-  },
-  AccordionSummary: {
-    padding: "0px 16px 0px 0px",
-    "& .MuiAccordionSummary-content": {
-      margin: "17px 0px 7px 0px",
-    },
-  },
-  AccordionDetails: {
-    display: "block",
-    backgroundColor: "#dfe3e7",
-    position: "relative",
-  },
-  box: {
-    borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
-    marginTop: 10,
   },
   rectangle: {
     width: 8,
@@ -73,6 +30,35 @@ const useStyles = makeStyles({
   },
 });
 
+const setScheduleColor = (color: string) => {
+  let scheduleColor;
+  switch (color) {
+    case "default":
+      scheduleColor = "#000088";
+      break;
+    case "red":
+      scheduleColor = "#880000";
+      break;
+    case "orange":
+      scheduleColor = "#D2691E";
+      break;
+    case "green":
+      scheduleColor = "#008800";
+      break;
+    default:
+      break;
+  }
+  return scheduleColor;
+};
+
+const returnCodeToBr = (text: string) => {
+  if (text === "") {
+    return text;
+  } else {
+    return HTMLReactParser(text.replace(/\r?\n/g, "<br/>"));
+  }
+};
+
 type Props = {
   schedule: ISchedule;
   index: number;
@@ -80,19 +66,8 @@ type Props = {
 
 const Schedule: React.FC<Props> = (props) => {
   const classes = useStyles();
-  const selector = useSelector((state: RootState) => state);
-  const schedules = getSchedules(selector);
-  const scheduleId = props.schedule.scheduleId
-  // const schedule = schedules.filter((schedule) => schedule.scheduleId === scheduleId)[0]
-  const schedule = props.schedule
-
-  const returnCodeToBr = (text: string) => {
-    if (text === "") {
-      return text;
-    } else {
-      return HTMLReactParser(text.replace(/\r?\n/g, "<br/>"));
-    }
-  };
+  const schedule = props.schedule;
+  const scheduleColor = setScheduleColor(schedule.color);
 
   return (
     <>
@@ -100,12 +75,26 @@ const Schedule: React.FC<Props> = (props) => {
         <Grid item xs={12}>
           <Grid container spacing={1} alignItems="center">
             <Grid item>
-              <span className={classes.rectangle}></span>
+              <span
+                style={{ backgroundColor: scheduleColor }}
+                className={classes.square}
+              ></span>
             </Grid>
             <Grid item>
               <p>{`日程${props.index + 1}`}</p>
             </Grid>
           </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Grid container spacing={1} alignItems="center">
+            <Grid item>
+              <Typography variant="caption">タイトル</Typography>
+            </Grid>
+          </Grid>
+          <Typography color="textSecondary">
+            {returnCodeToBr(schedule.title)}
+          </Typography>
+          <Divider />
         </Grid>
         <Grid item xs={6}>
           <Grid container spacing={1} alignItems="center">
@@ -113,31 +102,37 @@ const Schedule: React.FC<Props> = (props) => {
               <Typography variant="caption">日時</Typography>
             </Grid>
           </Grid>
-          <Typography color="textSecondary">{dayjs(schedule.date).format("YYYY/MM/DD HH:mm")}</Typography>
-          <Divider />
-        </Grid>
-        <Grid item xs={12}>
-          <Grid container spacing={1} alignItems="center">
-            <Grid item>
-              <Typography variant="caption">概要</Typography>
-            </Grid>
-          </Grid>
           <Typography color="textSecondary">
-            {returnCodeToBr(schedule.description)}
+            {dayjs(schedule.date).format("YYYY/MM/DD HH:mm")}
           </Typography>
           <Divider />
         </Grid>
-        <Grid item xs={12}>
-          <Grid container spacing={1} alignItems="center">
-            <Grid item>
-              <Typography variant="caption">場所</Typography>
+        {schedule.description && (
+          <Grid item xs={12}>
+            <Grid container spacing={1} alignItems="center">
+              <Grid item>
+                <Typography variant="caption">概要</Typography>
+              </Grid>
             </Grid>
+            <Typography color="textSecondary">
+              {returnCodeToBr(schedule.description)}
+            </Typography>
+            <Divider />
           </Grid>
-          <Typography color="textSecondary">
-            {returnCodeToBr(schedule.location)}
-          </Typography>
-          <Divider />
-        </Grid>
+        )}
+        {schedule.location && (
+          <Grid item xs={12}>
+            <Grid container spacing={1} alignItems="center">
+              <Grid item>
+                <Typography variant="caption">場所</Typography>
+              </Grid>
+            </Grid>
+            <Typography color="textSecondary">
+              {returnCodeToBr(schedule.location)}
+            </Typography>
+            <Divider />
+          </Grid>
+        )}
       </Grid>
     </>
   );

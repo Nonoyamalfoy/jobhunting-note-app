@@ -29,7 +29,7 @@ const useStyles = makeStyles({
     alignItems: "center",
     paddingLeft: "24px",
   },
-  box: {
+  square: {
     width: 16,
     height: 16,
     display: "block",
@@ -43,15 +43,6 @@ const useStyles = makeStyles({
     display: "block",
     borderRadius: "20%",
     backgroundColor: "rgba(0, 0, 0, 0.30)",
-  },
-  icon: {
-    color: "white",
-  },
-  title: {
-    wordWrap: "break-word",
-  },
-  scheduleInformationContainer: {
-    margin: "0px 8px",
   },
 });
 
@@ -120,10 +111,10 @@ const SelectedScheduleDialog: React.FC<Props> = (props) => {
     >
       <div className={classes.dialogHeader}>
         <Grid container spacing={1} alignItems="center">
-          <Grid item>
+          <Grid item >
             <span
               style={{ backgroundColor: scheduleColor }}
-              className={classes.box}
+              className={classes.square}
             ></span>
           </Grid>
           <Grid item>
@@ -148,7 +139,7 @@ const SelectedScheduleDialog: React.FC<Props> = (props) => {
       </div>
 
       <DialogContent>
-        <div className={classes.scheduleInformationContainer}>
+        <div >
           <div className="module-spacer--medium" />
 
           <Grid item container spacing={1} alignItems="center">

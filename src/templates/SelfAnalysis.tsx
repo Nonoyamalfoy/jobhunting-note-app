@@ -30,11 +30,8 @@ import {
 } from "../reducks/user/selectors";
 import { useSelector } from "react-redux";
 import { RootState } from "../entity/rootState";
-import { BestWork, Experience } from "../entity/user";
+import { BestWork } from "../entity/user";
 import HTMLReactParser from "html-react-parser";
-
-import { db } from "../firebase/index";
-import SelectedExperience from "../components/SelfAnalysis/SelectedExperience";
 
 const useStyles = makeStyles((theme) => ({
   mainCard: {
@@ -111,10 +108,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const returnCodeToBr = (text: string) => {
+  if (text === "") {
+    return text;
+  } else {
+    return HTMLReactParser(text.replace(/\r?\n/g, "<br/>"));
+  }
+};
+
 const SelfAnalysis: React.FC = () => {
   const classes = useStyles();
   const selector = useSelector((state: RootState) => state);
-  const uid = getUserId(selector);
   const strengths = getStrengths(selector);
   const weaknesses = getWeaknesses(selector);
   const bestWorks = getBestWorks(selector);
@@ -178,14 +182,6 @@ const SelfAnalysis: React.FC = () => {
   const handleCloseAddBestWorkDialog = () => {
     resetBestWork();
     setAddBestWorkDialogopen(false);
-  };
-
-  const returnCodeToBr = (text: string) => {
-    if (text === "") {
-      return text;
-    } else {
-      return HTMLReactParser(text.replace(/\r?\n/g, "<br/>"));
-    }
   };
 
   return (

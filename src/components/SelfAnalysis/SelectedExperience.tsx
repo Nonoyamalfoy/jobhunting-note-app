@@ -28,60 +28,12 @@ const useStyles = makeStyles({
     alignItems: "center",
     paddingLeft: "24px",
   },
-  Accordion: {
-    padding: 0,
-    // borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
-    boxShadow: "none",
-    margin: 0,
-    marginTop: 5,
-    "&:before": {
-      display: "none",
-    },
-    "&.Mui-expanded": {
-      margin: 0,
-    },
-  },
-  AccordionSummary: {
-    padding: "0px 16px 0px 0px",
-    "& .MuiAccordionSummary-content": {
-      margin: "17px 0px 7px 0px",
-    },
-  },
-  AccordionDetails: {
-    display: "block",
-  },
   rectangle: {
     width: 8,
     height: 16,
     display: "block",
     borderRadius: "20%",
     backgroundColor: "rgba(0, 0, 0, 0.30)",
-  },
-  square: {
-    height: 16,
-    width: 16,
-    display: "block",
-    borderRadius: "20%",
-    backgroundColor: "#20295f",
-  },
-  dividerBlack: {
-    marginTop: 16,
-    backgroundColor: "rgba(0, 0, 0, 0.54)",
-  },
-  textContainer: {
-    padding: "8px 16px 16px 16px",
-    position: "relative",
-  },
-  box: {
-    width: 16,
-    height: 16,
-    display: "block",
-    // marginLeft: 6,
-    borderRadius: 4,
-    backgroundColor: "#20295f",
-  },
-  experienceInformationContainer: {
-    margin: "0px 8px",
   },
 });
 
@@ -148,7 +100,7 @@ const SelectedExperience: React.FC<Props> = (props) => {
         <DialogContent>
           <div className="module-spacer--medium" />
 
-          <div className={classes.experienceInformationContainer}>
+          <div >
             <Grid item container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.rectangle}></span>
