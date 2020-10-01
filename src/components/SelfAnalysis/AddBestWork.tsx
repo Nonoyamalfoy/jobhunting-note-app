@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogActions,
-} from "@material-ui/core";
+import { Dialog, DialogContent, DialogActions } from "@material-ui/core";
 import {
   CloseButton,
   SaveButton,
@@ -15,6 +11,17 @@ import { createStringChangeEventCallback } from "../../lib/createHooks";
 import { addBestWork } from "../../reducks/user/operations";
 import { useDispatch } from "react-redux";
 import { BestWork } from "../../entity/user";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    dialogContent: {
+      [theme.breakpoints.down(960)]: {
+        padding: "8px 12px",
+      },
+    },
+  })
+);
 
 type Props = {
   open: boolean;
@@ -23,6 +30,7 @@ type Props = {
 };
 
 const AddBestWork: React.FC<Props> = (props) => {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const matches = useMediaQuery("(max-width:960px)");
   const schrollType = matches ? "paper" : "body";
@@ -61,7 +69,7 @@ const AddBestWork: React.FC<Props> = (props) => {
             <CloseButton onClick={props.handleClose} />
           </DialogActions>
         </div>
-        <DialogContent>
+        <DialogContent className={classes.dialogContent}>
           <TextInput
             label={"タイトル"}
             multiline
@@ -80,14 +88,18 @@ const AddBestWork: React.FC<Props> = (props) => {
           <SingleTextInputAccordion
             title="何が困難だったか"
             TextInputLabel="テキストを入力"
-            TextInputValue={whatIDid}
-            TextInputOnChange={createStringChangeEventCallback(setWhatWasDifficult)}
+            TextInputValue={whatWasDifficult}
+            TextInputOnChange={createStringChangeEventCallback(
+              setWhatWasDifficult
+            )}
           />
           <SingleTextInputAccordion
             title="なぜ解決しようと思ったか"
             TextInputLabel="テキストを入力"
             TextInputValue={reasonsForWorking}
-            TextInputOnChange={createStringChangeEventCallback(setReasonsForWorking)}
+            TextInputOnChange={createStringChangeEventCallback(
+              setReasonsForWorking
+            )}
           />
           <SingleTextInputAccordion
             title="何を得たか"
@@ -99,7 +111,9 @@ const AddBestWork: React.FC<Props> = (props) => {
             title="何に活かせるか"
             TextInputLabel="テキストを入力"
             TextInputValue={whatImakeUseOftheBestWork}
-            TextInputOnChange={createStringChangeEventCallback(setWhatImakeUseOftheBestWork)}
+            TextInputOnChange={createStringChangeEventCallback(
+              setWhatImakeUseOftheBestWork
+            )}
           />
         </DialogContent>
         <DialogActions>

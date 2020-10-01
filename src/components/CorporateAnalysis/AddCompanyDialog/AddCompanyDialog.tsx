@@ -4,7 +4,6 @@ import {
   DialogContent,
   DialogActions,
   Typography,
-  makeStyles,
   Box,
   Accordion,
   AccordionSummary,
@@ -18,6 +17,8 @@ import {
   SingleTextInputAccordion,
   TextInput,
 } from "../../Uikit";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Rating from "@material-ui/lab/Rating";
 import dayjs from "dayjs";
@@ -36,35 +37,45 @@ import { getSchedules } from "../../../reducks/user/selectors";
 
 const day = dayjs();
 
-const useStyles = makeStyles({
-  box: {
-    borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
-    marginTop: 10,
-  },
-  Accordion: {
-    padding: 0,
-    borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
-    boxShadow: "none",
-    margin: 0,
-    marginTop: 5,
-    "&:before": {
-      display: "none",
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    box: {
+      borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
+      marginTop: 10,
     },
-    "&.Mui-expanded": {
+    Accordion: {
+      padding: 0,
+      borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
+      boxShadow: "none",
       margin: 0,
+      marginTop: 5,
+      "&:before": {
+        display: "none",
+      },
+      "&.Mui-expanded": {
+        margin: 0,
+      },
     },
-  },
-  AccordionSummary: {
-    padding: "0px 16px 0px 0px",
-    "& .MuiAccordionSummary-content": {
-      margin: "17px 0px 7px 0px",
+    AccordionSummary: {
+      padding: "0px 16px 0px 0px",
+      "& .MuiAccordionSummary-content": {
+        margin: "17px 0px 7px 0px",
+      },
     },
-  },
-  AccordionDetails: {
-    display: "block",
-    backgroundColor: "#dfe3e7",
-  },
-});
+    AccordionDetails: {
+      display: "block",
+      backgroundColor: "#dfe3e7",
+      [theme.breakpoints.down(960)]: {
+        padding: "8px 5px 16px",
+      },
+    },
+    dialogContent: {
+      [theme.breakpoints.down(960)]: {
+        padding: "8px 12px",
+      },
+    },
+  })
+);
 
 type Props = {
   open: boolean;
@@ -80,7 +91,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
   const schrollType = matches ? "paper" : "body";
   const company = props.company;
   const companyId = company.companyId;
-  
+
   const _schedules = getSchedules(selector);
   let companySchedules: ISchedule[];
   if (companyId === "") {
@@ -187,7 +198,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
           <CloseButton onClick={props.handleClose} />
         </DialogActions>
       </div>
-      <DialogContent>
+      <DialogContent className={classes.dialogContent}>
         <TextInput
           label={"会社名"}
           multiline={false}

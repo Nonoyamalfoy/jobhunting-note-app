@@ -8,10 +8,11 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  makeStyles,
   Box,
   Divider,
 } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+
 import { CloseButton, MoreButton, CreateButton } from "../../Uikit";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -25,60 +26,71 @@ import { db } from "../../../firebase/index";
 import Schedule from "./Schedule";
 import dayjs from "dayjs";
 
-const useStyles = makeStyles({
-  dialogHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    minHeight: 48,
-    backgroundColor: "#20295f",
-    color: "white",
-    alignItems: "center",
-    paddingLeft: "24px",
-  },
-  Accordion: {
-    padding: 0,
-    borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
-    boxShadow: "none",
-    margin: 0,
-    marginTop: 5,
-    "&:before": {
-      display: "none",
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    dialogHeader: {
+      display: "flex",
+      justifyContent: "space-between",
+      minHeight: 48,
+      backgroundColor: "#20295f",
+      color: "white",
+      alignItems: "center",
+      paddingLeft: "24px",
     },
-    "&.Mui-expanded": {
+    Accordion: {
+      padding: 0,
+      borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
+      boxShadow: "none",
       margin: 0,
+      marginTop: 5,
+      "&:before": {
+        display: "none",
+      },
+      "&.Mui-expanded": {
+        margin: 0,
+      },
     },
-  },
-  AccordionSummary: {
-    padding: "0px 16px 0px 0px",
-    "& .MuiAccordionSummary-content": {
-      margin: "17px 0px 7px 0px",
+    AccordionSummary: {
+      padding: "0px 16px 0px 0px",
+      "& .MuiAccordionSummary-content": {
+        margin: "17px 0px 7px 0px",
+      },
     },
-  },
-  AccordionDetails: {
-    display: "block",
-    backgroundColor: "#dfe3e7",
-    position: "relative",
-    minHeight: 57
-  },
-  box: {
-    borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
-    marginTop: 10,
-  },
-  rectangle: {
-    width: 8,
-    height: 16,
-    display: "block",
-    borderRadius: "20%",
-    backgroundColor: "rgba(0, 0, 0, 0.30)",
-  },
-  square: {
-    height: 16,
-    width: 16,
-    display: "block",
-    borderRadius: "20%",
-    backgroundColor: "#20295f",
-  },
-});
+    AccordionDetails: {
+      display: "block",
+      backgroundColor: "#dfe3e7",
+      position: "relative",
+      minHeight: 57,
+      cursor: "pointer",
+      [theme.breakpoints.down(960)]: {
+        padding: "8px 5px 16px",
+      },
+    },
+    box: {
+      borderBottom: "1px solid rgba(0, 0, 0, 0.54)",
+      marginTop: 10,
+    },
+    rectangle: {
+      width: 8,
+      height: 16,
+      display: "block",
+      borderRadius: "20%",
+      backgroundColor: "rgba(0, 0, 0, 0.30)",
+    },
+    square: {
+      height: 16,
+      width: 16,
+      display: "block",
+      borderRadius: "20%",
+      backgroundColor: "#20295f",
+    },
+    dialogContent: {
+      [theme.breakpoints.down(960)]: {
+        padding: "8px 12px",
+      },
+    },
+  })
+);
 
 type Props = {
   selectedCompany: Company;
@@ -142,7 +154,7 @@ const SelectedCompany: React.FC<Props> = (props) => {
         </Typography>
         <DialogActions>
           <MoreButton
-          color="white"
+            color="white"
             size="small"
             onClickEdit={() => {
               props.handleClickOpenAddCompanyDialog();
@@ -156,7 +168,7 @@ const SelectedCompany: React.FC<Props> = (props) => {
           <CloseButton onClick={props.handleClose} />
         </DialogActions>
       </div>
-      <DialogContent>
+      <DialogContent className={classes.dialogContent}>
         <Box className={classes.box}>
           <Typography>志望度</Typography>
           <Rating readOnly value={selectedCompany.aspiration} />
@@ -176,14 +188,20 @@ const SelectedCompany: React.FC<Props> = (props) => {
               </Grid>
             </Grid>
           </AccordionSummary>
-          <AccordionDetails className={classes.AccordionDetails}>
-            <CreateButton
+          <AccordionDetails
+            className={classes.AccordionDetails}
+            onClick={() => {
+              props.handleClickOpenAddCompanyDialog();
+              props.handleClose();
+            }}
+          >
+            {/* <CreateButton
               size="small"
               onClick={() => {
                 props.handleClickOpenAddCompanyDialog();
                 props.handleClose();
               }}
-            />
+            /> */}
             <Grid item container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.rectangle}></span>
@@ -225,7 +243,7 @@ const SelectedCompany: React.FC<Props> = (props) => {
                   </Typography>
                   <Divider />
                 </Grid>
-                <Grid item xs={6} style={{minHeight: 81}}>
+                <Grid item xs={6} style={{ minHeight: 81 }}>
                   <Grid item container spacing={1} alignItems="center">
                     <Grid item>
                       <span className={classes.rectangle}></span>
@@ -234,7 +252,7 @@ const SelectedCompany: React.FC<Props> = (props) => {
                       <p>従業員数</p>
                     </Grid>
                   </Grid>
-                  <Typography color="textSecondary" style={{minHeight: 24}}>
+                  <Typography color="textSecondary" style={{ minHeight: 24 }}>
                     {selectedCompany.numberOfEmployees}
                   </Typography>
                   <Divider />
@@ -288,14 +306,20 @@ const SelectedCompany: React.FC<Props> = (props) => {
               </Grid>
             </Grid>
           </AccordionSummary>
-          <AccordionDetails className={classes.AccordionDetails}>
-            <CreateButton
+          <AccordionDetails
+            className={classes.AccordionDetails}
+            onClick={() => {
+              props.handleClickOpenAddCompanyDialog();
+              props.handleClose();
+            }}
+          >
+            {/* <CreateButton
               size="small"
               onClick={() => {
                 props.handleClickOpenAddCompanyDialog();
                 props.handleClose();
               }}
-            />
+            /> */}
             <Grid container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.rectangle}></span>
@@ -339,14 +363,20 @@ const SelectedCompany: React.FC<Props> = (props) => {
               </Grid>
             </Grid>
           </AccordionSummary>
-          <AccordionDetails className={classes.AccordionDetails}>
-            <CreateButton
+          <AccordionDetails
+            className={classes.AccordionDetails}
+            onClick={() => {
+              props.handleClickOpenAddCompanyDialog();
+              props.handleClose();
+            }}
+          >
+            {/* <CreateButton
               size="small"
               onClick={() => {
                 props.handleClickOpenAddCompanyDialog();
                 props.handleClose();
               }}
-            />
+            /> */}
             <Grid container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.rectangle}></span>
@@ -388,14 +418,20 @@ const SelectedCompany: React.FC<Props> = (props) => {
               </Grid>
             </Grid>
           </AccordionSummary>
-          <AccordionDetails className={classes.AccordionDetails}>
-            <CreateButton
+          <AccordionDetails
+            className={classes.AccordionDetails}
+            onClick={() => {
+              props.handleClickOpenAddCompanyDialog();
+              props.handleClose();
+            }}
+          >
+            {/* <CreateButton
               size="small"
               onClick={() => {
                 props.handleClickOpenAddCompanyDialog();
                 props.handleClose();
               }}
-            />
+            /> */}
             <Grid container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.rectangle}></span>
@@ -437,14 +473,20 @@ const SelectedCompany: React.FC<Props> = (props) => {
               </Grid>
             </Grid>
           </AccordionSummary>
-          <AccordionDetails className={classes.AccordionDetails}>
-            <CreateButton
+          <AccordionDetails
+            className={classes.AccordionDetails}
+            onClick={() => {
+              props.handleClickOpenAddCompanyDialog();
+              props.handleClose();
+            }}
+          >
+            {/* <CreateButton
               size="small"
               onClick={() => {
                 props.handleClickOpenAddCompanyDialog();
                 props.handleClose();
               }}
-            />
+            /> */}
             <Grid container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.rectangle}></span>
@@ -474,14 +516,20 @@ const SelectedCompany: React.FC<Props> = (props) => {
               </Grid>
             </Grid>
           </AccordionSummary>
-          <AccordionDetails className={classes.AccordionDetails}>
-            <CreateButton
+          <AccordionDetails
+            className={classes.AccordionDetails}
+            onClick={() => {
+              props.handleClickOpenAddCompanyDialog();
+              props.handleClose();
+            }}
+          >
+            {/* <CreateButton
               size="small"
               onClick={() => {
                 props.handleClickOpenAddCompanyDialog();
                 props.handleClose();
               }}
-            />
+            /> */}
             <Grid container>
               {companySchedules?.map((schedule, i) => (
                 <Schedule schedule={schedule} index={i} key={i} />
@@ -504,14 +552,20 @@ const SelectedCompany: React.FC<Props> = (props) => {
               </Grid>
             </Grid>
           </AccordionSummary>
-          <AccordionDetails className={classes.AccordionDetails}>
-            <CreateButton
+          <AccordionDetails
+            className={classes.AccordionDetails}
+            onClick={() => {
+              props.handleClickOpenAddCompanyDialog();
+              props.handleClose();
+            }}
+          >
+            {/* <CreateButton
               size="small"
               onClick={() => {
                 props.handleClickOpenAddCompanyDialog();
                 props.handleClose();
               }}
-            />
+            /> */}
             <Grid container spacing={1} alignItems="center">
               <Grid item>
                 <span className={classes.rectangle}></span>
