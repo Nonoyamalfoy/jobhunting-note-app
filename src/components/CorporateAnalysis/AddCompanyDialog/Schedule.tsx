@@ -65,8 +65,7 @@ const Schedule: React.FC<Props> = (props) => {
             <Grid item xs={6}>
               <DateTimePicker
                 value={schedule.date}
-                placeholder="deadline"
-                label="期日"
+                label="日時"
                 ampm={false}
                 onChange={(d) =>
                   props.inputSchedule(

@@ -24,6 +24,7 @@ const TextInput = (props: Props) => {
       value={props.value}
       type={props.type}
       onChange={props.onChange}
+      autoFocus={props.autoFocus}
 
       // onBlur={props.onBlur}
       // error={props.error}
@@ -31,7 +32,6 @@ const TextInput = (props: Props) => {
       // className={props.className}
       // inputProps={{style: {fontSize: 17}}}
       // InputLabelProps={{style: {fontSize: 17}}}
-      // autoFocus={props.autoFocus}
     />
   )
 }

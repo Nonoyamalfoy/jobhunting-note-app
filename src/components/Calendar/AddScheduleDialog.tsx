@@ -87,7 +87,6 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
         <div className="module-spacer--medium" />
         <TextInput
           label="タイトル"
-          autoFocus={true}
           value={title}
           multiline={true}
           type="text"
@@ -97,7 +96,7 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
         <Grid container spacing={3}>
           <Grid item xs={6}>
             <SelectColorBox
-              label="Color"
+              label="色"
               required={true}
               select={inputColor}
               value={color}
@@ -106,8 +105,7 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
           <Grid item xs={6}>
             <DateTimePicker
               value={date}
-              placeholder="deadline"
-              label="deadline"
+              label="日時"
               ampm={false}
               onChange={inputDate}
               variant="inline"

@@ -42,9 +42,8 @@ const ToDoList: React.FC = () => {
   return (
     <div className="p-ToDo">
       {/* <div className="module-spacer--extra-small"/> */}
-      <List>
-        {ToDoList.length > 0 ? (
-          <>
+      {ToDoList.length > 0 ? (
+        <List>
           {ToDoList.map((t, i) => (
             <ToDoListItem
               key={i}
@@ -52,11 +51,14 @@ const ToDoList: React.FC = () => {
               handleClickOpenAddToDoDialog={handleClickOpenAddToDoDialog}
             />
           ))}
-          </>
-        ) : (
-          <h2 className="empty-item">追加されたToDoはありません</h2>
-        )}
-      </List>
+        </List>
+      ) : (
+        <h2 className="empty-item">
+          追加されたToDoは
+          <br />
+          ありません
+        </h2>
+      )}
       <AddToDoDialog
         open={addToDoDialogOpen}
         handleClose={handleCloseAddToDoDialog}

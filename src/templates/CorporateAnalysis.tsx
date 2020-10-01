@@ -103,18 +103,22 @@ const CorporateAnalysis: React.FC = () => {
       <Grid container spacing={4}>
         {companies.length > 0 ? (
           <>
-          {companies.map((c, i) => (
-            <CompanyListItem
-              key={i}
-              company={c}
-              handleClickOpenSelectedCompanyDialog={() =>
-                handleClickOpenSelectedCompanyDialog(c)
-              }
-            />
-          ))}
+            {companies.map((c, i) => (
+              <CompanyListItem
+                key={i}
+                company={c}
+                handleClickOpenSelectedCompanyDialog={() =>
+                  handleClickOpenSelectedCompanyDialog(c)
+                }
+              />
+            ))}
           </>
         ) : (
-          <h2 className="empty-item">追加された企業はありません</h2>
+          <h2 className="empty-item">
+            追加された企業は
+            <br />
+            ありません
+          </h2>
         )}
       </Grid>
 
