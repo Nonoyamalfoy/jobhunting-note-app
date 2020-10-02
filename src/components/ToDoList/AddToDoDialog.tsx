@@ -7,10 +7,10 @@ import { SaveButton, CloseButton, ValidationTextInput } from "../Uikit";
 import dayjs from "dayjs";
 import { createStringChangeEventCallback } from "../../lib/createHooks";
 import { addToDo } from "../../reducks/user/operations";
-import { ToDo } from "../../entity/user";
+import { ToDo } from "../../type/user";
 import { db } from "../../firebase/index";
 import { getUserId } from "../../reducks/user/selectors";
-import { RootState } from "../../entity/rootState";
+import { RootState } from "../../type/rootState";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 type Props = {

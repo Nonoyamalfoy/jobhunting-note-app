@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/styles";
 import { useDispatch } from "react-redux";
-import { Schedule } from "../../entity/user";
+import { Schedule } from "../../type/user";
 
 const useStyles = makeStyles({
   schedule: {

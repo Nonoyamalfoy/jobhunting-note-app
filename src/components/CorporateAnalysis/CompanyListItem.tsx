@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { Company } from "../../entity/company";
+import { Company } from "../../type/company";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

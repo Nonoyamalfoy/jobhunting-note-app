@@ -10,9 +10,9 @@ import Paper from "@material-ui/core/Paper";
 import { CreateButton } from "../components/Uikit";
 import { db } from "../firebase";
 import { useSelector } from "react-redux";
-import { RootState } from "../entity/rootState";
+import { RootState } from "../type/rootState";
 import { getCompanies, getUserId } from "../reducks/user/selectors";
-import { Company } from "../entity/company";
+import { Company } from "../type/company";
 import dayjs from "dayjs";
 
 const useStyles = makeStyles((theme) => ({

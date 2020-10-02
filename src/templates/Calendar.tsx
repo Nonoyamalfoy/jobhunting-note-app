@@ -7,7 +7,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import { CreateButton } from "../components/Uikit";
-import { Schedule } from "../entity/user";
+import { Schedule } from "../type/user";
 import dayjs from "dayjs";
 
 const Calendar: React.FC = () => {

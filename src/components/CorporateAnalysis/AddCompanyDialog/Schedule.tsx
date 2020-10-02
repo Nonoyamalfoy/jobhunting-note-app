@@ -2,8 +2,8 @@ import React from "react";
 import { Button, Grid, makeStyles } from "@material-ui/core";
 import { TextInput, SelectColorBox } from "../../Uikit";
 import { DateTimePicker } from "@material-ui/pickers";
-import { Schedule as ISchedule } from "../../../entity/user";
-import { RootState } from "../../../entity/rootState";
+import { Schedule as ISchedule } from "../../../type/user";
+import { RootState } from "../../../type/rootState";
 import { useSelector } from "react-redux";
 
 const useStyles = makeStyles({

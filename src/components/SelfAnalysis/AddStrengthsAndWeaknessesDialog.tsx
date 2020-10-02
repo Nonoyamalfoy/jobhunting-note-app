@@ -28,7 +28,7 @@ import { createStringChangeEventCallback } from "../../lib/createHooks";
 import { useDispatch, useSelector } from "react-redux";
 import { addStrengthsAndWeaknesses } from "../../reducks/user/operations";
 import { push } from "connected-react-router";
-import { RootState } from "../../entity/rootState";
+import { RootState } from "../../type/rootState";
 import { getStrengths, getWeaknesses } from "../../reducks/user/selectors";
 
 const useStyles = makeStyles({

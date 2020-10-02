@@ -11,11 +11,11 @@ import {
 import { CloseButton, MoreButton } from "../Uikit";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { CreateButton } from "../Uikit";
-import { BestWork, Experience } from "../../entity/user";
+import { BestWork, Experience } from "../../type/user";
 import HTMLReactParser from "html-react-parser";
 import { db } from "../../firebase/index";
 import { useSelector } from "react-redux";
-import { RootState } from "../../entity/rootState";
+import { RootState } from "../../type/rootState";
 import { getUserId } from "../../reducks/user/selectors";
 
 const useStyles = makeStyles({

@@ -2,9 +2,9 @@ import { auth, FirebaseTimestamp, db } from "../../firebase/index";
 import { push } from "connected-react-router";
 import { Dispatch } from "redux";
 import usersActions from "./actions";
-import { RootState } from "../../entity/rootState";
-import { Company } from "../../entity/company";
-import { BestWork, Schedule, ToDo, Experience } from "../../entity/user";
+import { RootState } from "../../type/rootState";
+import { Company } from "../../type/company";
+import { BestWork, Schedule, ToDo, Experience } from "../../type/user";
 import loadingActions from "../loading/actions";
 import { isValidEmailFormat } from "../../lib/validation";
 

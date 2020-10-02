@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import List from "@material-ui/core/List";
 import { CreateButton, DeleteCircleButton } from "../components/Uikit";
 import { getToDoList, getUserId } from "../reducks/user/selectors";
-import { RootState } from "../entity/rootState";
-import { ToDo } from "../entity/user";
+import { RootState } from "../type/rootState";
+import { ToDo } from "../type/user";
 import dayjs from "dayjs";
 import { db } from "../firebase/index";
 

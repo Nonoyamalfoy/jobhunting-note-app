@@ -5,7 +5,7 @@ import { ScheduleBar } from "./";
 import dayjs from "dayjs";
 import { isSameMonth, isFirstDay, isSameDay } from "../../lib/calendar";
 import { useSelector } from "react-redux";
-import { Schedule } from "../../entity/user";
+import { Schedule } from "../../type/user";
 
 const useStyles = makeStyles({
   element: {

@@ -11,7 +11,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { createStringChangeEventCallback } from "../../lib/createHooks";
 import { addBestWork } from "../../reducks/user/operations";
 import { useDispatch } from "react-redux";
-import { BestWork } from "../../entity/user";
+import { BestWork } from "../../type/user";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme: Theme) =>

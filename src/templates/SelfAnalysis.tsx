@@ -29,8 +29,8 @@ import {
   getWeaknesses,
 } from "../reducks/user/selectors";
 import { useSelector } from "react-redux";
-import { RootState } from "../entity/rootState";
-import { BestWork } from "../entity/user";
+import { RootState } from "../type/rootState";
+import { BestWork } from "../type/user";
 import HTMLReactParser from "html-react-parser";
 
 const useStyles = makeStyles((theme) => ({

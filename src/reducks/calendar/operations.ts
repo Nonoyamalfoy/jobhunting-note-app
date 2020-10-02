@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import { Dispatch } from "redux";
 import calendarActions from "./actions";
 import { getNextMonth, getPreviousMonth } from "../../lib/calendar";
-import { RootState } from "../../entity/rootState";
+import { RootState } from "../../type/rootState";
 
 export const setNextMonth = () => {
   return async (dispatch: Dispatch, getState: () => RootState) => {

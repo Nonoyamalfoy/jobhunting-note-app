@@ -1,5 +1,5 @@
 import { reducerWithInitialState } from "typescript-fsa-reducers";
-import {Loading} from "../../entity/loading"
+import {Loading} from "../../type/loading"
 import loadingActions from "./actions";
 
 const init: Loading = {

@@ -7,10 +7,10 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import Checkbox from "@material-ui/core/Checkbox";
 import MoreVertButton from "../Uikit/MoreButton";
 import { ListItemSecondaryAction } from "@material-ui/core";
-import { ToDo } from "../../entity/user";
+import { ToDo } from "../../type/user";
 import { db } from "../../firebase/index";
 import { getUserId } from "../../reducks/user/selectors";
-import { RootState } from "../../entity/rootState";
+import { RootState } from "../../type/rootState";
 import dayjs from "dayjs";
 
 const useStyles = makeStyles((theme: Theme) => ({

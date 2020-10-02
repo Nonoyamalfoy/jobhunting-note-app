@@ -1,7 +1,7 @@
 import React from "react";
 import { Typography, Grid, makeStyles, Divider } from "@material-ui/core";
 import HTMLReactParser from "html-react-parser";
-import { Schedule as ISchedule } from "../../../entity/user";
+import { Schedule as ISchedule } from "../../../type/user";
 import dayjs from "dayjs";
 
 const useStyles = makeStyles({

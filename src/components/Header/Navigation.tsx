@@ -12,7 +12,7 @@ import { DatePicker } from "@material-ui/pickers";
 // import {setDate} from "../../reducks/calendar/oeprations";
 import { makeStyles } from "@material-ui/styles";
 import dayjs from "dayjs";
-import { RootState } from "../../entity/rootState";
+import { RootState } from "../../type/rootState";
 import { getCurrentDate } from "../../reducks/calendar/selector";
 import { setCurrentDate } from "../../reducks/calendar/operations";
 

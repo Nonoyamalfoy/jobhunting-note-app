@@ -6,8 +6,8 @@ import { createCalendar } from "../../lib/calendar";
 import { useSelector, useDispatch } from "react-redux";
 import dayjs from "dayjs";
 import { getSchedules } from "../../reducks/user/selectors";
-import { RootState } from "../../entity/rootState";
-import { Schedule } from "../../entity/user";
+import { RootState } from "../../type/rootState";
+import { Schedule } from "../../type/user";
 import { getCurrentDate } from "../../reducks/calendar/selector";
 import { setCurrentDate } from "../../reducks/calendar/operations";
 

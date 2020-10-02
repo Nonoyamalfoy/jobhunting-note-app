@@ -5,7 +5,7 @@ import Badge from "@material-ui/core/Badge";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import { makeStyles } from "@material-ui/styles";
 import { Navigation } from "./index";
-import { RootState } from "../../entity/rootState";
+import { RootState } from "../../type/rootState";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getUserId,
@@ -16,7 +16,7 @@ import {
   getExperiences,
 } from "../../reducks/user/selectors";
 import { db } from "../../firebase/index";
-import { Company } from "../../entity/company";
+import { Company } from "../../type/company";
 import {
   fetchToDoList,
   fetchSchedules,
@@ -25,7 +25,7 @@ import {
   setStrengthsAndWeaknesses,
   fetchExperiences,
 } from "../../reducks/user/operations";
-import { BestWork, Experience, Schedule, ToDo } from "../../entity/user";
+import { BestWork, Experience, Schedule, ToDo } from "../../type/user";
 import { push } from "connected-react-router";
 
 const useStyles = makeStyles({

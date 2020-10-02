@@ -1,6 +1,6 @@
 import { reducerWithInitialState } from "typescript-fsa-reducers";
 import calendarAction from "./actions";
-import { Calendar } from "../../entity/calendar";
+import { Calendar } from "../../type/calendar";
 import dayjs from "dayjs";
 
 const init: Calendar = {

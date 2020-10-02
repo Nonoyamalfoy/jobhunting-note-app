@@ -14,7 +14,7 @@ import {
 import dayjs from "dayjs";
 import { createStringChangeEventCallback } from "../../lib/createHooks";
 import { addSchedule } from "../../reducks/user/operations";
-import { Schedule } from "../../entity/user";
+import { Schedule } from "../../type/user";
 
 const day = dayjs();
 

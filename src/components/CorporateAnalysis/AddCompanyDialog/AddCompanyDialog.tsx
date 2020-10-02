@@ -26,12 +26,12 @@ import dayjs from "dayjs";
 import { createStringChangeEventCallback } from "../../../lib/createHooks";
 import PhilosophyAndCompanyProfile from "./PhilosophyAndCompanyProfile";
 import Schedule from "./Schedule";
-import { Company } from "../../../entity/company";
+import { Company } from "../../../type/company";
 import { addCompany } from "../../../reducks/user/operations";
 import { useDispatch, useSelector } from "react-redux";
-import { Schedule as ISchedule } from "../../../entity/user";
+import { Schedule as ISchedule } from "../../../type/user";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { RootState } from "../../../entity/rootState";
+import { RootState } from "../../../type/rootState";
 import { getSchedules } from "../../../reducks/user/selectors";
 
 // import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";

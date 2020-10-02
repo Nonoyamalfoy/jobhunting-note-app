@@ -1,6 +1,6 @@
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
-import { RootState } from "../../entity/rootState";
+import { RootState } from "../../type/rootState";
 import { connectRouter, routerMiddleware } from "connected-react-router";
 import { createBrowserHistory } from "history";
 

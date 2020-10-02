@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { RootState } from "../../entity/rootState";
+import { RootState } from "../../type/rootState";
 
 const calendarSelector = (state: RootState) => state.calendar;
 

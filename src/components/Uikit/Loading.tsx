@@ -5,7 +5,7 @@ import {
   getLoadingState,
   getLoadingText,
 } from "../../reducks/loading/selectors";
-import { RootState } from "../../entity/rootState";
+import { RootState } from "../../type/rootState";
 
 const Loading: React.FC = (props) => {
   const selector = useSelector((state: RootState) => state);

@@ -19,8 +19,8 @@ import TimelineConnector from "@material-ui/lab/TimelineConnector";
 import TimelineContent from "@material-ui/lab/TimelineContent";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { useSelector } from "react-redux";
-import { RootState } from "../../entity/rootState";
-import { Experience } from "../../entity/user";
+import { RootState } from "../../type/rootState";
+import { Experience } from "../../type/user";
 import { getExperiences } from "../../reducks/user/selectors";
 import { SelectedExperience, AddExperienceDialog } from "./";
 

@@ -15,9 +15,9 @@ import {
   createNumberChangeEventCallback,
 } from "../../lib/createHooks";
 import { addExperiences } from "../../reducks/user/operations";
-import { RootState } from "../../entity/rootState";
+import { RootState } from "../../type/rootState";
 import { getExperiences, getUserId } from "../../reducks/user/selectors";
-import { Experience } from "../../entity/user";
+import { Experience } from "../../type/user";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const day = dayjs();

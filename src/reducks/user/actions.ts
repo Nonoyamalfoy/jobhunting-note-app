@@ -1,5 +1,5 @@
 import actionCreatorFactory from "typescript-fsa";
-import { Company } from "../../entity/company";
+import { Company } from "../../type/company";
 import {
   AuthUser,
   BestWork,
@@ -8,7 +8,7 @@ import {
   ToDo,
   User,
   StrengthsAndWeaknesses,
-} from "../../entity/user";
+} from "../../type/user";
 
 const actionCreator = actionCreatorFactory();
 

@@ -8,11 +8,11 @@ import {
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { CloseButton, MoreButton } from "../Uikit";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { BestWork } from "../../entity/user";
+import { BestWork } from "../../type/user";
 import HTMLReactParser from "html-react-parser";
 import { db } from "../../firebase/index";
 import { useSelector } from "react-redux";
-import { RootState } from "../../entity/rootState";
+import { RootState } from "../../type/rootState";
 import { getUserId } from "../../reducks/user/selectors";
 import { SelectedDialogAccordion } from "../Uikit";
 
