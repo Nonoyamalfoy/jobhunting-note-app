@@ -185,14 +185,12 @@ export const addCompany = (
                 schedule["updated_at"] = timestamp;
                 scheduleRef.set(schedule, { merge: true });
               }
+              companyRef.set(company);
             }
           });
+        } else {
+          companyRef.set(company);
         }
-        // 削除された日程があるかどうか
-
-        console.log("aaa");
-
-        companyRef.set(company);
       } else {
         const companyRef = db
           .collection("users")
@@ -205,6 +203,7 @@ export const addCompany = (
           company.schedules.map((schedule, i) => {
             if (schedule.title === "") {
               alert(`日程${i + 1}のタイトルが未入力です`);
+              return;
             } else {
               if (schedule.scheduleId === "") {
                 const c = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -232,21 +231,35 @@ export const addCompany = (
                 schedule["updated_at"] = timestamp;
                 scheduleRef.set(schedule, { merge: true });
               }
+              if (deletedScheduleIdList.length > 0) {
+                deletedScheduleIdList.map((deleteScheduleId) => {
+                  if (deleteScheduleId !== "") {
+                    db.collection("users")
+                      .doc(uid)
+                      .collection("schedules")
+                      .doc(deleteScheduleId)
+                      .delete();
+                  }
+                });
+              }
+              companyRef.set(company, { merge: true });
             }
           });
+        } else {
+          if (deletedScheduleIdList.length > 0) {
+            deletedScheduleIdList.map((deleteScheduleId) => {
+              if (deleteScheduleId !== "") {
+                db.collection("users")
+                  .doc(uid)
+                  .collection("schedules")
+                  .doc(deleteScheduleId)
+                  .delete();
+              }
+            });
+          }
+          companyRef.set(company, { merge: true });
         }
-        if (deletedScheduleIdList.length > 0) {
-          deletedScheduleIdList.map((deleteScheduleId) => {
-            if (deleteScheduleId !== "") {
-              db.collection("users")
-                .doc(uid)
-                .collection("schedules")
-                .doc(deleteScheduleId)
-                .delete();
-            }
-          });
-        }
-        companyRef.set(company, { merge: true });
+        
       }
     }
   };
