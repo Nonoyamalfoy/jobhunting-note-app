@@ -15,6 +15,7 @@ const useStyles = makeStyles({
     fontWeight: 50,
     whiteSpace: "nowrap",
     overflow: "hidden",
+    pointerEvents: "painted",
   },
 });
 
@@ -41,19 +42,22 @@ const setScheduleColor = (color: string) => {
 
 type Props = {
   schedule: Schedule;
-
+  onClick: (
+    s: Schedule,
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => void;
 };
 
 const ScheduleBar: React.FC<Props> = (props) => {
   const classes = useStyles();
   const schedule = props.schedule;
-  const dispatch = useDispatch();
   const scheduleColor = setScheduleColor(schedule.color);
 
   return (
     <div
       style={{ backgroundColor: scheduleColor }}
       className={classes.schedule}
+      onClick={(e) => props.onClick(schedule, e)}
     >
       {schedule.title}
     </div>

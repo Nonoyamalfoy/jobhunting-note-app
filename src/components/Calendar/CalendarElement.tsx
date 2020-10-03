@@ -6,6 +6,8 @@ import dayjs from "dayjs";
 import { isSameMonth, isFirstDay, isSameDay } from "../../lib/calendar";
 import { useSelector } from "react-redux";
 import { Schedule } from "../../type/user";
+import { getCurrentDate } from "../../reducks/calendar/selector";
+import { RootState } from "../../type/rootState";
 
 const useStyles = makeStyles({
   element: {
@@ -40,29 +42,33 @@ const useStyles = makeStyles({
   schedules: {
     overflow: "scroll",
     height: "calc(15vh - 40px)",
+    pointerEvents: "none",
   },
 });
 
 type Props = {
   date: dayjs.Dayjs;
-  currentDate: dayjs.Dayjs;
   schedules: Schedule[];
-  handleClickOpenSelectedScheduleDialog: (s: Schedule) => void;
+  handleClickOpenSelectedScheduleDialog: (
+    s: Schedule,
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => void;
 };
 
 const CalendarElement: React.FC<Props> = (props) => {
   // console.log(props.schedules);
 
   const classes = useStyles();
-  const selector = useSelector((state) => state);
+  const selector = useSelector((state: RootState) => state);
+  const currentDate = getCurrentDate(selector);
   const today = dayjs();
   const format = isFirstDay(props.date) ? "M/D" : "D";
-  const isCurrentMonth = isSameMonth(props.date, props.currentDate)
+  const isCurrentMonth = isSameMonth(props.date, currentDate)
     ? "textPrimary"
     : "textSecondary";
 
   let date = "";
-  if (isSameDay(props.date, props.currentDate)) {
+  if (isSameDay(props.date, currentDate)) {
     date = classes.currentDate;
   } else if (isSameDay(props.date, today)) {
     date = classes.today;
@@ -81,9 +87,11 @@ const CalendarElement: React.FC<Props> = (props) => {
       </Typography>
       <div className={classes.schedules}>
         {props.schedules.map((schedule, i) => (
-          <div key={i} onClick={() => props.handleClickOpenSelectedScheduleDialog(schedule)}>
-            <ScheduleBar key={schedule.scheduleId} schedule={schedule} />
-          </div>
+          <ScheduleBar
+            key={schedule.scheduleId}
+            schedule={schedule}
+            onClick={props.handleClickOpenSelectedScheduleDialog}
+          />
         ))}
       </div>
     </ListItem>
