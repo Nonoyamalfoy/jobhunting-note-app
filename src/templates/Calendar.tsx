@@ -8,6 +8,10 @@ import {
 import { CreateButton } from "../components/Uikit";
 import { Schedule } from "../type/user";
 import dayjs from "dayjs";
+// import { createContext } from "react";
+
+// const CalendarContext = createContext();
+import CalendarContext from "../contexts/CalendarContext";
 
 const Calendar: React.FC = () => {
   const [addScheduleDialogOpen, setAddScheduleDialogOpen] = useState(false);
@@ -40,7 +44,8 @@ const Calendar: React.FC = () => {
   };
 
   // addDialog
-  const handleClickOpenAddScheduleDialog = useCallback(() => {
+  const handleClickOpenAddScheduleDialog = useCallback((s?: Schedule) => {
+    s && setSchedule(s);
     setAddScheduleDialogOpen(true);
   }, [setAddScheduleDialogOpen]);
 
@@ -70,38 +75,44 @@ const Calendar: React.FC = () => {
     setSelectedDateSchedulesDialogOpen(false);
   }, [setSelectedDateSchedulesDialogOpen]);
 
+  // const CalendarContext = createContext(handleClickOpenSelectedScheduleDialog);
+
   return (
     <div className="p-calendar">
-      <CalendarBoard
-        handleClickOpenSelectedScheduleDialog={
-          handleClickOpenSelectedScheduleDialog
-        }
-        handleClickOpenSelectedDateSchedulesDialog={
-          handleClickOpenSelectedDateSchedulesDialog
-        }
-      />
-      <CreateButton
-        onClick={() => {
-          handleClickOpenAddScheduleDialog();
-          resetSchedule();
+      <CalendarContext.Provider
+        value={{
+          handleClickOpenSelectedScheduleDialog: handleClickOpenSelectedScheduleDialog,
+          handleClickOpenAddScheduleDialog: handleClickOpenAddScheduleDialog,
         }}
-        size="medium"
-      />
-      <AddScheduleDialog
-        schedule={schedule}
-        open={addScheduleDialogOpen}
-        handleClose={handleCloseAddScheduleDialog}
-      />
-      <SelectedScheduleDialog
-        open={selectedScheduleDialogOpen}
-        handleCloseSelectedScheduleDialog={handleCloseSelectedScheduleDialog}
-        handleClickOpenAddScheduleDialog={handleClickOpenAddScheduleDialog}
-        selectedSchedule={schedule}
-      />
-      <SelectedDateSchedulesDialog
-        open={selectedDateSchedulesDialogOpen}
-        handleClose={handleCloseSelectedDateSchedulesDialog}
-      />
+      >
+        <CalendarBoard
+          handleClickOpenSelectedDateSchedulesDialog={
+            handleClickOpenSelectedDateSchedulesDialog
+          }
+        />
+        <CreateButton
+          onClick={() => {
+            handleClickOpenAddScheduleDialog();
+            resetSchedule();
+          }}
+          size="medium"
+        />
+        <AddScheduleDialog
+          schedule={schedule}
+          open={addScheduleDialogOpen}
+          handleClose={handleCloseAddScheduleDialog}
+        />
+        <SelectedScheduleDialog
+          open={selectedScheduleDialogOpen}
+          handleCloseSelectedScheduleDialog={handleCloseSelectedScheduleDialog}
+          handleClickOpenAddScheduleDialog={handleClickOpenAddScheduleDialog}
+          selectedSchedule={schedule}
+        />
+        <SelectedDateSchedulesDialog
+          open={selectedDateSchedulesDialogOpen}
+          handleClose={handleCloseSelectedDateSchedulesDialog}
+        />
+      </CalendarContext.Provider>
     </div>
   );
 };

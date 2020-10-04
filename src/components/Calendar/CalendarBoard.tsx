@@ -37,10 +37,6 @@ const setSchedules = (calendar: dayjs.Dayjs[], schedules: Schedule[]) => {
 const days = ["日", "月", "火", "水", "木", "金", "土"];
 
 type Props = {
-  handleClickOpenSelectedScheduleDialog: (
-    s: Schedule,
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => void;
   handleClickOpenSelectedDateSchedulesDialog: () => void;
 };
 
@@ -83,9 +79,6 @@ const CalendarBoard: React.FC<Props> = (props) => {
             }}
           >
             <CalendarElement
-              handleClickOpenSelectedScheduleDialog={
-                props.handleClickOpenSelectedScheduleDialog
-              }
               date={date}
               schedules={schedules}
             />

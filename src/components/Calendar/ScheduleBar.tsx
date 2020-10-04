@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/styles";
 import { useDispatch } from "react-redux";
 import { Schedule } from "../../type/user";
+import { CalendarContext } from "../../contexts";
 
 const useStyles = makeStyles({
   schedule: {
@@ -42,22 +43,19 @@ const setScheduleColor = (color: string) => {
 
 type Props = {
   schedule: Schedule;
-  onClick: (
-    s: Schedule,
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => void;
 };
 
 const ScheduleBar: React.FC<Props> = (props) => {
   const classes = useStyles();
   const schedule = props.schedule;
   const scheduleColor = setScheduleColor(schedule.color);
+  const handleClickOpenSelectedScheduleDialog = useContext(CalendarContext);
 
   return (
     <div
       style={{ backgroundColor: scheduleColor }}
       className={classes.schedule}
-      onClick={(e) => props.onClick(schedule, e)}
+      onClick={(e) => handleClickOpenSelectedScheduleDialog.handleClickOpenSelectedScheduleDialog(schedule, e)}
     >
       {schedule.title}
     </div>

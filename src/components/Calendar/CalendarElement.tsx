@@ -49,15 +49,9 @@ const useStyles = makeStyles({
 type Props = {
   date: dayjs.Dayjs;
   schedules: Schedule[];
-  handleClickOpenSelectedScheduleDialog: (
-    s: Schedule,
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => void;
 };
 
 const CalendarElement: React.FC<Props> = (props) => {
-  // console.log(props.schedules);
-
   const classes = useStyles();
   const selector = useSelector((state: RootState) => state);
   const currentDate = getCurrentDate(selector);
@@ -90,7 +84,6 @@ const CalendarElement: React.FC<Props> = (props) => {
           <ScheduleBar
             key={schedule.scheduleId}
             schedule={schedule}
-            onClick={props.handleClickOpenSelectedScheduleDialog}
           />
         ))}
       </div>

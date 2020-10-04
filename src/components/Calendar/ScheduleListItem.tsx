@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,6 +8,9 @@ import { ListItemSecondaryAction, Grid } from "@material-ui/core";
 import { RootState } from "../../type/rootState";
 import { Schedule } from "../../type/user";
 import { MoreButton } from "../Uikit";
+import { CalendarContext } from "../../contexts";
+import { getUserId } from "../../reducks/user/selectors";
+import { db } from "../../firebase/index";
 
 const useStyles = makeStyles({
   scheduleListItem: {
@@ -71,18 +74,30 @@ const ScheduleListItem: React.FC<Props> = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: RootState) => state);
+  const uid = getUserId(selector);
   const schedule = props.schedule;
-  const date = schedule.date;
-  const scheduleId = schedule.scheduleId;
   const title = schedule.title;
   const description = schedule.description;
-  const location = schedule.location;
   const scheduleColor = schedule ? setScheduleColor(schedule.color) : "";
-  const color = schedule.color;
+  const handleClickOpenSelectedScheduleDialog = useContext(CalendarContext)
+    .handleClickOpenSelectedScheduleDialog;
+  const handleClickOpenAddScheduleDialog = useContext(CalendarContext)
+    .handleClickOpenAddScheduleDialog;
+
+  const removeSchedule = (scheduleId: string) => {
+    db.collection("users")
+      .doc(uid)
+      .collection("schedules")
+      .doc(scheduleId)
+      .delete();
+  };
 
   return (
     <div className={classes.scheduleListItem}>
-      <ListItem onClick={(e) => {}} role={undefined} dense button>
+      <ListItem
+        onClick={(e) => handleClickOpenSelectedScheduleDialog(schedule, e)}
+        button
+      >
         <Grid item>
           <span
             style={{ backgroundColor: scheduleColor }}
@@ -97,8 +112,8 @@ const ScheduleListItem: React.FC<Props> = (props) => {
         <ListItemSecondaryAction>
           <MoreButton
             size="medium"
-            onClickEdit={() => {}}
-            onClickRemove={() => {}}
+            onClickEdit={() => handleClickOpenAddScheduleDialog(schedule)}
+            onClickRemove={() => removeSchedule(schedule.scheduleId)}
           />
         </ListItemSecondaryAction>
       </ListItem>
