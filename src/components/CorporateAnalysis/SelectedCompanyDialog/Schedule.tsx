@@ -60,18 +60,17 @@ const returnCodeToBr = (text: string) => {
 };
 
 type Props = {
-  schedule: ISchedule;
   index: number;
+  schedule: ISchedule;
 };
 
-const Schedule: React.FC<Props> = (props) => {
+const Schedule: React.FC<Props> = ({index, schedule}) => {
   const classes = useStyles();
-  const schedule = props.schedule;
   const scheduleColor = setScheduleColor(schedule.color);
 
   return (
     <>
-      <Grid item container key={props.index}>
+      <Grid item container >
         <Grid item xs={12}>
           <Grid container spacing={1} alignItems="center">
             <Grid item>
@@ -81,7 +80,7 @@ const Schedule: React.FC<Props> = (props) => {
               ></span>
             </Grid>
             <Grid item>
-              <p>{`日程${props.index + 1}`}</p>
+              <p>{`日程${index + 1}`}</p>
             </Grid>
           </Grid>
         </Grid>

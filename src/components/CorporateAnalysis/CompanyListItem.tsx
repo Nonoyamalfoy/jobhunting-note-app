@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
       "&:hover": {
         boxShadow:
           "0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)",
-        transform: "translateY(-3px)"
+        transform: "translateY(-3px)",
       },
     },
     cardActionArea: {
@@ -41,23 +41,26 @@ type Props = {
   handleClickOpenSelectedCompanyDialog: () => void;
 };
 
-const CompanyListItem: React.FC<Props> = (props) => {
+const CompanyListItem: React.FC<Props> = ({
+  company,
+  handleClickOpenSelectedCompanyDialog,
+}) => {
   const classes = useStyles();
   return (
     <Grid item xs={12} sm={6} md={4}>
-      <Card className={classes.card} >
+      <Card className={classes.card}>
         <CardActionArea
           className={classes.cardActionArea}
-          onClick={props.handleClickOpenSelectedCompanyDialog}
+          onClick={handleClickOpenSelectedCompanyDialog}
         >
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
-              {props.company.companyName}
+              {company.companyName}
             </Typography>
             <Box component="fieldset" mb={3} borderColor="transparent">
               <Rating
                 name="read-only"
-                value={props.company.aspiration}
+                value={company.aspiration}
                 readOnly
               />
             </Box>

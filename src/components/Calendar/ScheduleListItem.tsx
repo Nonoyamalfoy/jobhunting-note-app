@@ -70,19 +70,15 @@ type Props = {
   schedule: Schedule;
 };
 
-const ScheduleListItem: React.FC<Props> = (props) => {
+const ScheduleListItem: React.FC<Props> = ({schedule}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: RootState) => state);
   const uid = getUserId(selector);
-  const schedule = props.schedule;
   const title = schedule.title;
   const description = schedule.description;
   const scheduleColor = schedule ? setScheduleColor(schedule.color) : "";
-  const handleClickOpenSelectedScheduleDialog = useContext(CalendarContext)
-    .handleClickOpenSelectedScheduleDialog;
-  const handleClickOpenAddScheduleDialog = useContext(CalendarContext)
-    .handleClickOpenAddScheduleDialog;
+  const {handleClickOpenSelectedScheduleDialog, handleClickOpenAddScheduleDialog} = useContext(CalendarContext)
 
   const removeSchedule = (scheduleId: string) => {
     db.collection("users")

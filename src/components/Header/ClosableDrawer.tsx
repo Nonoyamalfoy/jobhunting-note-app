@@ -26,13 +26,13 @@ type Props = {
   handleDrawerToggle: (event: any) => void;
 };
 
-const ClosableDrawer = (props: Props) => {
+const ClosableDrawer: React.FC<Props> = ({open, handleDrawerToggle}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const selectMenu = (event: any, path: string) => {
     dispatch(push(path));
-    props.handleDrawerToggle(event);
+    handleDrawerToggle(event);
   };
 
   const menus = [
@@ -78,13 +78,13 @@ const ClosableDrawer = (props: Props) => {
       <Drawer
         variant="temporary"
         anchor="right"
-        open={props.open}
-        onClose={(e) => props.handleDrawerToggle(e)}
+        open={open}
+        onClose={(e) => handleDrawerToggle(e)}
         ModalProps={{ keepMounted: true }}
       >
         <div
           // onClose={(e) => props.onClose(e)}
-          onKeyDown={(e) => props.handleDrawerToggle(e)}
+          onKeyDown={(e) => handleDrawerToggle(e)}
         >
           <Divider />
           <List className={classes.drawerList}>
@@ -103,7 +103,7 @@ const ClosableDrawer = (props: Props) => {
               key="logout"
               onClick={(e) => {
                 dispatch(signOut());
-                props.handleDrawerToggle(e);
+                handleDrawerToggle(e);
               }}
             >
               <ListItemIcon>

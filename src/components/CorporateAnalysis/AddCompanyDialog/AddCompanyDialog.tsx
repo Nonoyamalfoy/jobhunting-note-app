@@ -15,7 +15,6 @@ import {
   DoubleTextInputAccordion,
   SaveButton,
   SingleTextInputAccordion,
-  TextInput,
   ValidationTextInput,
 } from "../../Uikit";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -80,17 +79,17 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Props = {
   open: boolean;
-  handleClose: () => void;
   company: Company;
+  handleClose: () => void;
 };
 
-const AddCompanyDialog: React.FC<Props> = (props) => {
+const AddCompanyDialog: React.FC<Props> = ({ open, company, handleClose }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: RootState) => state);
   const matches = useMediaQuery("(max-width:960px)");
   const schrollType = matches ? "paper" : "body";
-  const company = props.company;
+  // const company = props.company;
   const companyId = company.companyId;
 
   const _schedules = getSchedules(selector);
@@ -128,9 +127,9 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
   const isCompanyNameInValid = !companyName && isCompanyNameEditStart;
 
   const scheduleIdList = schedules.map((schedule) => schedule.scheduleId);
-  const judgementOfSchedulesTitle = schedules.filter((schedule) => 
-    schedule.title === ""
-  )
+  const judgementOfSchedulesTitle = schedules.filter(
+    (schedule) => schedule.title === ""
+  );
 
   const inputSchedule = useCallback(
     (value: Partial<ISchedule>, i: number) => {
@@ -193,9 +192,9 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
 
   return (
     <Dialog
-      open={props.open}
+      open={open}
       onClose={() => {
-        props.handleClose();
+        handleClose();
         setIsCompanyNameEditStart(false);
       }}
       scroll={schrollType}
@@ -207,7 +206,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
         <DialogActions>
           <CloseButton
             onClick={() => {
-              props.handleClose();
+              handleClose();
               setIsCompanyNameEditStart(false);
             }}
           />
@@ -313,7 +312,7 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
             {schedules.map((schedule, i) => (
               <Schedule
                 key={i}
-                addSchedule={addSchedule}
+                // addSchedule={addSchedule}
                 schedule={schedule}
                 index={i}
                 inputSchedule={inputSchedule}
@@ -366,8 +365,8 @@ const AddCompanyDialog: React.FC<Props> = (props) => {
               )
             );
             if (companyName !== "") {
-              if(!judgementOfSchedulesTitle.length) {
-                props.handleClose();
+              if (!judgementOfSchedulesTitle.length) {
+                handleClose();
                 setIsCompanyNameEditStart(false);
               }
             }

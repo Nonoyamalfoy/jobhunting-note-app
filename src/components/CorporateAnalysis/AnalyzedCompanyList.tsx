@@ -32,7 +32,7 @@ type Props = {
   handleClickOpenSelectedCompanyDialog: () => void
 }
 
-const AnalyzedCompanyList: React.FC<Props> = (props) => {
+const AnalyzedCompanyList: React.FC<Props> = ({handleClickOpenSelectedCompanyDialog}) => {
   const classes = useStyles()
   return (
     <>
@@ -41,7 +41,7 @@ const AnalyzedCompanyList: React.FC<Props> = (props) => {
           <Card className={classes.paper} elevation={5}>
             <CardActionArea
               className={classes.cardActionArea}
-              onClick={props.handleClickOpenSelectedCompanyDialog}
+              onClick={handleClickOpenSelectedCompanyDialog}
             >
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">

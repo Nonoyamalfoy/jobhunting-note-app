@@ -3,8 +3,6 @@ import { Button, Grid, makeStyles } from "@material-ui/core";
 import { TextInput, SelectColorBox } from "../../Uikit";
 import { DateTimePicker } from "@material-ui/pickers";
 import { Schedule as ISchedule } from "../../../type/user";
-import { RootState } from "../../../type/rootState";
-import { useSelector } from "react-redux";
 
 const useStyles = makeStyles({
   rectangle: {
@@ -17,22 +15,28 @@ const useStyles = makeStyles({
 });
 
 type Props = {
-  addSchedule: () => void;
   schedule: ISchedule;
   index: number;
-  inputSchedule: any;
-  deleteSchedule: any;
+  // addSchedule: () => void;
+  inputSchedule: (value: Partial<ISchedule>, i: number) => void;
+  deleteSchedule: (scheduleNumber: number) => void;
 };
 
-const Schedule: React.FC<Props> = (props) => {
+const Schedule: React.FC<Props> = ({
+  index,
+  schedule,
+  // addSchedule,
+  inputSchedule,
+  deleteSchedule,
+}) => {
   const classes = useStyles();
-  const schedule = props.schedule;
-  const index = props.index;
+  // const schedule = props.schedule;
+  // const index = props.index;
   return (
     <React.Fragment key={index}>
       <Grid container spacing={1} alignItems="center">
         <Grid item>
-          <span className={classes.rectangle}></span>
+          <span className={classes.rectangle}></span>hewa
         </Grid>
         <Grid item>
           <p>{`日程 ${index + 1}`}</p>
@@ -48,9 +52,7 @@ const Schedule: React.FC<Props> = (props) => {
               required={true}
               value={schedule.title}
               type={"text"}
-              onChange={(e) =>
-                props.inputSchedule({ title: e.target.value }, index)
-              }
+              onChange={(e) => inputSchedule({ title: e.target.value }, index)}
             />
           </Grid>
           <Grid item container spacing={3}>
@@ -58,7 +60,7 @@ const Schedule: React.FC<Props> = (props) => {
               <SelectColorBox
                 label="色"
                 required={true}
-                select={(c) => props.inputSchedule({ color: c }, index)}
+                select={(c) => inputSchedule({ color: c }, index)}
                 value={schedule.color}
               />
             </Grid>
@@ -68,10 +70,7 @@ const Schedule: React.FC<Props> = (props) => {
                 label="日時"
                 ampm={false}
                 onChange={(d) =>
-                  props.inputSchedule(
-                    { date: d?.format("YYYYMMDDHHmm") },
-                    index
-                  )
+                  inputSchedule({ date: d?.format("YYYYMMDDHHmm") }, index)
                 }
                 variant="inline"
                 format="YYYY/MM/DD HH:mm"
@@ -91,7 +90,7 @@ const Schedule: React.FC<Props> = (props) => {
               value={schedule.description}
               type={"text"}
               onChange={(e) =>
-                props.inputSchedule({ description: e.target.value }, index)
+                inputSchedule({ description: e.target.value }, index)
               }
             />
           </Grid>
@@ -103,7 +102,7 @@ const Schedule: React.FC<Props> = (props) => {
               value={schedule.location}
               type={"text"}
               onChange={(e) =>
-                props.inputSchedule({ location: e.target.value }, index)
+                inputSchedule({ location: e.target.value }, index)
               }
             />
           </Grid>
@@ -112,13 +111,13 @@ const Schedule: React.FC<Props> = (props) => {
       <div className="module-spacer--small" />
       <Button
         onClick={() => {
-          props.deleteSchedule(props.index);
+          deleteSchedule(index);
         }}
         fullWidth
         variant="outlined"
         color="secondary"
       >
-        日程 {props.index + 1} を削除
+        日程 {index + 1} を削除
       </Button>
     </React.Fragment>
   );

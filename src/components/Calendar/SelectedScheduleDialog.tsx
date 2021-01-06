@@ -77,18 +77,22 @@ const returnCodeToBr = (text: string) => {
 
 type Props = {
   open: boolean;
-  selectedSchedule: Schedule;
+  schedule: Schedule;
   handleCloseSelectedScheduleDialog: () => void;
   handleClickOpenAddScheduleDialog: () => void;
 };
 
-const SelectedScheduleDialog: React.FC<Props> = (props) => {
+const SelectedScheduleDialog: React.FC<Props> = ({
+  open,
+  schedule,
+  handleCloseSelectedScheduleDialog,
+  handleClickOpenAddScheduleDialog,
+}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: RootState) => state);
   const uid = getUserId(selector);
-  const selectedSchedule = props.selectedSchedule;
-  const scheduleColor = setScheduleColor(selectedSchedule.color);
+  const scheduleColor = setScheduleColor(schedule.color);
   const matches = useMediaQuery("(max-width:960px)");
   const schrollType = matches ? "paper" : "body";
 
@@ -102,8 +106,8 @@ const SelectedScheduleDialog: React.FC<Props> = (props) => {
 
   return (
     <Dialog
-      open={props.open}
-      onClose={props.handleCloseSelectedScheduleDialog}
+      open={open}
+      onClose={handleCloseSelectedScheduleDialog}
       maxWidth="sm"
       fullWidth
       fullScreen={matches}
@@ -111,14 +115,14 @@ const SelectedScheduleDialog: React.FC<Props> = (props) => {
     >
       <div className={classes.dialogHeader}>
         <Grid container spacing={1} alignItems="center">
-          <Grid item >
+          <Grid item>
             <span
               style={{ backgroundColor: scheduleColor }}
               className={classes.square}
             ></span>
           </Grid>
           <Grid item>
-            <Typography>{selectedSchedule.title}</Typography>
+            <Typography>{schedule.title}</Typography>
           </Grid>
         </Grid>
         <DialogActions>
@@ -126,20 +130,20 @@ const SelectedScheduleDialog: React.FC<Props> = (props) => {
             color="white"
             size="small"
             onClickEdit={() => {
-              props.handleCloseSelectedScheduleDialog();
-              props.handleClickOpenAddScheduleDialog();
+              handleCloseSelectedScheduleDialog();
+              handleClickOpenAddScheduleDialog();
             }}
             onClickRemove={() => {
-              removeSchedule(selectedSchedule.scheduleId);
-              props.handleCloseSelectedScheduleDialog();
+              removeSchedule(schedule.scheduleId);
+              handleCloseSelectedScheduleDialog();
             }}
           />
-          <CloseButton onClick={props.handleCloseSelectedScheduleDialog} />
+          <CloseButton onClick={handleCloseSelectedScheduleDialog} />
         </DialogActions>
       </div>
 
       <DialogContent>
-        <div >
+        <div>
           <div className="module-spacer--medium" />
 
           <Grid item container spacing={1} alignItems="center">
@@ -151,12 +155,12 @@ const SelectedScheduleDialog: React.FC<Props> = (props) => {
             </Grid>
           </Grid>
           <Typography color="textSecondary">
-            {dayjs(selectedSchedule.date).format("YYYY/MM/DD HH:mm")}
+            {dayjs(schedule.date).format("YYYY/MM/DD HH:mm")}
           </Typography>
           <Divider />
           <div className="module-spacer--medium" />
 
-          {selectedSchedule.description && (
+          {schedule.description && (
             <>
               <Grid item container spacing={1} alignItems="center">
                 <Grid item>
@@ -167,14 +171,14 @@ const SelectedScheduleDialog: React.FC<Props> = (props) => {
                 </Grid>
               </Grid>
               <Typography color="textSecondary">
-                {returnCodeToBr(selectedSchedule.description)}
+                {returnCodeToBr(schedule.description)}
               </Typography>
               <Divider />
               <div className="module-spacer--medium" />
             </>
           )}
 
-          {selectedSchedule.location && (
+          {schedule.location && (
             <>
               <Grid item container spacing={1} alignItems="center">
                 <Grid item>
@@ -185,7 +189,7 @@ const SelectedScheduleDialog: React.FC<Props> = (props) => {
                 </Grid>
               </Grid>
               <Typography color="textSecondary">
-                {returnCodeToBr(selectedSchedule.location)}
+                {returnCodeToBr(schedule.location)}
               </Typography>
               <Divider />
               <div className="module-spacer--medium" />

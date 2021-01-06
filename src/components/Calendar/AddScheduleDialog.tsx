@@ -11,12 +11,14 @@ import {
   SelectColorBox,
   ValidationTextInput,
 } from "../Uikit";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 import { createStringChangeEventCallback } from "../../lib/createHooks";
 import { addSchedule } from "../../reducks/user/operations";
 import { Schedule } from "../../type/user";
+import { RootState } from "../../type/rootState";
+import { getCurrentDate } from "../../reducks/calendar/selector";
 
-const day = dayjs();
+// const day = dayjs();
 
 const useStyles = makeStyles({
   box: {
@@ -40,16 +42,18 @@ type Props = {
 const AddScheduleDialog: React.FC<Props> = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const selector = useSelector((state: RootState) => state);
+  const currentDate = getCurrentDate(selector)
 
   const [title, setTitle] = useState("");
   const [color, setColor] = useState("default");
-  const [date, setDate] = useState(day.format("YYYYMMDDHHmm"));
+  const [date, setDate] = useState(currentDate.format("YYYYMMDDHHmm"));
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [isTitleEditStart, setIsTietleEditStart] = useState(false);
   const isTitleInValid = !title && isTitleEditStart;
 
-  const scheduel = props.schedule;
+  const schedule = props.schedule;
   const matches = useMediaQuery("(max-width:960px)");
   const schrollType = matches ? "paper" : "body";
 
@@ -68,12 +72,12 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
   );
 
   useEffect(() => {
-    setTitle(scheduel.title);
-    setColor(scheduel.color);
-    setDate(scheduel.date);
-    setDescription(scheduel.description);
-    setLocation(scheduel.location);
-  }, [scheduel]);
+    setTitle(schedule.title);
+    setColor(schedule.color);
+    setDate(schedule.date);
+    setDescription(schedule.description);
+    setLocation(schedule.location);
+  }, [schedule]);
 
   return (
     <Dialog
@@ -165,7 +169,7 @@ const AddScheduleDialog: React.FC<Props> = (props) => {
           onClick={() => {
             dispatch(
               addSchedule({
-                scheduleId: scheduel.scheduleId,
+                scheduleId: schedule.scheduleId,
                 title: title,
                 color: color,
                 date: date,

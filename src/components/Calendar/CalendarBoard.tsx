@@ -40,7 +40,9 @@ type Props = {
   handleClickOpenSelectedDateSchedulesDialog: () => void;
 };
 
-const CalendarBoard: React.FC<Props> = (props) => {
+const CalendarBoard: React.FC<Props> = ({
+  handleClickOpenSelectedDateSchedulesDialog,
+}) => {
   const classes = useStyles();
   // const [currentDate, setCurrentDate] = useState(dayjs());
   const dispatch = useDispatch();
@@ -75,13 +77,10 @@ const CalendarBoard: React.FC<Props> = (props) => {
             key={date.toISOString()}
             onClick={() => {
               dispatch(setCurrentDate(date));
-              props.handleClickOpenSelectedDateSchedulesDialog();
+              handleClickOpenSelectedDateSchedulesDialog();
             }}
           >
-            <CalendarElement
-              date={date}
-              schedules={schedules}
-            />
+            <CalendarElement date={date} schedules={schedules} />
           </li>
         ))}
       </GridList>

@@ -49,7 +49,7 @@ type Props = {
   handleClose: () => void;
 };
 
-const SelectedScheduleDialog: React.FC<Props> = (props) => {
+const SelectedScheduleDialog: React.FC<Props> = ({open, handleClose}) => {
   const classes = useStyles();
   const selector = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
@@ -65,8 +65,8 @@ const SelectedScheduleDialog: React.FC<Props> = (props) => {
 
   return (
     <Dialog
-      open={props.open}
-      onClose={props.handleClose}
+      open={open}
+      onClose={handleClose}
       maxWidth="xs"
       fullWidth
     >
@@ -76,14 +76,14 @@ const SelectedScheduleDialog: React.FC<Props> = (props) => {
         </Typography>
         <DialogActions>
           {/* <CreateButton size="small" onClick={() => {}} /> */}
-          <CloseButton onClick={props.handleClose} />
+          <CloseButton onClick={handleClose} />
         </DialogActions>
       </div>
       <DialogContent className={classes.dialogContent}>
         {currentDateSchedules.length > 0 ? (
           <List>
             {currentDateSchedules.map((schedule) => (
-              <ScheduleListItem schedule={schedule} />
+              <ScheduleListItem key={schedule.scheduleId} schedule={schedule} />
             ))}
           </List>
         ) : (

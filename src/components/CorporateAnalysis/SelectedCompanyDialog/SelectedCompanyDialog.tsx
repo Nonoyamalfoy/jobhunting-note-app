@@ -59,19 +59,24 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type Props = {
-  selectedCompany: Company;
   open: boolean;
+  selectedCompany: Company;
   handleClose: () => void;
   handleClickOpenAddCompanyDialog: () => void;
 };
 
-const SelectedCompanyDialog: React.FC<Props> = (props) => {
+const SelectedCompanyDialog: React.FC<Props> = ({
+  open,
+  selectedCompany,
+  handleClose,
+  handleClickOpenAddCompanyDialog,
+}) => {
   const classes = useStyles();
   const selector = useSelector((state: RootState) => state);
   const uid = getUserId(selector);
   const matches = useMediaQuery("(max-width:960px)");
   const schrollType = matches ? "paper" : "body";
-  const selectedCompany = props.selectedCompany;
+  // const selectedCompany = props.selectedCompany;
   const companyId = selectedCompany.companyId;
 
   const schedules = getSchedules(selector);
@@ -107,8 +112,8 @@ const SelectedCompanyDialog: React.FC<Props> = (props) => {
 
   return (
     <Dialog
-      open={props.open}
-      onClose={props.handleClose}
+      open={open}
+      onClose={handleClose}
       scroll={schrollType}
       fullScreen={matches}
       fullWidth
@@ -123,15 +128,15 @@ const SelectedCompanyDialog: React.FC<Props> = (props) => {
             color="white"
             size="small"
             onClickEdit={() => {
-              props.handleClickOpenAddCompanyDialog();
-              props.handleClose();
+              handleClickOpenAddCompanyDialog();
+              handleClose();
             }}
             onClickRemove={() => {
               removeCompany(selectedCompany.companyId);
-              props.handleClose();
+              handleClose();
             }}
           />
-          <CloseButton onClick={props.handleClose} />
+          <CloseButton onClick={handleClose} />
         </DialogActions>
       </div>
       <DialogContent className={classes.dialogContent}>
@@ -150,8 +155,8 @@ const SelectedCompanyDialog: React.FC<Props> = (props) => {
         <SelectedDialogAccordion
           title="理念・会社概要"
           onClick={() => {
-            props.handleClickOpenAddCompanyDialog();
-            props.handleClose();
+            handleClickOpenAddCompanyDialog();
+            handleClose();
           }}
         >
           <Typography color="textSecondary">
@@ -248,8 +253,8 @@ const SelectedCompanyDialog: React.FC<Props> = (props) => {
         <SelectedDialogAccordion
           title="求める人物像・スキル"
           onClick={() => {
-            props.handleClickOpenAddCompanyDialog();
-            props.handleClose();
+            handleClickOpenAddCompanyDialog();
+            handleClose();
           }}
         >
           <Grid container spacing={1} alignItems="center">
@@ -283,8 +288,8 @@ const SelectedCompanyDialog: React.FC<Props> = (props) => {
         <SelectedDialogAccordion
           title="将来性・課題"
           onClick={() => {
-            props.handleClickOpenAddCompanyDialog();
-            props.handleClose();
+            handleClickOpenAddCompanyDialog();
+            handleClose();
           }}
         >
           <Grid container spacing={1} alignItems="center">
@@ -316,8 +321,8 @@ const SelectedCompanyDialog: React.FC<Props> = (props) => {
         <SelectedDialogAccordion
           title="労働環境・福利厚生"
           onClick={() => {
-            props.handleClickOpenAddCompanyDialog();
-            props.handleClose();
+            handleClickOpenAddCompanyDialog();
+            handleClose();
           }}
         >
           <Grid container spacing={1} alignItems="center">
@@ -349,8 +354,8 @@ const SelectedCompanyDialog: React.FC<Props> = (props) => {
         <SelectedDialogAccordion
           title="志望理由"
           onClick={() => {
-            props.handleClickOpenAddCompanyDialog();
-            props.handleClose();
+            handleClickOpenAddCompanyDialog();
+            handleClose();
           }}
         >
           <Grid container spacing={1} alignItems="center">
@@ -370,8 +375,8 @@ const SelectedCompanyDialog: React.FC<Props> = (props) => {
         <SelectedDialogAccordion
           title="日程"
           onClick={() => {
-            props.handleClickOpenAddCompanyDialog();
-            props.handleClose();
+            handleClickOpenAddCompanyDialog();
+            handleClose();
           }}
         >
           <Grid container>
@@ -384,8 +389,8 @@ const SelectedCompanyDialog: React.FC<Props> = (props) => {
         <SelectedDialogAccordion
           title="メモ"
           onClick={() => {
-            props.handleClickOpenAddCompanyDialog();
-            props.handleClose();
+            handleClickOpenAddCompanyDialog();
+            handleClose();
           }}
         >
           <Grid container spacing={1} alignItems="center">

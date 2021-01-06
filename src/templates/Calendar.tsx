@@ -7,13 +7,14 @@ import {
 } from "../components/Calendar";
 import { CreateButton } from "../components/Uikit";
 import { Schedule } from "../type/user";
-import dayjs from "dayjs";
-// import { createContext } from "react";
-
-// const CalendarContext = createContext();
 import CalendarContext from "../contexts/CalendarContext";
+import { useSelector } from "react-redux";
+import { RootState } from "../type/rootState";
+import { getCurrentDate } from "../reducks/calendar/selector";
 
 const Calendar: React.FC = () => {
+  const selector = useSelector((state: RootState) => state);
+  const currentDate = getCurrentDate(selector)
   const [addScheduleDialogOpen, setAddScheduleDialogOpen] = useState(false);
   const [selectedScheduleDialogOpen, setSelectedScheduleDialogOpen] = useState(
     false
@@ -22,12 +23,13 @@ const Calendar: React.FC = () => {
     selectedDateSchedulesDialogOpen,
     setSelectedDateSchedulesDialogOpen,
   ] = useState(false);
+  
 
   const [schedule, setSchedule] = useState({
     scheduleId: "",
     title: "",
     color: "default",
-    date: dayjs().format("YYYYMMDDHHmm"),
+    date: currentDate.format("YYYYMMDDHHmm"),
     description: "",
     location: "",
   } as Schedule);
@@ -37,7 +39,7 @@ const Calendar: React.FC = () => {
       scheduleId: "",
       title: "",
       color: "default",
-      date: dayjs().format("YYYYMMDDHHmm"),
+      date: currentDate.format("YYYYMMDDHHmm"),
       description: "",
       location: "",
     });
@@ -74,9 +76,7 @@ const Calendar: React.FC = () => {
   const handleCloseSelectedDateSchedulesDialog = useCallback(() => {
     setSelectedDateSchedulesDialogOpen(false);
   }, [setSelectedDateSchedulesDialogOpen]);
-
-  // const CalendarContext = createContext(handleClickOpenSelectedScheduleDialog);
-
+  
   return (
     <div className="p-calendar">
       <CalendarContext.Provider
@@ -92,7 +92,14 @@ const Calendar: React.FC = () => {
         />
         <CreateButton
           onClick={() => {
-            handleClickOpenAddScheduleDialog();
+            handleClickOpenAddScheduleDialog({
+              scheduleId: "",
+              title: "",
+              color: "default",
+              date: currentDate.format("YYYYMMDDHHmm"),
+              description: "",
+              location: "",
+            });
             resetSchedule();
           }}
           size="medium"
@@ -106,7 +113,7 @@ const Calendar: React.FC = () => {
           open={selectedScheduleDialogOpen}
           handleCloseSelectedScheduleDialog={handleCloseSelectedScheduleDialog}
           handleClickOpenAddScheduleDialog={handleClickOpenAddScheduleDialog}
-          selectedSchedule={schedule}
+          schedule={schedule}
         />
         <SelectedDateSchedulesDialog
           open={selectedDateSchedulesDialogOpen}

@@ -45,17 +45,16 @@ type Props = {
   schedule: Schedule;
 };
 
-const ScheduleBar: React.FC<Props> = (props) => {
+const ScheduleBar: React.FC<Props> = ({schedule}) => {
   const classes = useStyles();
-  const schedule = props.schedule;
   const scheduleColor = setScheduleColor(schedule.color);
-  const handleClickOpenSelectedScheduleDialog = useContext(CalendarContext);
+  const { handleClickOpenSelectedScheduleDialog } = useContext(CalendarContext);
 
   return (
     <div
       style={{ backgroundColor: scheduleColor }}
       className={classes.schedule}
-      onClick={(e) => handleClickOpenSelectedScheduleDialog.handleClickOpenSelectedScheduleDialog(schedule, e)}
+      onClick={(e) => handleClickOpenSelectedScheduleDialog(schedule, e)}
     >
       {schedule.title}
     </div>

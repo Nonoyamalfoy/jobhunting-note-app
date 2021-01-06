@@ -51,22 +51,23 @@ type Props = {
   schedules: Schedule[];
 };
 
-const CalendarElement: React.FC<Props> = (props) => {
+const CalendarElement: React.FC<Props> = ({date, schedules}) => {
   const classes = useStyles();
   const selector = useSelector((state: RootState) => state);
   const currentDate = getCurrentDate(selector);
   const today = dayjs();
-  const format = isFirstDay(props.date) ? "M/D" : "D";
-  const isCurrentMonth = isSameMonth(props.date, currentDate)
+  const format = isFirstDay(date) ? "M/D" : "D";
+  const isCurrentMonth = isSameMonth(date, currentDate)
     ? "textPrimary"
     : "textSecondary";
 
-  let date = "";
-  if (isSameDay(props.date, currentDate)) {
-    date = classes.currentDate;
-  } else if (isSameDay(props.date, today)) {
-    date = classes.today;
+  let dateStyle = "";
+  if (isSameDay(date, currentDate)) {
+    dateStyle = classes.currentDate;
+  } else if (isSameDay(date, today)) {
+    dateStyle = classes.today;
   }
+  
 
   return (
     <ListItem button className={classes.element}>
@@ -77,10 +78,10 @@ const CalendarElement: React.FC<Props> = (props) => {
         variant="caption"
         component="div"
       >
-        <span className={date}>{props.date.format(format)}</span>
+        <span className={dateStyle}>{date.format(format)}</span>
       </Typography>
       <div className={classes.schedules}>
-        {props.schedules.map((schedule, i) => (
+        {schedules.map((schedule, i) => (
           <ScheduleBar
             key={schedule.scheduleId}
             schedule={schedule}
