@@ -32,8 +32,16 @@ const useStyles = makeStyles((theme) => ({
 const CorporateAnalysis: React.FC = () => {
   const classes = useStyles();
   const selector = useSelector((state: RootState) => state);
-  const uid = getUserId(selector);
-  const companies = getCompanies(selector);
+  const companies = getCompanies(selector).sort((a, b) =>{
+    if(a.updated_at !== undefined && b.updated_at !== undefined) {
+      if(a.updated_at > b.updated_at) {
+        return -1
+      } else {return 1}
+    } else {
+      return -1
+    }
+  }
+  );
   const [addCompanyDialogOpen, setAddCompanyDialogOpen] = useState(false);
   const [selectedCompanyDialogopen, setSelectedCompanyDialogopen] = useState(
     false
